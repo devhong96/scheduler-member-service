@@ -38,7 +38,7 @@ public class JwtUtils {
     private static final Long refreshTokenPeriod = 60L * 60L * 24L * 30L; // 24시간
     private static final long EXPIRATION_THRESHOLD = 60L * 60L;
 
-    @Value("${custom.jwt.secretKey}")
+    @Value("${jwt.secret_key}")
     private String secretKey;
 
     private static SecretKey signingKey;

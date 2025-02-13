@@ -1,6 +1,5 @@
 package com.scheduler.memberservice.member.admin.domain;
 
-
 import com.scheduler.memberservice.member.common.RoleType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,7 +14,6 @@ import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.Edit
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
-
 
 @Entity
 @Getter
@@ -51,12 +49,12 @@ public class Admin {
         this.email = editEmailRequest.getEmail();
     }
 
-    public static Admin create(PasswordEncoder passwordEncoder) {
+    public static Admin create(String username, String password, String email, PasswordEncoder passwordEncoder) {
         Admin admin = new Admin();
-        admin.username = "admin";
-        admin.password = passwordEncoder.encode("admin");
+        admin.username = username;
+        admin.password = passwordEncoder.encode(password);
         admin.adminId = UUID.randomUUID().toString();
-        admin.email = "admin@admin.com";
+        admin.email = email;
         admin.name = UUID.randomUUID().toString();
         admin.roleType = RoleType.ADMIN;
         return admin;

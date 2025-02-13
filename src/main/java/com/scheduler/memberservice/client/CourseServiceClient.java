@@ -17,11 +17,11 @@ public interface CourseServiceClient {
     void deleteScheduleByStudentId(@PathVariable String studentId);
 
     @GetMapping("{teacherId}")
-    List<StudentCourseResponse> getWeeklyCoursesByTeacherId(String teacherId);
+    List<StudentCourseResponse> getWeeklyCoursesByTeacherId(@PathVariable String teacherId);
 
     @GetMapping("{studentId}")
-    StudentCourseResponse getWeeklyCoursesByStudentId(String studentId);
+    StudentCourseResponse getWeeklyCoursesByStudentId(@PathVariable String studentId);
 
     @PatchMapping("{teacherId}/{studentId}")
-    void reassignStudentCourses(String teacherId, String studentId);
+    void reassignStudentCourses(@PathVariable String teacherId, @PathVariable String studentId);
 }

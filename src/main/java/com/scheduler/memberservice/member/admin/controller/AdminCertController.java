@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.EditEmailRequest;
 import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.PwdEditRequest;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -22,7 +21,7 @@ public class AdminCertController {
     @PatchMapping("password")
     public ResponseEntity<String> initializePassword(@RequestBody PwdEditRequest pwdEditRequest) {
         adminCertService.initializePassword(pwdEditRequest);
-        return new ResponseEntity<>(NO_CONTENT);
+        return new ResponseEntity<>(OK);
     }
 
     @GetMapping("email")
@@ -33,6 +32,6 @@ public class AdminCertController {
     @PatchMapping("email")
     public ResponseEntity<String> updateEmail(EditEmailRequest editEmailRequest) {
         adminCertService.updateEmail(editEmailRequest);
-        return new ResponseEntity<>(NO_CONTENT);
+        return new ResponseEntity<>(OK);
     }
 }

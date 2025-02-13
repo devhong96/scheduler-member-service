@@ -44,10 +44,10 @@ public class AdminCertServiceImpl implements AdminCertService {
     @Transactional
     public void updateEmail(EditEmailRequest editEmailRequest) {
 
-        String adminId = memberUtils.getAdminId();
+        String username = memberUtils.getAdmin().getUsername();
 
         Admin admin = adminJpaRepository
-                .findByUsernameIs(adminId)
+                .findByUsernameIs(username)
                 .orElseThrow(MemberExistException::new);
 
         admin.updateEmail(editEmailRequest);

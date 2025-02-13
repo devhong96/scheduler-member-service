@@ -19,9 +19,11 @@ public class AdminConfig implements ApplicationRunner {
     public void run(ApplicationArguments args) {
 
         final String admin = "admin";
+        final String password = "password";
+        final String email = "email";
 
         if (!adminJpaRepository.existsAdminByUsername(admin)) {
-            adminJpaRepository.save(Admin.create(passwordEncoder));
+            adminJpaRepository.save(Admin.create(admin, password, email, passwordEncoder));
         }
     }
 }
