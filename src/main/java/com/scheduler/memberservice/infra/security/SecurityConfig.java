@@ -43,24 +43,23 @@ public class SecurityConfig {
 
     public static final String[] MICROSERVICE_INTERNAL_ENDPOINTS = {
             "/actuator/**",
-    };
-
-    public static final String[] ADMIN_RESTRICTED_ENDPOINTS = {
-
-    };
-
-    public static final String[] RESTRICTED_ENDPOINTS = {
-
-    };
-
-    public static final String[] AUTHORIZED_ENDPOINTS = {
-
-    };
-
-    public static final String[] ENDPOINTS_WHITELISTS = {
             "/swagger-resources/**",
             "/v3/api-docs/**",
             "/swagger-ui/**",
+    };
+
+    public static final String[] ADMIN_RESTRICTED_ENDPOINTS = {
+            "/admin/**"
+    };
+
+    public static final String[] AUTHORIZED_ENDPOINTS = {
+            "/manage/*"
+    };
+
+    public static final String[] ENDPOINTS_WHITELISTS = {
+            "/help/*",
+            "/join",
+            "/token/*"
     };
 
     @Bean
@@ -84,8 +83,6 @@ public class SecurityConfig {
                                         new WebExpressionAuthorizationManager(
                                                 "hasIpAddress('127.0.0.1') or hasIpAddress('172.18.0.0/16')"))
                                 .requestMatchers(ADMIN_RESTRICTED_ENDPOINTS).hasAuthority("ADMIN")
-                                .requestMatchers(RESTRICTED_ENDPOINTS)
-                                .hasAnyAuthority("ADMIN", "AUTHOR")
                                 .requestMatchers(AUTHORIZED_ENDPOINTS).hasAnyAuthority("ADMIN", "TEACHER")
                                 .requestMatchers(ENDPOINTS_WHITELISTS).permitAll()
                 )
