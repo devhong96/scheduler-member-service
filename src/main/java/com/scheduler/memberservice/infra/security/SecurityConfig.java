@@ -43,9 +43,7 @@ public class SecurityConfig {
 
     public static final String[] MICROSERVICE_INTERNAL_ENDPOINTS = {
             "/actuator/**",
-            "/swagger-resources/**",
-            "/v3/api-docs/**",
-            "/swagger-ui/**",
+            "/member-api/**"
     };
 
     public static final String[] ADMIN_RESTRICTED_ENDPOINTS = {
@@ -57,6 +55,10 @@ public class SecurityConfig {
     };
 
     public static final String[] ENDPOINTS_WHITELISTS = {
+            "/swagger-resources/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+
             "/help/*",
             "/join",
             "/token/*"
