@@ -1,7 +1,8 @@
 package com.scheduler.memberservice.member.teacher.application;
 
-import com.scheduler.memberservice.infra.email.dto.HtmlEmailService;
+import com.scheduler.memberservice.infra.email.dto.AuthEmailService;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
+import com.scheduler.memberservice.infra.exception.custom.PasswordMismatchException;
 import com.scheduler.memberservice.infra.util.MemberUtils;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
@@ -10,7 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.*;
+import java.util.Objects;
+
+import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindPasswordRequest;
+import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindUsernameRequest;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.EditEmailRequest;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.PwdEditRequest;
 
@@ -20,28 +24,17 @@ public class TeacherCertServiceImpl implements TeacherCertService {
 
     private final TeacherJpaRepository teacherJpaRepository;
     private final PasswordEncoder passwordEncoder;
-    private final HtmlEmailService htmlEmailService;
+    private final AuthEmailService authEmailService;
     private final MemberUtils memberUtils;
 
     @Override
-    public void findUsernameByEmail(FindIdRequest findIdRequest) {
+    public void findUsernameByEmail(FindUsernameRequest findUsernameRequest) {
 
         Teacher teacher = teacherJpaRepository
-                .findByEmailIs(findIdRequest.getEmail())
+                .findByEmailIs(findUsernameRequest.getEmail())
                 .orElseThrow(MemberExistException::new);
 
-        htmlEmailService.sendUsername(teacher.getUsername(), findIdRequest.getEmail());
-    }
-
-    @Override
-    @Transactional
-    public void initializePassword(PwdEditRequest pwdEditRequest) {
-
-        Teacher teacher = teacherJpaRepository
-                .findByUsernameIs(pwdEditRequest.getUsername())
-                .orElseThrow(MemberExistException::new);
-
-        teacher.updatePassword(passwordEncoder, pwdEditRequest);
+        authEmailService.sendUsername(teacher.getUsername(), findUsernameRequest.getEmail());
     }
 
     @Override
@@ -57,12 +50,26 @@ public class TeacherCertServiceImpl implements TeacherCertService {
             throw new MemberExistException();
         }
 
-        htmlEmailService.sendAuthNum(email, username);
+        authEmailService.sendAuthNum(email, username);
     }
 
     @Override
-    public void verifyAuthCode(AuthCodeRequest authCodeRequest) {
+    @Transactional
+    public void initializePassword(PwdEditRequest pwdEditRequest) {
 
+        String username = memberUtils.getTeacher().getUsername();
+
+        if(!Objects.equals(
+                pwdEditRequest.getCheckPassword(),
+                pwdEditRequest.getNewPassword()))
+
+            throw new PasswordMismatchException();
+
+        Teacher teacher = teacherJpaRepository
+                .findByUsernameIs(username)
+                .orElseThrow(MemberExistException::new);
+
+        teacher.updatePassword(passwordEncoder, pwdEditRequest);
     }
 
     @Override

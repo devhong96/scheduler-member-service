@@ -9,6 +9,7 @@ import com.scheduler.memberservice.infra.security.jwt.domain.RefreshToken;
 import com.scheduler.memberservice.infra.security.jwt.dto.JwtTokenDto;
 import com.scheduler.memberservice.infra.security.jwt.dto.UsernamePasswordAutoDto;
 import com.scheduler.memberservice.member.admin.domain.Admin;
+import com.scheduler.memberservice.member.common.RoleType;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -81,7 +82,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                     .findRefreshTokenByUserId(teacherId)
                     .orElseGet(() -> refreshTokenJpaRepository.save(new RefreshToken(teacherId, refreshTokenValue, expiresDate)));
 
-            jsonResponse = jsonProperty(teacher.getUsername(), String.valueOf(teacher.getRoleType()),
+            jsonResponse = jsonProperty(teacher.getUsername(), teacher.getRoleType(),
                     jwtTokenDto.getAccessToken(), refreshToken.getRefreshToken()
             );
         }
@@ -95,7 +96,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                     .findRefreshTokenByUserId(adminId)
                     .orElseGet(() -> refreshTokenJpaRepository.save(new RefreshToken(adminId, refreshTokenValue, expiresDate)));
 
-            jsonResponse = jsonProperty(admin.getUsername(), String.valueOf(admin.getRoleType()),
+            jsonResponse = jsonProperty(admin.getUsername(), admin.getRoleType(),
                     jwtTokenDto.getAccessToken(), refreshToken.getRefreshToken()
             );
         }
@@ -133,12 +134,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.getWriter().write(errorMessage);
     }
 
-    private Map<String, String> jsonProperty(String username, String roleType,
+    private Map<String, String> jsonProperty(String username, RoleType roleType,
                                              String accessToken, String RefreshToken) {
         Map<String, String> jsonResponse = new HashMap<>();
 
         jsonResponse.put("username", username);
-        jsonResponse.put("role", roleType);
+        jsonResponse.put("role", String.valueOf(roleType));
         jsonResponse.put("access", accessToken);
         jsonResponse.put("refresh", RefreshToken);
 

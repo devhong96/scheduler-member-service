@@ -2,9 +2,7 @@ package com.scheduler.memberservice.member.student.domain;
 
 import com.scheduler.memberservice.infra.BaseEntity;
 import com.scheduler.memberservice.member.common.RoleType;
-import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -14,7 +12,6 @@ import java.util.UUID;
 
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.RegisterStudentRequest;
 import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -31,6 +28,9 @@ public class Student extends BaseEntity {
 
     @Column(unique = true, nullable = false)
     private String studentId;
+
+    @Column(nullable = false)
+    private String teacherId;
 
     private String studentName;
 
@@ -61,18 +61,8 @@ public class Student extends BaseEntity {
         return student;
     }
 
-    @NotNull
-    @ManyToOne(fetch = LAZY, optional = false, cascade = CascadeType.PERSIST)
-    private Teacher teacher;
-
-    public void setTeacher(Teacher teacher) {
-        if (this.teacher != null) {
-            this.teacher.getStudentList().remove(this);
-        }
-        this.teacher = teacher;
-        if(teacher != null) {
-            teacher.getStudentList().add(this);
-        }
+    public void assignTeacher(String teacherId) {
+        this.teacherId = teacherId;
     }
 
     @PrePersist

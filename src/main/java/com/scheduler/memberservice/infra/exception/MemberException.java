@@ -1,15 +1,13 @@
 package com.scheduler.memberservice.infra.exception;
 
-import com.scheduler.memberservice.infra.exception.custom.AuthorApproveException;
-import com.scheduler.memberservice.infra.exception.custom.DuplicateEmailException;
-import com.scheduler.memberservice.infra.exception.custom.DuplicateUsernameException;
-import com.scheduler.memberservice.infra.exception.custom.InvalidAuthNumException;
+import com.scheduler.memberservice.infra.exception.custom.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Slf4j
 @RestControllerAdvice
@@ -34,5 +32,8 @@ public class MemberException {
     public ResponseEntity<String> handleDuplicateEmailException() {
         return new ResponseEntity<>("email already exist.", FORBIDDEN);
     }
-
+    @ExceptionHandler(MemberExistException.class)
+    public ResponseEntity<String> handleMemberExistException() {
+        return new ResponseEntity<>(NOT_FOUND);
+    }
 }

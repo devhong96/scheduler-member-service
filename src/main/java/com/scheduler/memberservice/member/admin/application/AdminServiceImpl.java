@@ -1,7 +1,7 @@
 package com.scheduler.memberservice.member.admin.application;
 
 import com.scheduler.memberservice.client.CourseServiceClient;
-import com.scheduler.memberservice.infra.email.dto.HtmlEmailService;
+import com.scheduler.memberservice.infra.email.dto.AuthEmailService;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.infra.util.MemberUtils;
 import com.scheduler.memberservice.member.admin.domain.Admin;
@@ -33,7 +33,7 @@ public class AdminServiceImpl implements AdminService {
     private final StudentJpaRepository studentJpaRepository;
     private final TeacherJpaRepository teacherJpaRepository;
 
-    private final HtmlEmailService htmlEmailService;
+    private final AuthEmailService authEmailService;
     private final CourseServiceClient courseServiceClient;
 
     @Override
@@ -56,7 +56,7 @@ public class AdminServiceImpl implements AdminService {
         String email = admin.getEmail();
         String username = admin.getUsername();
 
-        htmlEmailService.sendUsername(email, username);
+        authEmailService.sendUsername(email, username);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class AdminServiceImpl implements AdminService {
 
         classValidator(weekCourseByTeacherId, weeklyCoursesByStudentId);
 
-        student.setTeacher(teacher);
+        student.assignTeacher(teacher.getTeacherId());
 
         courseServiceClient.reassignStudentCourses(teacherId, studentId);
     }

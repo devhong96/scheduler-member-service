@@ -8,6 +8,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,13 +42,14 @@ public class JwtUtils {
     @Value("${jwt.secret_key}")
     private String secretKey;
 
-    private static SecretKey signingKey;
-
     @PostConstruct
     public void createSigningKey() {
         byte[] keyBytes = BASE64.decode(secretKey);
-        signingKey =  Keys.hmacShaKeyFor(keyBytes);
+        signingKey = Keys.hmacShaKeyFor(keyBytes);
     }
+
+    @Getter
+    private SecretKey signingKey; // static 제거
 
     private final RefreshTokenJpaRepository refreshTokenJpaRepository;
 

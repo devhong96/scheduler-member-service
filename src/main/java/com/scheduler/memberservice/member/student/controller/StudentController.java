@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.student;
+package com.scheduler.memberservice.member.student.controller;
 
 import com.scheduler.memberservice.member.student.application.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class StudentController {
             @RequestBody ModifyStudentRequest registerStudentRequest
     ) {
         studentService.modifyStudentVerification(registerStudentRequest);
-        return ResponseEntity.ok("삭제되었습니다.");
+        return ResponseEntity.ok("변경되었습니다.");
     }
 
     @GetMapping("studentList")

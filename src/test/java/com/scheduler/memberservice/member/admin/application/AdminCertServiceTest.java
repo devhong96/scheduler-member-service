@@ -1,7 +1,7 @@
 package com.scheduler.memberservice.member.admin.application;
 
 import com.scheduler.memberservice.infra.IntegrationTest;
-import com.scheduler.memberservice.infra.WithAdmin;
+import com.scheduler.memberservice.infra.admin.WithAdmin;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.member.admin.domain.Admin;
 import com.scheduler.memberservice.member.admin.repository.AdminJpaRepository;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static com.scheduler.memberservice.TestConstants.*;
+import static com.scheduler.memberservice.infra.TestConstants.*;
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindPasswordRequest;
 import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.EditEmailRequest;
 import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.PwdEditRequest;

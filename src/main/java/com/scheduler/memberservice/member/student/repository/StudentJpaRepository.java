@@ -10,11 +10,9 @@ import java.util.Optional;
 @Repository
 public interface StudentJpaRepository extends JpaRepository<Student, Long> {
 
-    boolean existsByStudentNameIs(String StudentName);
-
     Optional<Student> findStudentByStudentId(String studentId);
 
-    Student findStudentEntityByStudentName(String studentName);
+    Optional<Student> findStudentByStudentName(String studentName);
 
     @Transactional
     void deleteStudentEntityById(long id);

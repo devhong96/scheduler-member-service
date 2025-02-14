@@ -14,18 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.AuthNumDto;
+import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.AuthCodeRequest;
 
 @Slf4j
 @Component
 @Transactional
 @RequiredArgsConstructor
-public class HtmlEmailService {
+public class AuthEmailService {
 
     @Value("${spring.mail.username}")
     private String from;
 
-    private final ConcurrentHashMap<String, AuthCode> authNumMap = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, AuthCode> authNumMap = new ConcurrentHashMap<>();
     private final long AUTH_NUM_EXPIRY_MINUTES = 5; // 인증 번호 유효 시간 (초 단위)
     private final long MINUTES = 60 * 1000;
 
@@ -55,11 +55,10 @@ public class HtmlEmailService {
 
     }
 
+    public void verifyAuthCode(AuthCodeRequest authCodeRequest) {
 
-    public boolean confirmAuthNum(AuthNumDto authNumDto) {
-
-        String email = authNumDto.getEmail();
-        String authNum = authNumDto.getAuthNum();
+        String email = authCodeRequest.getEmail();
+        String authNum = authCodeRequest.getAuthNum();
 
         AuthCode code = authNumMap.get(email);
 
@@ -75,7 +74,6 @@ public class HtmlEmailService {
         }
 
         authNumMap.remove(email);
-        return true;
     }
 
     @Scheduled(fixedRate = AUTH_NUM_EXPIRY_MINUTES * MINUTES)

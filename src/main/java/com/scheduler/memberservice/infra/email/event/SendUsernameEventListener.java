@@ -10,7 +10,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-@Async
+import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMIT;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -18,7 +19,8 @@ public class SendUsernameEventListener {
 
     private final JavaMailSender javaMailSender;
 
-    @TransactionalEventListener
+    @Async
+    @TransactionalEventListener(phase = AFTER_COMMIT)
     public void handleSendUsernameByEmailEvent(SendEmailEvent sendEmailEvent) {
 
         String from = sendEmailEvent.getFrom();
@@ -29,7 +31,8 @@ public class SendUsernameEventListener {
         sendEmail(from, to, subject, message);
     }
 
-    @TransactionalEventListener
+    @Async
+    @TransactionalEventListener(phase = AFTER_COMMIT)
     public void handleSendAuthNumByEmailEvent(SendAuthNumEvent sendAuthNumEvent) {
 
         String from = sendAuthNumEvent.getFrom();

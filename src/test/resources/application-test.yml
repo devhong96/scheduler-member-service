@@ -12,15 +12,15 @@ spring:
 
   datasource: # jdbc
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/test
+    url: jdbc:h2:mem:testdb
     username: sa
     password:
 
   mail: #email
     host: smtp.gmail.com
     port: 587
-    username:
-    password:
+    username: test
+    password: test
     properties:
       mail:
         smtp:
@@ -39,6 +39,11 @@ spring:
       password: 123
   messages:
     basename: errors
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
 
 management:
   endpoints:

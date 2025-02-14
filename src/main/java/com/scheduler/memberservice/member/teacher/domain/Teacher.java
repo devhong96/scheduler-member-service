@@ -1,7 +1,6 @@
 package com.scheduler.memberservice.member.teacher.domain;
 
 import com.scheduler.memberservice.member.common.RoleType;
-import com.scheduler.memberservice.member.student.domain.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +8,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import static com.scheduler.memberservice.member.common.RoleType.TEACHER;
@@ -46,11 +43,8 @@ public class Teacher {
 
     private Boolean approved;
 
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Student> studentList = new ArrayList<>();
-
     public void updatePassword(PasswordEncoder passwordEncoder, PwdEditRequest pwdEditRequest) {
-        this.password = passwordEncoder.encode(pwdEditRequest.getPassword());
+        this.password = passwordEncoder.encode(pwdEditRequest.getNewPassword());
     }
 
     public void updateEmail(EditEmailRequest editEmailRequest) {

@@ -39,10 +39,10 @@ public class StudentRepository {
                                 student.createdAt))
                         .from(student)
                         .join(teacher)
-                        .on(student.teacher.eq(teacher))
+                        .on(student.teacherId.eq(teacher.teacherId))
                         .where(
-                                studentNameEq(teacherName),
-                                teacherNameEq(studentName)
+                                studentNameEq(studentName),
+                                teacherNameEq(teacherName)
                         )
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize())
@@ -51,6 +51,8 @@ public class StudentRepository {
         JPAQuery<Long> counts = queryFactory
                 .select(student.count())
                 .from(student)
+                .join(teacher)
+                .on(student.teacherId.eq(teacher.teacherId))
                 .where(
                         studentNameEq(studentName),
                         teacherNameEq(teacherName)

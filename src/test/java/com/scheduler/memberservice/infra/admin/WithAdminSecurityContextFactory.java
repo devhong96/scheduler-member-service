@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.infra;
+package com.scheduler.memberservice.infra.admin;
 
 import com.scheduler.memberservice.infra.security.jwt.component.JwtUtils;
 import com.scheduler.memberservice.infra.security.jwt.dto.JwtTokenDto;
@@ -14,6 +14,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
+
+import static com.scheduler.memberservice.infra.TestConstants.TEST_ADMIN_EMAIL;
+import static com.scheduler.memberservice.infra.TestConstants.TEST_ADMIN_PASSWORD;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -56,6 +59,6 @@ public class WithAdminSecurityContextFactory implements WithSecurityContextFacto
     private void validateAdminAccount(String username, String email) {
         adminJpaRepository.findByUsernameIs(username)
                 .orElseGet(() -> adminJpaRepository
-                        .save(Admin.create(username, "testPassword", email, passwordEncoder)));
+                        .save(Admin.create(username, TEST_ADMIN_PASSWORD, TEST_ADMIN_EMAIL, passwordEncoder)));
     }
 }

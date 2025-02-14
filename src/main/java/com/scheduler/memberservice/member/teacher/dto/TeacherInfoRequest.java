@@ -1,6 +1,5 @@
 package com.scheduler.memberservice.member.teacher.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,18 +27,16 @@ public class TeacherInfoRequest {
     @Setter
     public static class PwdEditRequest {
 
-        private String username;
-
         @NotEmpty(message = "변경할 비밀번호를 입력해 주세요.")
-        private String password;
+        private String newPassword;
+
+        @NotEmpty
+        private String checkPassword;
     }
 
     @Getter
     @Setter
     public static class EditEmailRequest {
-
-        @JsonIgnore
-        private String username;
 
         @NotEmpty(message = "이메일을 입력해 주세요")
         private String email;

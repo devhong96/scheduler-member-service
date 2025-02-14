@@ -26,18 +26,6 @@ public class StudentRequest {
 
         @NotEmpty(message = "학부모 전화번호를 입력해 주세요")
         private String studentParentPhoneNumber;
-
-        private String teacherName;
-
-        private String teacherUsername;
-
-        public void setStudentPhoneNumber(String studentPhoneNumber) {
-            this.studentPhoneNumber = studentPhoneNumber.replace("-", "");
-        }
-
-        public void setStudentParentPhoneNumber(String studentParentPhoneNumber) {
-            this.studentParentPhoneNumber = studentParentPhoneNumber.replace("-", "");
-        }
     }
 
     @Getter

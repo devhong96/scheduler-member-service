@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface TeacherJpaRepository extends JpaRepository<Teacher, Long> {
 
     Boolean existsByUsername(String username);
+
     Boolean existsByEmail(String email);
 
     Optional<Teacher> findByUsernameIs(String username);

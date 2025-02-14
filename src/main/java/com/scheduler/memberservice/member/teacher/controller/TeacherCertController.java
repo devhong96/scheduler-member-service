@@ -1,5 +1,6 @@
 package com.scheduler.memberservice.member.teacher.controller;
 
+import com.scheduler.memberservice.infra.email.dto.AuthEmailService;
 import com.scheduler.memberservice.member.teacher.application.TeacherCertService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -16,20 +17,21 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 public class TeacherCertController {
 
-    public final TeacherCertService teacherCertService;
+    private final TeacherCertService teacherCertService;
+    private final AuthEmailService authEmailService;
 
     @Operation(description = "아이디 찾기")
     @PostMapping("sendUsername")
-    public ResponseEntity<String> sendEmail(
-            @RequestBody FindIdRequest findIdRequest
+    public ResponseEntity<String> findUsernameByEmail(
+            @RequestBody FindUsernameRequest findUsernameRequest
     ) {
-        teacherCertService.findUsernameByEmail(findIdRequest);
+        teacherCertService.findUsernameByEmail(findUsernameRequest);
         return new ResponseEntity<>(OK);
     }
 
     @Operation(description = "이메일이 있으면 메일 보냄")
     @PostMapping("findPwd")
-    public ResponseEntity<String> emailConfirm(
+    public ResponseEntity<String> sendPasswordResetEmail(
             @RequestBody FindPasswordRequest findPasswordRequest
     ) {
         teacherCertService.sendPasswordResetEmail(findPasswordRequest);
@@ -38,10 +40,10 @@ public class TeacherCertController {
 
     @Operation(description = "인증번호 인증")
     @PostMapping("authNumCheck")
-    private ResponseEntity<String> authNumCheck(
+    public ResponseEntity<String> verifyAuthCode(
             @RequestBody AuthCodeRequest authCodeRequest
     ) {
-        teacherCertService.verifyAuthCode(authCodeRequest);
+        authEmailService.verifyAuthCode(authCodeRequest);
         return new ResponseEntity<>(OK);
     }
 

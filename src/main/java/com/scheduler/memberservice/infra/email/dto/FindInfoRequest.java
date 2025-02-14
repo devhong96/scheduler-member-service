@@ -13,6 +13,7 @@ public class FindInfoRequest {
     public static class FindPasswordRequest {
 
         @NotEmpty(message = "이메일을 입력해 주세요")
+        @Email(message = "유효한 이메일 형식이어야 합니다")
         private String email;
 
         @NotEmpty(message = "아이디을 입력해 주세요")
@@ -21,9 +22,10 @@ public class FindInfoRequest {
 
     @Getter
     @Setter
-    public static class FindIdRequest {
+    public static class FindUsernameRequest {
 
         @NotEmpty(message = "이메일을 입력해주세요")
+        @Email(message = "유효한 이메일 형식이어야 합니다")
         private String email;
 
         @JsonIgnore
@@ -46,23 +48,14 @@ public class FindInfoRequest {
         }
     }
 
-    @Getter
-    @Setter
-    public static class AuthNumDto {
-
-        @Email
-        @NotEmpty
-        private String email;
-
-        @NotEmpty
-        private String authNum;
-    }
 
     @Getter
     @Setter
     public static class AuthCodeRequest {
 
-        private String username;
+        @Email
+        @NotEmpty
+        private String email;
 
         @NotEmpty(message = "인증번호를 입력해 주세요")
         private String authNum;
