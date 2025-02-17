@@ -1,9 +1,9 @@
-package com.scheduler.memberservice.infra.teacher;
+package com.scheduler.memberservice.infra.student;
 
 import com.scheduler.memberservice.infra.security.jwt.component.JwtUtils;
 import com.scheduler.memberservice.infra.security.jwt.dto.JwtTokenDto;
-import com.scheduler.memberservice.member.teacher.domain.Teacher;
-import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
+import com.scheduler.memberservice.member.student.domain.Student;
+import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,24 +16,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
 import static com.scheduler.memberservice.infra.TestConstants.*;
-import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.JoinTeacherRequest;
+import static com.scheduler.memberservice.member.student.dto.StudentRequest.RegisterStudentRequest;
 
 @Slf4j
 @RequiredArgsConstructor
-public class WithTeacherSecurityContextFactory implements WithSecurityContextFactory<WithTeacher> {
+public class WithStudentSecurityContextFactory implements WithSecurityContextFactory<WithStudent> {
 
     private final PasswordEncoder passwordEncoder;
-    private final TeacherJpaRepository teacherJpaRepository;
+    private final StudentJpaRepository studentJpaRepository;
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
 
     @Override
-    public SecurityContext createSecurityContext(WithTeacher withTeacher) {
+    public SecurityContext createSecurityContext(WithStudent withStudent) {
 
-        String username = withTeacher.username();
+        String username = withStudent.username();
 
-        System.out.println("username = " + username);
-        validateTeacherAccount(username);
+        validateStudentAccount(username);
 
         UserDetails principal = userDetailsService.loadUserByUsername(username);
 
@@ -51,20 +50,24 @@ public class WithTeacherSecurityContextFactory implements WithSecurityContextFac
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(tokenAuthentication);
 
-        log.info("teacher-login");
+        log.info("student-login");
 
         return context;
     }
 
-    private void validateTeacherAccount(String username) {
-        JoinTeacherRequest joinTeacherRequest = new JoinTeacherRequest();
-        joinTeacherRequest.setUsername(username);
-        joinTeacherRequest.setEmail(TEST_TEACHER_EMAIL);
-        joinTeacherRequest.setPassword(TEST_TEACHER_PASSWORD);
-        joinTeacherRequest.setTeacherName(TEST_TEACHER_NAME);
+    private void validateStudentAccount(String username) {
+        RegisterStudentRequest request = new RegisterStudentRequest();
+        request.setUsername(username);
+        request.setPassword(TEST_STUDENT_PASSWORD);
+        request.setStudentName(TEST_STUDENT_NAME);
+        request.setStudentEmail(TEST_STUDENT_EMAIL);
+        request.setStudentPhoneNumber(TEST_STUDENT_PHONE_NUMBER);
+        request.setStudentAddress(TEST_STUDENT_ADDRESS);
+        request.setStudentDetailedAddress(TEST_STUDENT_DETAILED_ADDRESS);
+        request.setStudentParentPhoneNumber(TEST_STUDENT_PARENT_PHONE_NUMBER);
 
-        teacherJpaRepository.findByUsernameIs(username)
-                .orElseGet(() -> teacherJpaRepository
-                        .save(Teacher.create(joinTeacherRequest, passwordEncoder)));
+        studentJpaRepository.findStudentByUsernameIs(username)
+                .orElseGet(() -> studentJpaRepository
+                        .save(Student.create(request, "testTeacherId", passwordEncoder)));
     }
 }

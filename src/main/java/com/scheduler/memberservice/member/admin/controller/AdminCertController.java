@@ -2,6 +2,7 @@ package com.scheduler.memberservice.member.admin.controller;
 
 import com.scheduler.memberservice.member.admin.application.AdminCertService;
 import com.scheduler.memberservice.member.admin.application.AdminService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,9 @@ public class AdminCertController {
     public final AdminCertService adminCertService;
 
     @PatchMapping("password")
-    public ResponseEntity<String> initializePassword(@RequestBody PwdEditRequest pwdEditRequest) {
+    public ResponseEntity<String> initializePassword(
+            @Valid @RequestBody PwdEditRequest pwdEditRequest
+    ) {
         adminCertService.initializePassword(pwdEditRequest);
         return new ResponseEntity<>(OK);
     }
@@ -30,7 +33,9 @@ public class AdminCertController {
     }
 
     @PatchMapping("email")
-    public ResponseEntity<String> updateEmail(EditEmailRequest editEmailRequest) {
+    public ResponseEntity<String> updateEmail(
+            @Valid EditEmailRequest editEmailRequest
+    ) {
         adminCertService.updateEmail(editEmailRequest);
         return new ResponseEntity<>(OK);
     }

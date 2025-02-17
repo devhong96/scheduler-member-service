@@ -2,6 +2,7 @@ package com.scheduler.memberservice.member.teacher.controller;
 
 import com.scheduler.memberservice.member.teacher.application.TeacherService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ public class JoinController {
     @Operation(description = "교사 회원 가입")
     @PostMapping
     public ResponseEntity<Void> approved(
-            @RequestBody JoinTeacherRequest joinTeacherRequest
+            @Valid @RequestBody JoinTeacherRequest joinTeacherRequest
     ) {
         teacherService.joinTeacher(joinTeacherRequest);
         return new ResponseEntity<>(OK);

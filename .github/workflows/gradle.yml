@@ -73,19 +73,18 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: deploy
-
-        run: |
-          ssh -p ${{ secrets.NAS_PORT }} -o StrictHostKeyChecking=no ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_HOST }}  << EOF
-          cd /volume1/docker/scheduler/application
-          
-          compose stop member-service
-          compose rm -f member-service
-          docker rmi -f member-service
-          
-          compose pull member-service
-          compose up -d --no-deps member-service
-          EOF
+#      - name: deploy
+#        run: |
+#          ssh -p ${{ secrets.NAS_PORT }} -o StrictHostKeyChecking=no ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_HOST }}  << EOF
+#          cd /volume1/docker/scheduler/application
+#
+#          compose stop scheduler-member-service
+#          compose rm -f scheduler-member-service
+#          docker rmi -f scheduler-member-service
+#
+#          compose pull member-service
+#          compose up -d --no-deps member-service
+#          EOF
 
   dependency-submission:
 

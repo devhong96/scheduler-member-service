@@ -1,19 +1,16 @@
 package com.scheduler.memberservice.member.student.application;
 
-import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.infra.util.MemberUtils;
 import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
-import com.scheduler.memberservice.member.student.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.scheduler.memberservice.member.student.dto.StudentRequest.ModifyStudentRequest;
-import static com.scheduler.memberservice.member.student.dto.StudentRequest.RegisterStudentRequest;
-import static com.scheduler.memberservice.member.student.dto.StudentResponse.StudentInfoResponse;
+import java.util.Objects;
+
+import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,39 +18,40 @@ public class StudentServiceImpl implements StudentService {
 
     private final MemberUtils memberUtils;
     private final StudentJpaRepository studentJpaRepository;
-    private final StudentRepository studentRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
-    public void registerStudentInformation(RegisterStudentRequest registerStudentRequest) {
-
-        Student student = Student.create(registerStudentRequest);
-
+    public void registerStudent(
+            RegisterStudentRequest registerStudentRequest
+    ) {
         String teacherId = memberUtils.getTeacherId();
-        student.assignTeacher(teacherId);
-
+        Student student = Student.create(registerStudentRequest, teacherId, passwordEncoder);
         studentJpaRepository.save(student);
     }
 
     @Override
     @Transactional
-    public void modifyStudentVerification(ModifyStudentRequest registerStudentRequest) {
-
-        String studentId = registerStudentRequest.getStudentId();
-        Boolean isApproved = registerStudentRequest.getIsApproved();
-
-        Student student = studentJpaRepository.findStudentByStudentId(studentId)
-                .orElseThrow(MemberExistException::new);
-
-        student.updateApproved(isApproved);
+    public void modifyStudentInfo(
+            ModifyStudentInfoRequest modifyStudentRequest
+    ) {
+        Student student = memberUtils.getStudent();
+        student.modifyStudentInfo(modifyStudentRequest);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Page<StudentInfoResponse> findStudentInfoList(
-            String teacherName, String studentName, Pageable pageable
+    @Transactional
+    public void modifyStudentPassword(
+            ModifyStudentPasswordRequest modifyStudentPasswordRequest
     ) {
+        String newPassword = modifyStudentPasswordRequest.getNewPassword();
+        String confirmNewPassword = modifyStudentPasswordRequest.getConfirmNewPassword();
 
-        return studentRepository.studentInformationList(teacherName, studentName, pageable);
+        if(!Objects.equals(newPassword, confirmNewPassword)){
+            throw new RuntimeException("Passwords do not match");
+        }
+
+        Student student = memberUtils.getStudent();
+        student.changePassword(modifyStudentPasswordRequest, passwordEncoder);
     }
 }

@@ -31,7 +31,7 @@ class AdminCertServiceTest {
     PasswordEncoder passwordEncoder;
 
     @Test
-    @WithAdmin(username = TEST_ADMIN_USERNAME, email = TEST_ADMIN_EMAIL)
+    @WithAdmin(username = TEST_ADMIN_USERNAME)
     @DisplayName("아이디와 이메일 회원가입 유무 확인 ")
     void emailConfirmation() {
 

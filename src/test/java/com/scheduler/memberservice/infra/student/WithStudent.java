@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.infra.admin;
+package com.scheduler.memberservice.infra.student;
 
 import org.springframework.security.test.context.support.WithSecurityContext;
 
@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@WithSecurityContext(factory = WithAdminSecurityContextFactory.class)
-public @interface WithAdmin {
-  String username() default "";
+@WithSecurityContext(factory = WithStudentSecurityContextFactory.class)
+public @interface WithStudent {
+    String username() default "";
 }

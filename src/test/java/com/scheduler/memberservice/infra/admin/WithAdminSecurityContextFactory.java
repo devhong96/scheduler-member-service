@@ -31,9 +31,8 @@ public class WithAdminSecurityContextFactory implements WithSecurityContextFacto
     public SecurityContext createSecurityContext(WithAdmin withAdmin) {
 
         String username = withAdmin.username();
-        String email = withAdmin.email();
 
-        validateAdminAccount(username, email);
+        validateAdminAccount(username);
 
         UserDetails principal = userDetailsService.loadUserByUsername(username);
 
@@ -56,7 +55,7 @@ public class WithAdminSecurityContextFactory implements WithSecurityContextFacto
         return context;
     }
 
-    private void validateAdminAccount(String username, String email) {
+    private void validateAdminAccount(String username) {
         adminJpaRepository.findByUsernameIs(username)
                 .orElseGet(() -> adminJpaRepository
                         .save(Admin.create(username, TEST_ADMIN_PASSWORD, TEST_ADMIN_EMAIL, passwordEncoder)));

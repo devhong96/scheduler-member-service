@@ -3,7 +3,7 @@ package com.scheduler.memberservice.member.teacher.application;
 import com.scheduler.memberservice.infra.IntegrationTest;
 import com.scheduler.memberservice.infra.email.dto.AuthEmailService;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
-import com.scheduler.memberservice.infra.teacher.WithTeacher;
+import com.scheduler.memberservice.infra.student.WithStudent;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +37,7 @@ class TeacherCertServiceTest {
     private AuthEmailService authEmailService;
 
 //    @Test
-    @WithTeacher(username = TEST_TEACHER_USERNAME)
+    @WithStudent(username = TEST_TEACHER_USERNAME)
     void findUsernameByEmail() {
          FindUsernameRequest findUsernameRequest = new FindUsernameRequest();
          findUsernameRequest.setEmail(TEST_TEACHER_EMAIL);
@@ -47,7 +47,21 @@ class TeacherCertServiceTest {
     }
 
     @Test
-    @WithTeacher(username = TEST_TEACHER_USERNAME)
+    @DisplayName("이메일 전송")
+    @WithStudent(username = TEST_TEACHER_USERNAME)
+    void sendPasswordResetEmail() {
+        FindPasswordRequest findInfoRequest = new FindPasswordRequest();
+        findInfoRequest.setUsername(TEST_TEACHER_USERNAME);
+        findInfoRequest.setEmail(TEST_TEACHER_EMAIL);
+
+        teacherCertService.sendPasswordResetEmail(findInfoRequest);
+
+        verify(authEmailService)
+                .sendAuthNum(TEST_TEACHER_EMAIL, TEST_TEACHER_USERNAME);
+    }
+
+    @Test
+    @WithStudent(username = TEST_TEACHER_USERNAME)
     @DisplayName("교사 비밀번호 변경")
     void initializePassword() {
 
@@ -67,22 +81,8 @@ class TeacherCertServiceTest {
         assertTrue(matches);
     }
 
-    @Test
-    @DisplayName("이메일 전송")
-    @WithTeacher(username = TEST_TEACHER_USERNAME)
-    void sendPasswordResetEmail() {
-        FindPasswordRequest findInfoRequest = new FindPasswordRequest();
-        findInfoRequest.setUsername(TEST_TEACHER_USERNAME);
-        findInfoRequest.setEmail(TEST_TEACHER_EMAIL);
-
-        teacherCertService.sendPasswordResetEmail(findInfoRequest);
-
-        verify(authEmailService)
-                .sendAuthNum(TEST_TEACHER_EMAIL, TEST_TEACHER_USERNAME);
-    }
-
 //    @Test
-    @WithTeacher(username = TEST_TEACHER_USERNAME)
+    @WithStudent(username = TEST_TEACHER_USERNAME)
     void verifyAuthCode() {
 
         FindPasswordRequest findInfoRequest = new FindPasswordRequest();
@@ -95,7 +95,7 @@ class TeacherCertServiceTest {
 
     @Test
     @DisplayName("교사 이메일 변경")
-    @WithTeacher(username = TEST_TEACHER_USERNAME)
+    @WithStudent(username = TEST_TEACHER_USERNAME)
     void changeUserEmail() {
         EditEmailRequest editEmailRequest = new EditEmailRequest();
         editEmailRequest.setEmail(TEST_NEW_TEACHER_EMAIL);

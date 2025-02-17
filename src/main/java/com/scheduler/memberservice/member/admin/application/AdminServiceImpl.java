@@ -2,6 +2,7 @@ package com.scheduler.memberservice.member.admin.application;
 
 import com.scheduler.memberservice.client.CourseServiceClient;
 import com.scheduler.memberservice.infra.email.dto.AuthEmailService;
+import com.scheduler.memberservice.infra.exception.custom.DuplicateCourseException;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.infra.util.MemberUtils;
 import com.scheduler.memberservice.member.admin.domain.Admin;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.scheduler.memberservice.client.dto.FeignCourseResponse.StudentCourseResponse;
 import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.ChangeTeacherRequest;
 import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.EmailRequest;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.TeacherResponse;
@@ -78,6 +78,11 @@ public class AdminServiceImpl implements AdminService {
                 .findByUsernameIs(username)
                 .orElseThrow(MemberExistException::new);
 
+        Boolean result = courseServiceClient
+                .existWeeklyCoursesByTeacherId(teacher.getTeacherId());
+        if(!result)
+            throw new IllegalStateException("학생 수업 시간이 남아 있습니다.");
+
         teacher.updateApprove(false);
     }
 
@@ -92,66 +97,23 @@ public class AdminServiceImpl implements AdminService {
                 .findTeacherByTeacherId(teacherId)
                 .orElseThrow(MemberExistException::new);
 
+        String actualTeacherId = teacher.getTeacherId();
+
         Student student = studentJpaRepository
-                .findStudentByStudentId(teacherId)
+                .findStudentByStudentId(studentId)
                 .orElseThrow(MemberExistException::new);
 
-        //학생의 수업엔티티와 교사의 수업을 비교
-        List<StudentCourseResponse> weekCourseByTeacherId = courseServiceClient.getWeeklyCoursesByTeacherId(teacherId);
-        StudentCourseResponse weeklyCoursesByStudentId = courseServiceClient.getWeeklyCoursesByStudentId(studentId);
+        //학생의 수업엔티티와 교사의 수업을 비교 후, 재할당
+        Boolean result = courseServiceClient.validateStudentCoursesAndReassign(
+                actualTeacherId,
+                student.getStudentId()
+        );
 
-        classValidator(weekCourseByTeacherId, weeklyCoursesByStudentId);
-
-        student.assignTeacher(teacher.getTeacherId());
-
-        courseServiceClient.reassignStudentCourses(teacherId, studentId);
-    }
-
-    private void classValidator(
-            List<StudentCourseResponse> weekCourseByTeacherId,
-            StudentCourseResponse weeklyCoursesByStudentId
-    ) {
-
-        for (StudentCourseResponse studentCourseResponse : weekCourseByTeacherId) {
-
-            Integer mondayValue = studentCourseResponse.getMondayClass();
-            Integer tuesdayValue = studentCourseResponse.getTuesdayClass();
-            Integer wednesdayValue = studentCourseResponse.getWednesdayClass();
-            Integer thursdayValue = studentCourseResponse.getThursdayClass();
-            Integer fridayValue = studentCourseResponse.getFridayClass();
-
-            if (mondayValue.equals(weeklyCoursesByStudentId.getMondayClass()))
-                throw new IllegalArgumentException("학생의 월요일 수업 중에 겹치는 날이 있습니다.");
-
-            if (tuesdayValue.equals(weeklyCoursesByStudentId.getTuesdayClass()))
-                throw new IllegalArgumentException("학생의 화요일 수업 중에 겹치는 날이 있습니다.");
-
-            if (wednesdayValue.equals(weeklyCoursesByStudentId.getWednesdayClass()))
-                throw new IllegalArgumentException("학생의 수요일 수업 중에 겹치는 날이 있습니다.");
-
-            if (thursdayValue.equals(weeklyCoursesByStudentId.getThursdayClass()))
-                throw new IllegalArgumentException("학생의 목요일 수업 중에 겹치는 날이 있습니다.");
-
-            if (fridayValue.equals(weeklyCoursesByStudentId.getFridayClass()))
-                throw new IllegalArgumentException("학생의 금요일 수업 중에 겹치는 날이 있습니다.");
+        if(result) {
+            student.assignTeacher(actualTeacherId);
+        } else {
+            throw new DuplicateCourseException();
         }
-    }
-
-    @Override
-    @Transactional
-    public void deleteTeacherAccount(String teacherId) {
-
-        Teacher teacher = teacherJpaRepository
-                .findByUsernameIs(teacherId)
-                .orElseThrow(MemberExistException::new);
-
-        List<StudentCourseResponse> studentClassByTeacherName
-                = courseServiceClient.getWeeklyCoursesByTeacherId(teacher.getTeacherId());
-
-        if(!studentClassByTeacherName.isEmpty())
-            throw new IllegalStateException("학생 수업 시간이 남아 있습니다.");
-
-        teacherJpaRepository.deleteByUsernameIs(teacherId);
     }
 
     @Override

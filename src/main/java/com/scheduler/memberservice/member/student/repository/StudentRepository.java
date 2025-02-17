@@ -51,8 +51,6 @@ public class StudentRepository {
         JPAQuery<Long> counts = queryFactory
                 .select(student.count())
                 .from(student)
-                .join(teacher)
-                .on(student.teacherId.eq(teacher.teacherId))
                 .where(
                         studentNameEq(studentName),
                         teacherNameEq(teacherName)

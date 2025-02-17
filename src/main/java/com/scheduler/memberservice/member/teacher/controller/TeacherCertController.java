@@ -3,6 +3,7 @@ package com.scheduler.memberservice.member.teacher.controller;
 import com.scheduler.memberservice.infra.email.dto.AuthEmailService;
 import com.scheduler.memberservice.member.teacher.application.TeacherCertService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class TeacherCertController {
     @Operation(description = "아이디 찾기")
     @PostMapping("sendUsername")
     public ResponseEntity<String> findUsernameByEmail(
-            @RequestBody FindUsernameRequest findUsernameRequest
+            @Valid @RequestBody FindUsernameRequest findUsernameRequest
     ) {
         teacherCertService.findUsernameByEmail(findUsernameRequest);
         return new ResponseEntity<>(OK);
@@ -32,7 +33,7 @@ public class TeacherCertController {
     @Operation(description = "이메일이 있으면 메일 보냄")
     @PostMapping("findPwd")
     public ResponseEntity<String> sendPasswordResetEmail(
-            @RequestBody FindPasswordRequest findPasswordRequest
+            @Valid @RequestBody FindPasswordRequest findPasswordRequest
     ) {
         teacherCertService.sendPasswordResetEmail(findPasswordRequest);
         return new ResponseEntity<>(OK);
@@ -41,7 +42,7 @@ public class TeacherCertController {
     @Operation(description = "인증번호 인증")
     @PostMapping("authNumCheck")
     public ResponseEntity<String> verifyAuthCode(
-            @RequestBody AuthCodeRequest authCodeRequest
+            @Valid @RequestBody AuthCodeRequest authCodeRequest
     ) {
         authEmailService.verifyAuthCode(authCodeRequest);
         return new ResponseEntity<>(OK);
@@ -50,7 +51,7 @@ public class TeacherCertController {
     @Operation(description = "확인 후 변경")
     @PatchMapping("password")
     public ResponseEntity<String> initializePassword(
-            @RequestBody PwdEditRequest pwdEditRequest
+            @Valid @RequestBody PwdEditRequest pwdEditRequest
     ) {
         teacherCertService.initializePassword(pwdEditRequest);
         return new ResponseEntity<>(OK);
@@ -59,7 +60,7 @@ public class TeacherCertController {
     @Operation(description = "로그인 상태에서 이메일 변경")
     @PatchMapping("email")
     public ResponseEntity<Void> changeUserEmail(
-            @RequestBody EditEmailRequest editEmailRequest
+            @Valid @RequestBody EditEmailRequest editEmailRequest
     ) {
         teacherCertService.changeUserEmail(editEmailRequest);
         return new ResponseEntity<>(OK);

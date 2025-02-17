@@ -1,50 +1,44 @@
 package com.scheduler.memberservice.member.student.controller;
 
 import com.scheduler.memberservice.member.student.application.StudentService;
+import com.scheduler.memberservice.member.student.dto.StudentRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.scheduler.memberservice.member.student.dto.StudentRequest.ModifyStudentRequest;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.RegisterStudentRequest;
-import static com.scheduler.memberservice.member.student.dto.StudentResponse.StudentInfoResponse;
-import static org.springframework.data.domain.PageRequest.of;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("manage")
+@RequestMapping("student")
 @RequiredArgsConstructor
 public class StudentController {
 
     private final StudentService studentService;
 
-    @PostMapping("saveStudent")
+    @PostMapping("join")
     public ResponseEntity<String> saveStudent(
-            @RequestBody RegisterStudentRequest registerStudentRequest
+            @Valid @RequestBody RegisterStudentRequest registerStudentRequest
     ) {
-        studentService.registerStudentInformation(registerStudentRequest);
+        studentService.registerStudent(registerStudentRequest);
         return new ResponseEntity<>(OK);
     }
 
-    @PatchMapping("modifyStudent")
-    public ResponseEntity<String> modifyStudentVerification(
-            @RequestBody ModifyStudentRequest registerStudentRequest
+    @PatchMapping("modify/info")
+    public ResponseEntity<String> modifyStudentInfo(
+            @Valid @RequestBody StudentRequest.ModifyStudentInfoRequest registerStudentRequest
     ) {
-        studentService.modifyStudentVerification(registerStudentRequest);
-        return ResponseEntity.ok("변경되었습니다.");
+        studentService.modifyStudentInfo(registerStudentRequest);
+        return  new ResponseEntity<>(OK);
     }
 
-    @GetMapping("studentList")
-    public ResponseEntity<Page<StudentInfoResponse>> studentList(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String teacherName,
-            @RequestParam(required = false) String studentName
+    @PatchMapping("modify/password")
+    public ResponseEntity<String> modifyStudentPassword(
+            @Valid @RequestBody StudentRequest.ModifyStudentPasswordRequest modifyStudentPasswordRequest
     ) {
-        return new ResponseEntity<>(studentService
-                .findStudentInfoList(teacherName, studentName, of(page, size)), OK);
-
-
+        studentService.modifyStudentPassword(modifyStudentPasswordRequest);
+        return  new ResponseEntity<>(OK);
     }
+
 }

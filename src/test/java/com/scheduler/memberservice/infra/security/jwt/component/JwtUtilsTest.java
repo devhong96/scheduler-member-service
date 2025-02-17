@@ -2,7 +2,7 @@ package com.scheduler.memberservice.infra.security.jwt.component;
 
 import com.scheduler.memberservice.infra.IntegrationTest;
 import com.scheduler.memberservice.infra.security.jwt.dto.JwtTokenDto;
-import com.scheduler.memberservice.infra.teacher.WithTeacher;
+import com.scheduler.memberservice.infra.student.WithStudent;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -25,7 +25,7 @@ class JwtUtilsTest {
 
     @Test
     @DisplayName("토큰 생성 및 정보 확인")
-    @WithTeacher(username = TEST_TEACHER_USERNAME)
+    @WithStudent(username = TEST_TEACHER_USERNAME)
     void generateToken() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -42,7 +42,7 @@ class JwtUtilsTest {
     }
 
 //    @Test
-    @WithTeacher(username = TEST_TEACHER_USERNAME)
+    @WithStudent(username = TEST_TEACHER_USERNAME)
     void isExpired() {
         String expiredToken = "";
 
@@ -60,7 +60,7 @@ class JwtUtilsTest {
 
     @Test
     @DisplayName("토큰으로 권한 확인")
-    @WithTeacher(username = TEST_TEACHER_USERNAME)
+    @WithStudent(username = TEST_TEACHER_USERNAME)
     void getAuthentication() {
 
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -78,7 +78,7 @@ class JwtUtilsTest {
     }
 
 //    @Test
-    @WithTeacher(username = TEST_TEACHER_USERNAME)
+    @WithStudent(username = TEST_TEACHER_USERNAME)
     void isRefreshTokenExpiringSoon() {
         String mockRefreshToken = "mock.refresh.tokenasfdasdf";
 

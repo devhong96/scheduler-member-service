@@ -27,6 +27,11 @@ public class GlobalException {
         return new ResponseEntity<>(e.getMessage(), FORBIDDEN);
     }
 
+    @ExceptionHandler(DuplicateCourseException.class)
+    public ResponseEntity<String> handleNullPointerException() {
+        return new ResponseEntity<>(FORBIDDEN);
+    }
+
     /*
        찾고자 하는 객체, 파일 또는 자료가 없을 때
     */

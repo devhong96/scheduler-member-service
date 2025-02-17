@@ -18,7 +18,6 @@ public interface AdminService {
     void revokeAuth(String teacherId);
 
     void changeExistTeacher(ChangeTeacherRequest changeTeacherRequest);
-    void deleteTeacherAccount(String teacherId);
 
     String findEmail();
 }

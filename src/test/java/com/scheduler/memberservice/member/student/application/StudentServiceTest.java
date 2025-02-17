@@ -2,7 +2,7 @@ package com.scheduler.memberservice.member.student.application;
 
 import com.scheduler.memberservice.infra.IntegrationTest;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
-import com.scheduler.memberservice.infra.teacher.WithTeacher;
+import com.scheduler.memberservice.infra.student.WithStudent;
 import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -10,17 +10,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
 import static com.scheduler.memberservice.infra.TestConstants.*;
-import static com.scheduler.memberservice.member.student.dto.StudentRequest.RegisterStudentRequest;
-import static com.scheduler.memberservice.member.student.dto.StudentResponse.StudentInfoResponse;
+import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.data.domain.PageRequest.of;
 
 @IntegrationTest
 class StudentServiceTest {
@@ -31,10 +28,13 @@ class StudentServiceTest {
     @Autowired
     private StudentJpaRepository studentJpaRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Test
-    @WithTeacher(username = TEST_TEACHER_USERNAME)
+    @WithStudent(username = TEST_TEACHER_USERNAME)
     @DisplayName("학생 등록")
-    void registerStudentInformation() {
+    void registerStudent() {
 
         Optional<Student> studentByStudentName = studentJpaRepository
                 .findStudentByStudentName(TEST_STUDENT_NAME);
@@ -49,44 +49,59 @@ class StudentServiceTest {
     }
 
     @Test
-    @WithTeacher(username = TEST_TEACHER_USERNAME)
-    @DisplayName("학생 등록 변경")
-    void modifyStudentVerification() {
+    @WithStudent(username = TEST_STUDENT_USERNAME)
+    @DisplayName("학생 개인정보 변경")
+    void modifyStudentInfo() {
 
-        //
-        Student student = studentJpaRepository
-                .findStudentByStudentName(TEST_STUDENT_NAME)
+        ModifyStudentInfoRequest modifyStudentInfoRequest = new ModifyStudentInfoRequest();
+        
+        modifyStudentInfoRequest.setStudentEmail("student@email.com");
+
+        Student student = studentJpaRepository.findStudentByUsernameIs(TEST_STUDENT_NAME)
+                .orElseThrow(MemberExistException::new);
+        
+        student.modifyStudentInfo(modifyStudentInfoRequest);
+
+        Student resultStudent = studentJpaRepository.findStudentByUsernameIs(TEST_STUDENT_NAME)
                 .orElseThrow(MemberExistException::new);
 
-        student.updateApproved(false);
-        Student result = studentJpaRepository.save(student);
+        String email = resultStudent.getEmail();
 
-        //
-        assertFalse(result.getApproved());
+        assertThat(email).isEqualTo("student@email.com");
 
     }
 
     @Test
-    @WithTeacher(username = TEST_TEACHER_USERNAME)
-    @DisplayName("학생 조회")
-    void findStudentInfoList() {
+    @WithStudent(username = TEST_STUDENT_USERNAME)
+    @DisplayName("학생 비밀번호 변경")
+    void modifyStudentPassword() {
+        ModifyStudentPasswordRequest modifyStudentPasswordRequest = new ModifyStudentPasswordRequest();
+        modifyStudentPasswordRequest.setNewPassword("newPassword");
+        modifyStudentPasswordRequest.setConfirmNewPassword("newPassword");
 
-        Page<StudentInfoResponse> studentInfoList = studentService
-                .findStudentInfoList(TEST_TEACHER_NAME, TEST_STUDENT_NAME, of(0, 10));
+        studentService.modifyStudentPassword(modifyStudentPasswordRequest);
 
-        assertThat(studentInfoList).size().isEqualTo(1);
+        Student student = studentJpaRepository.findStudentByUsernameIs(TEST_STUDENT_NAME)
+                .orElseThrow(MemberExistException::new);
+
+        boolean matches = passwordEncoder.matches(modifyStudentPasswordRequest.getNewPassword(), student.getPassword());
+
+        assertTrue(matches);
     }
 
     @BeforeEach
     void setUp() {
         RegisterStudentRequest request = new RegisterStudentRequest();
-        request.setStudentName(TEST_STUDENT_NAME);
+        request.setUsername(TEST_STUDENT_USERNAME);
         request.setPassword(TEST_STUDENT_PASSWORD);
+        request.setStudentName(TEST_STUDENT_NAME);
+        request.setStudentEmail(TEST_STUDENT_EMAIL);
         request.setStudentPhoneNumber(TEST_STUDENT_PHONE_NUMBER);
         request.setStudentAddress(TEST_STUDENT_ADDRESS);
         request.setStudentDetailedAddress(TEST_STUDENT_DETAILED_ADDRESS);
         request.setStudentParentPhoneNumber(TEST_STUDENT_PARENT_PHONE_NUMBER);
-        studentService.registerStudentInformation(request);
+
+        studentService.registerStudent(request);
     }
 
     @AfterEach

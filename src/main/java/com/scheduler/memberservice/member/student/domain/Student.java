@@ -7,10 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.UUID;
 
-import static com.scheduler.memberservice.member.student.dto.StudentRequest.RegisterStudentRequest;
+import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -32,9 +33,13 @@ public class Student extends BaseEntity {
     @Column(nullable = false)
     private String teacherId;
 
-    private String studentName;
+    private String username;
 
     private String password;
+
+    private String studentName;
+
+    private String email;
 
     private String studentPhoneNumber;
 
@@ -49,16 +54,40 @@ public class Student extends BaseEntity {
 
     private Boolean approved;
 
-    public static Student create(RegisterStudentRequest registerStudentRequest) {
+    public static Student create(
+            RegisterStudentRequest registerStudentRequest,
+            String teacherId,
+            PasswordEncoder passwordEncoder
+    ) {
         Student student = new Student();
+        student.teacherId = teacherId;
+        student.username = registerStudentRequest.getUsername();
+        student.password = passwordEncoder.encode(registerStudentRequest.getPassword());
         student.studentName = registerStudentRequest.getStudentName();
-        student.password = registerStudentRequest.getPassword();
+        student.email = registerStudentRequest.getStudentEmail();
         student.studentPhoneNumber = registerStudentRequest.getStudentPhoneNumber();
         student.studentParentPhoneNumber = registerStudentRequest.getStudentParentPhoneNumber();
         student.studentAddress = registerStudentRequest.getStudentAddress();
         student.studentDetailedAddress = registerStudentRequest.getStudentDetailedAddress();
         student.approved = true;
         return student;
+    }
+
+    public void modifyStudentInfo(
+            ModifyStudentInfoRequest modifyStudentRequest
+    ) {
+        this.email = modifyStudentRequest.getStudentEmail();
+        this.studentPhoneNumber = modifyStudentRequest.getStudentPhoneNumber();
+        this.studentParentPhoneNumber = modifyStudentRequest.getStudentParentPhoneNumber();
+        this.studentAddress = modifyStudentRequest.getStudentAddress();
+        this.studentDetailedAddress = modifyStudentRequest.getStudentDetailedAddress();
+    }
+
+    public void changePassword(
+            ModifyStudentPasswordRequest modifyStudentPasswordRequest,
+            PasswordEncoder passwordEncoder
+    ) {
+        this.password = passwordEncoder.encode(modifyStudentPasswordRequest.getNewPassword());
     }
 
     public void assignTeacher(String teacherId) {
