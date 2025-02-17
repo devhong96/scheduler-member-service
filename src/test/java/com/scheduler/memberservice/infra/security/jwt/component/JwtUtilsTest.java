@@ -3,6 +3,7 @@ package com.scheduler.memberservice.infra.security.jwt.component;
 import com.scheduler.memberservice.infra.IntegrationTest;
 import com.scheduler.memberservice.infra.security.jwt.dto.JwtTokenDto;
 import com.scheduler.memberservice.infra.student.WithStudent;
+import com.scheduler.memberservice.infra.teacher.WithTeacher;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -60,7 +61,7 @@ class JwtUtilsTest {
 
     @Test
     @DisplayName("토큰으로 권한 확인")
-    @WithStudent(username = TEST_TEACHER_USERNAME)
+    @WithTeacher(username = TEST_TEACHER_USERNAME)
     void getAuthentication() {
 
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

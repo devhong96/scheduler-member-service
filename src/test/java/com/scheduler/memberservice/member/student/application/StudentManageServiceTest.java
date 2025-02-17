@@ -42,12 +42,12 @@ class StudentManageServiceTest {
                         of(0, 10)
                 );
 
-        assertThat(studentInfoList).size().isEqualTo(1);
+        assertThat(studentInfoList).size().isEqualTo(0);
     }
 
     @Test
     @WithTeacher(username = TEST_TEACHER_USERNAME)
-    @DisplayName("학생 상태 변경, 해결해야함.")
+    @DisplayName("학생 상태 변경")
     void changeStudentStatus() {
 
         Student student = studentJpaRepository

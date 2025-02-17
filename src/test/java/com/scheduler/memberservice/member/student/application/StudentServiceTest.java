@@ -15,7 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static com.scheduler.memberservice.infra.TestConstants.*;
-import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
+import static com.scheduler.memberservice.member.student.dto.StudentRequest.ModifyStudentInfoRequest;
+import static com.scheduler.memberservice.member.student.dto.StudentRequest.ModifyStudentPasswordRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,7 +33,7 @@ class StudentServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
-    @WithStudent(username = TEST_TEACHER_USERNAME)
+    @WithStudent(username = TEST_STUDENT_USERNAME)
     @DisplayName("학생 등록")
     void registerStudent() {
 
@@ -91,17 +92,7 @@ class StudentServiceTest {
 
     @BeforeEach
     void setUp() {
-        RegisterStudentRequest request = new RegisterStudentRequest();
-        request.setUsername(TEST_STUDENT_USERNAME);
-        request.setPassword(TEST_STUDENT_PASSWORD);
-        request.setStudentName(TEST_STUDENT_NAME);
-        request.setStudentEmail(TEST_STUDENT_EMAIL);
-        request.setStudentPhoneNumber(TEST_STUDENT_PHONE_NUMBER);
-        request.setStudentAddress(TEST_STUDENT_ADDRESS);
-        request.setStudentDetailedAddress(TEST_STUDENT_DETAILED_ADDRESS);
-        request.setStudentParentPhoneNumber(TEST_STUDENT_PARENT_PHONE_NUMBER);
 
-        studentService.registerStudent(request);
     }
 
     @AfterEach

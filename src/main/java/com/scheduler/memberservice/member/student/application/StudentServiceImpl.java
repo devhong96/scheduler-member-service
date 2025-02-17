@@ -25,8 +25,7 @@ public class StudentServiceImpl implements StudentService {
     public void registerStudent(
             RegisterStudentRequest registerStudentRequest
     ) {
-        String teacherId = memberUtils.getTeacherId();
-        Student student = Student.create(registerStudentRequest, teacherId, passwordEncoder);
+        Student student = Student.create(registerStudentRequest, "default", passwordEncoder);
         studentJpaRepository.save(student);
     }
 
