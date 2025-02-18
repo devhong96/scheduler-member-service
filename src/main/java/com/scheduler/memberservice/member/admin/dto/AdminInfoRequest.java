@@ -16,14 +16,6 @@ public class AdminInfoRequest {
 
     @Getter
     @Setter
-    public static class ChangeTeacherRequest {
-
-        private String teacherId;
-        private String studentId;
-    }
-
-    @Getter
-    @Setter
     public static class CertDTO {
 
         private String username;

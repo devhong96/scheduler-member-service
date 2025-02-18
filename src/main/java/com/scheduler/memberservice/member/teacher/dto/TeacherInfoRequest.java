@@ -42,4 +42,12 @@ public class TeacherInfoRequest {
         private String email;
     }
 
+    @Getter
+    @Setter
+    public static class ChangeTeacherRequest {
+
+        private String teacherId;
+        private String studentId;
+    }
+
 }

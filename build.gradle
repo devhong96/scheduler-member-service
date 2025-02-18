@@ -55,7 +55,7 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-    implementation 'org.springframework.boot:spring-boot-starter-hateoas:3.3.5'
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas:3.4.2'
 
 //    implementation 'com.fasterxml.uuid:java-uuid-generator:5.1.0'
 

@@ -2,10 +2,11 @@ package com.scheduler.memberservice.member.teacher.application;
 
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindPasswordRequest;
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindUsernameRequest;
-import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.EditEmailRequest;
-import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.PwdEditRequest;
+import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.*;
 
 public interface TeacherCertService {
+
+    void joinTeacher(JoinTeacherRequest joinTeacherRequest);
 
     void findUsernameByEmail(FindUsernameRequest findUsernameRequest);
 

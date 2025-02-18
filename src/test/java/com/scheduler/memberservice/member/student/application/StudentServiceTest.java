@@ -6,7 +6,6 @@ import com.scheduler.memberservice.infra.student.WithStudent;
 import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,12 +57,14 @@ class StudentServiceTest {
         
         modifyStudentInfoRequest.setStudentEmail("student@email.com");
 
-        Student student = studentJpaRepository.findStudentByUsernameIs(TEST_STUDENT_NAME)
+        Student student = studentJpaRepository
+                .findStudentByUsernameIs(TEST_STUDENT_NAME)
                 .orElseThrow(MemberExistException::new);
         
         student.modifyStudentInfo(modifyStudentInfoRequest);
 
-        Student resultStudent = studentJpaRepository.findStudentByUsernameIs(TEST_STUDENT_NAME)
+        Student resultStudent = studentJpaRepository
+                .findStudentByUsernameIs(TEST_STUDENT_NAME)
                 .orElseThrow(MemberExistException::new);
 
         String email = resultStudent.getEmail();
@@ -76,23 +77,20 @@ class StudentServiceTest {
     @WithStudent(username = TEST_STUDENT_USERNAME)
     @DisplayName("학생 비밀번호 변경")
     void modifyStudentPassword() {
+
         ModifyStudentPasswordRequest modifyStudentPasswordRequest = new ModifyStudentPasswordRequest();
         modifyStudentPasswordRequest.setNewPassword("newPassword");
         modifyStudentPasswordRequest.setConfirmNewPassword("newPassword");
 
         studentService.modifyStudentPassword(modifyStudentPasswordRequest);
 
-        Student student = studentJpaRepository.findStudentByUsernameIs(TEST_STUDENT_NAME)
+        Student student = studentJpaRepository
+                .findStudentByUsernameIs(TEST_STUDENT_NAME)
                 .orElseThrow(MemberExistException::new);
 
         boolean matches = passwordEncoder.matches(modifyStudentPasswordRequest.getNewPassword(), student.getPassword());
 
         assertTrue(matches);
-    }
-
-    @BeforeEach
-    void setUp() {
-
     }
 
     @AfterEach

@@ -1,7 +1,6 @@
 package com.scheduler.memberservice.member.student.application;
 
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
-import com.scheduler.memberservice.infra.util.MemberUtils;
 import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
 import com.scheduler.memberservice.member.student.repository.StudentRepository;
@@ -17,7 +16,6 @@ import static com.scheduler.memberservice.member.student.dto.StudentResponse.Stu
 @RequiredArgsConstructor
 public class StudentManageServiceImpl implements StudentManageService {
 
-    private final MemberUtils memberUtils;
     private final StudentRepository studentRepository;
     private final StudentJpaRepository studentJpaRepository;
 
@@ -33,7 +31,7 @@ public class StudentManageServiceImpl implements StudentManageService {
     @Override
     @Transactional
     public void changeStudentStatus(String studentId) {
-        memberUtils.getTeacher();
+
         Student student = studentJpaRepository
                 .findStudentByStudentId(studentId)
                 .orElseThrow(MemberExistException::new);

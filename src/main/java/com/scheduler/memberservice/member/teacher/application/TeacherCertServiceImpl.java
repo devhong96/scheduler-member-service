@@ -1,6 +1,8 @@
 package com.scheduler.memberservice.member.teacher.application;
 
 import com.scheduler.memberservice.infra.email.dto.AuthEmailService;
+import com.scheduler.memberservice.infra.exception.custom.DuplicateEmailException;
+import com.scheduler.memberservice.infra.exception.custom.DuplicateUsernameException;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.infra.exception.custom.PasswordMismatchException;
 import com.scheduler.memberservice.infra.util.MemberUtils;
@@ -15,8 +17,7 @@ import java.util.Objects;
 
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindPasswordRequest;
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindUsernameRequest;
-import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.EditEmailRequest;
-import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.PwdEditRequest;
+import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,26 @@ public class TeacherCertServiceImpl implements TeacherCertService {
     private final PasswordEncoder passwordEncoder;
     private final AuthEmailService authEmailService;
     private final MemberUtils memberUtils;
+
+    @Override
+    @Transactional
+    public void joinTeacher(JoinTeacherRequest joinTeacherRequest) {
+
+        boolean existsByUsername = teacherJpaRepository.existsByUsername(joinTeacherRequest.getUsername());
+
+        if (existsByUsername) {
+            throw new DuplicateUsernameException();
+        }
+
+        boolean existsByEmail = teacherJpaRepository.existsByEmail(joinTeacherRequest.getEmail());
+
+        if (existsByEmail) {
+            throw new DuplicateEmailException();
+        }
+
+        Teacher teacher = Teacher.create(joinTeacherRequest, passwordEncoder);
+        teacherJpaRepository.save(teacher);
+    }
 
     @Override
     public void findUsernameByEmail(FindUsernameRequest findUsernameRequest) {
@@ -38,6 +59,7 @@ public class TeacherCertServiceImpl implements TeacherCertService {
     }
 
     @Override
+    @Transactional
     public void sendPasswordResetEmail(FindPasswordRequest findPasswordRequest) {
 
         String username = findPasswordRequest.getUsername();

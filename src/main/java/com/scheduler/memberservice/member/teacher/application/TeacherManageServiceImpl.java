@@ -1,12 +1,8 @@
-package com.scheduler.memberservice.member.admin.application;
+package com.scheduler.memberservice.member.teacher.application;
 
 import com.scheduler.memberservice.client.CourseServiceClient;
-import com.scheduler.memberservice.infra.email.dto.AuthEmailService;
 import com.scheduler.memberservice.infra.exception.custom.DuplicateCourseException;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
-import com.scheduler.memberservice.infra.util.MemberUtils;
-import com.scheduler.memberservice.member.admin.domain.Admin;
-import com.scheduler.memberservice.member.admin.repository.AdminJpaRepository;
 import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
@@ -18,22 +14,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.ChangeTeacherRequest;
-import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.EmailRequest;
+import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.ChangeTeacherRequest;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.TeacherResponse;
 
 @Service
 @RequiredArgsConstructor
-public class AdminServiceImpl implements AdminService {
-
-    private final MemberUtils memberUtils;
+public class TeacherManageServiceImpl implements TeacherManageService {
 
     private final TeacherRepository teacherRepository;
-    private final AdminJpaRepository adminJpaRepository;
     private final StudentJpaRepository studentJpaRepository;
     private final TeacherJpaRepository teacherJpaRepository;
 
-    private final AuthEmailService authEmailService;
     private final CourseServiceClient courseServiceClient;
 
     @Override
@@ -42,48 +33,27 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<TeacherResponse> findTeacherInformation(String username) {
+    public TeacherResponse findTeacherInformation(String username) {
         return teacherRepository.getTeacherInfoByUsername(username);
     }
 
     @Override
-    public void findAdminUsernameByEmail(EmailRequest emailRequest) {
-
-        Admin admin = adminJpaRepository
-                .findAdminByEmail(emailRequest.getEmail())
-                .orElseThrow(MemberExistException::new);
-
-        String email = admin.getEmail();
-        String username = admin.getUsername();
-
-        authEmailService.sendUsername(email, username);
-    }
-
-    @Override
     @Transactional
-    public void grantAuth(String teacherId) {
-
+    public void changeTeacherStatus(String teacherId) {
         Teacher teacher = teacherJpaRepository
-                .findByUsernameIs(teacherId)
-                .orElseThrow(MemberExistException::new);
-
-        teacher.updateApprove(true);
-    }
-
-    @Override
-    @Transactional
-    public void revokeAuth(String username) {
-
-        Teacher teacher = teacherJpaRepository
-                .findByUsernameIs(username)
+                .findByTeacherId(teacherId)
                 .orElseThrow(MemberExistException::new);
 
         Boolean result = courseServiceClient
                 .existWeeklyCoursesByTeacherId(teacher.getTeacherId());
-        if(!result)
-            throw new IllegalStateException("학생 수업 시간이 남아 있습니다.");
 
-        teacher.updateApprove(false);
+        if (!result) {
+            throw new IllegalStateException("학생 수업 시간이 남아 있습니다.");
+        }
+
+        Boolean approved = teacher.getApproved();
+
+        teacher.updateApprove(!approved);
     }
 
     @Override
@@ -109,16 +79,10 @@ public class AdminServiceImpl implements AdminService {
                 student.getStudentId()
         );
 
-        if(result) {
+        if (result) {
             student.assignTeacher(actualTeacherId);
         } else {
             throw new DuplicateCourseException();
         }
-    }
-
-    @Override
-    public String findEmail() {
-        Admin admin = memberUtils.getAdmin();
-        return admin.getEmail();
     }
 }

@@ -28,7 +28,7 @@ class AdminCertServiceTest {
     private AdminJpaRepository adminJpaRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Test
     @WithAdmin(username = TEST_ADMIN_USERNAME)

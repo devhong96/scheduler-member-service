@@ -2,6 +2,7 @@ package com.scheduler.memberservice.member.teacher.controller;
 
 import com.scheduler.memberservice.infra.email.dto.AuthEmailService;
 import com.scheduler.memberservice.member.teacher.application.TeacherCertService;
+import com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,15 @@ public class TeacherCertController {
 
     private final TeacherCertService teacherCertService;
     private final AuthEmailService authEmailService;
+
+    @Operation(description = "교사 회원 가입")
+    @PostMapping
+    public ResponseEntity<Void> approved(
+            @Valid @RequestBody TeacherInfoRequest.JoinTeacherRequest joinTeacherRequest
+    ) {
+        teacherCertService.joinTeacher(joinTeacherRequest);
+        return new ResponseEntity<>(OK);
+    }
 
     @Operation(description = "아이디 찾기")
     @PostMapping("sendUsername")

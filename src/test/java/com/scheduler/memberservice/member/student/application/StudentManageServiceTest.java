@@ -82,4 +82,5 @@ class StudentManageServiceTest {
     void tearDown() {
         studentJpaRepository.deleteAll();
     }
+
 }

@@ -6,6 +6,7 @@ import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.infra.student.WithStudent;
 import com.scheduler.memberservice.infra.teacher.WithTeacher;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
+import com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,10 +17,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import static com.scheduler.memberservice.infra.TestConstants.*;
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindPasswordRequest;
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindUsernameRequest;
+import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.*;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.EditEmailRequest;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.PwdEditRequest;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 
 @IntegrationTest
@@ -36,6 +37,25 @@ class TeacherCertServiceTest {
 
     @MockitoBean
     private AuthEmailService authEmailService;
+
+    @Test
+    @DisplayName("교사 회원 가입")
+    void joinTeacher() {
+
+        JoinTeacherRequest joinTeacherRequest = new JoinTeacherRequest();
+        joinTeacherRequest.setUsername(TEST_TEACHER_USERNAME);
+        joinTeacherRequest.setPassword(TEST_TEACHER_PASSWORD);
+        joinTeacherRequest.setEmail(TEST_TEACHER_EMAIL);
+        joinTeacherRequest.setTeacherName(TEST_TEACHER_NAME);
+
+        teacherCertService.joinTeacher(joinTeacherRequest);
+
+        Teacher teacher = teacherJpaRepository
+                .findByUsernameIs(TEST_TEACHER_USERNAME)
+                .orElseThrow(MemberExistException::new);
+
+        assertNotNull(teacher);
+    }
 
 //    @Test
     @WithStudent(username = TEST_TEACHER_USERNAME)
