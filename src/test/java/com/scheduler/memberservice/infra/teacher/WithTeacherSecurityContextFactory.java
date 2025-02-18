@@ -32,7 +32,6 @@ public class WithTeacherSecurityContextFactory implements WithSecurityContextFac
 
         String username = withTeacher.username();
 
-        System.out.println("username = " + username);
         validateTeacherAccount(username);
 
         UserDetails principal = userDetailsService.loadUserByUsername(username);

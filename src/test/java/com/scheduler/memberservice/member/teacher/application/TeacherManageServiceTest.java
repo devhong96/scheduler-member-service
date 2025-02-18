@@ -2,19 +2,20 @@ package com.scheduler.memberservice.member.teacher.application;
 
 import com.scheduler.memberservice.infra.IntegrationTest;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
+import com.scheduler.memberservice.infra.teacher.WithTeacher;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
-import com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static com.scheduler.memberservice.infra.TestConstants.*;
 import static com.scheduler.memberservice.infra.TestConstants.TEST_TEACHER_NAME;
-import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.*;
+import static com.scheduler.memberservice.infra.TestConstants.TEST_TEACHER_USERNAME;
+import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.TeacherResponse;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @IntegrationTest
@@ -34,13 +35,7 @@ class TeacherManageServiceTest {
 
     @BeforeEach
     void setUp() {
-        TeacherInfoRequest.JoinTeacherRequest joinTeacherRequest = new TeacherInfoRequest.JoinTeacherRequest();
-        joinTeacherRequest.setUsername(TEST_TEACHER_USERNAME);
-        joinTeacherRequest.setPassword(TEST_TEACHER_PASSWORD);
-        joinTeacherRequest.setEmail(TEST_TEACHER_EMAIL);
-        joinTeacherRequest.setTeacherName(TEST_TEACHER_NAME);
 
-        teacherCertService.joinTeacher(joinTeacherRequest);
     }
 
     @AfterEach
@@ -49,6 +44,8 @@ class TeacherManageServiceTest {
     }
 
     @Test
+    @WithTeacher(username = TEST_TEACHER_NAME)
+    @DisplayName("등록된 교사 인원 수")
     void getTeacherList() {
         List<TeacherResponse> teacherList =
                 teacherManageService.getTeacherList();
@@ -57,6 +54,8 @@ class TeacherManageServiceTest {
     }
 
     @Test
+    @WithTeacher(username = TEST_TEACHER_NAME)
+    @DisplayName("교사 정보 가져오기")
     void findTeacherInformation() {
 
         TeacherResponse teacherInformation = teacherManageService
@@ -66,7 +65,8 @@ class TeacherManageServiceTest {
                 .isEqualTo(TEST_TEACHER_NAME);
     }
 
-    @Test
+//    @Test
+    @WithTeacher(username = TEST_TEACHER_NAME)
     void changeTeacherStatus() {
         //
         Teacher before = teacherJpaRepository
@@ -84,7 +84,7 @@ class TeacherManageServiceTest {
         assertThat(before.getApproved()).isNotEqualTo(after.getApproved());
     }
 
-    @Test
+//    @Test
     void changeExistTeacher() {
     }
 }

@@ -31,11 +31,11 @@ public class TeacherManageController {
         return new ResponseEntity<>(teacherManageService.findTeacherInformation(username), OK);
     }
 
-    @PatchMapping("teacher/{teacherId}/status")
+    @PatchMapping("teacher/{username}/status")
     public ResponseEntity<String> changeTeacherStatus(
-            @PathVariable String teacherId
+            @PathVariable String username
     ) {
-        teacherManageService.changeTeacherStatus(teacherId);
+        teacherManageService.changeTeacherStatus(username);
         return ResponseEntity.ok("승인되었습니다.");
     }
 

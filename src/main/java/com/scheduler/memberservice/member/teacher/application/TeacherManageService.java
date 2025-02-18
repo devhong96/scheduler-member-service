@@ -13,5 +13,5 @@ public interface TeacherManageService {
 
     void changeExistTeacher(ChangeTeacherRequest changeTeacherRequest);
 
-    void changeTeacherStatus(String teacherId);
+    void changeTeacherStatus(String username);
 }

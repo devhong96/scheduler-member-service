@@ -39,9 +39,10 @@ public class TeacherManageServiceImpl implements TeacherManageService {
 
     @Override
     @Transactional
-    public void changeTeacherStatus(String teacherId) {
+    public void changeTeacherStatus(String username) {
+
         Teacher teacher = teacherJpaRepository
-                .findByTeacherId(teacherId)
+                .findByUsernameIs(username)
                 .orElseThrow(MemberExistException::new);
 
         Boolean result = courseServiceClient
