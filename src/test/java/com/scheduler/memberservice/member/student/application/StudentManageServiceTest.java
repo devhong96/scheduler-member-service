@@ -2,7 +2,6 @@ package com.scheduler.memberservice.member.student.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.WireMockServer;
 import com.scheduler.memberservice.client.CourseServiceClient;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.member.student.domain.Student;
@@ -20,7 +19,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.ChangeTeacherRequest;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.RegisterStudentRequest;
 import static com.scheduler.memberservice.member.student.dto.StudentResponse.StudentInfoResponse;
@@ -115,9 +113,6 @@ class StudentManageServiceTest {
 
     @BeforeEach
     void setUp() {
-
-        WireMockServer wireMockServer = new WireMockServer(wireMockConfig().port(8080));
-        wireMockServer.start();
 
         RegisterStudentRequest request = new RegisterStudentRequest();
 

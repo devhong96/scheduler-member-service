@@ -43,16 +43,20 @@ class TeacherManageServiceTest {
     @MockitoBean
     private CourseServiceClient courseServiceClient;
 
+    @MockitoBean
+    private WireMockServer wireMockServer;
+
     //== setting
 
     @BeforeEach
     void setUp() {
-        WireMockServer wireMockServer = new WireMockServer(wireMockConfig().port(8080));
+        wireMockServer = new WireMockServer(wireMockConfig().port(8080));
         wireMockServer.start();
     }
 
     @AfterEach
     void tearDown() {
+        wireMockServer.stop();
         teacherJpaRepository.deleteAll();
     }
 

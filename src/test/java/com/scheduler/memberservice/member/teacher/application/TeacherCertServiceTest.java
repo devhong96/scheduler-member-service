@@ -8,9 +8,9 @@ import com.scheduler.memberservice.testSet.IntegrationTest;
 import com.scheduler.memberservice.testSet.teacher.WithTeacher;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindPasswordRequest;
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindUsernameRequest;
@@ -32,7 +32,7 @@ class TeacherCertServiceTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Spy
+    @MockitoBean
     private AuthEmailService authEmailService;
 
     @Test
