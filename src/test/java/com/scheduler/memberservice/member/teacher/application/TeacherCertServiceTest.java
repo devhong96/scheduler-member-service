@@ -5,19 +5,19 @@ import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import com.scheduler.memberservice.testSet.IntegrationTest;
-import com.scheduler.memberservice.testSet.student.WithStudent;
 import com.scheduler.memberservice.testSet.teacher.WithTeacher;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindPasswordRequest;
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindUsernameRequest;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.*;
 import static com.scheduler.memberservice.testSet.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @IntegrationTest
@@ -32,7 +32,7 @@ class TeacherCertServiceTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @MockitoBean
+    @Spy
     private AuthEmailService authEmailService;
 
     @Test
@@ -54,13 +54,18 @@ class TeacherCertServiceTest {
         assertNotNull(teacher);
     }
 
-//    @Test
-    @WithStudent(username = TEST_TEACHER_USERNAME)
+    @Test
+    @DisplayName("이메일로 교사 아이디 찾기")
+    @WithTeacher(username = TEST_TEACHER_USERNAME)
     void findUsernameByEmail() {
+
          FindUsernameRequest findUsernameRequest = new FindUsernameRequest();
          findUsernameRequest.setEmail(TEST_TEACHER_EMAIL);
 
          teacherCertService.findUsernameByEmail(findUsernameRequest);
+
+        verify(authEmailService, times(1))
+                .sendUsername(TEST_TEACHER_USERNAME, TEST_TEACHER_EMAIL);
 
     }
 
@@ -68,6 +73,7 @@ class TeacherCertServiceTest {
     @DisplayName("이메일 전송")
     @WithTeacher(username = TEST_TEACHER_USERNAME)
     void sendPasswordResetEmail() {
+
         FindPasswordRequest findInfoRequest = new FindPasswordRequest();
         findInfoRequest.setUsername(TEST_TEACHER_USERNAME);
         findInfoRequest.setEmail(TEST_TEACHER_EMAIL);

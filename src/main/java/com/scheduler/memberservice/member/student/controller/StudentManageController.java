@@ -1,11 +1,13 @@
 package com.scheduler.memberservice.member.student.controller;
 
 import com.scheduler.memberservice.member.student.application.StudentManageService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.scheduler.memberservice.member.student.dto.StudentRequest.ChangeTeacherRequest;
 import static com.scheduler.memberservice.member.student.dto.StudentResponse.StudentInfoResponse;
 import static org.springframework.data.domain.PageRequest.of;
 import static org.springframework.http.HttpStatus.OK;
@@ -17,7 +19,7 @@ public class StudentManageController {
 
     private final StudentManageService studentManageService;
 
-    @GetMapping("studentList")
+    @GetMapping("student/list")
     public ResponseEntity<Page<StudentInfoResponse>> studentList(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -34,5 +36,13 @@ public class StudentManageController {
     ) {
         studentManageService.changeStudentStatus(studentId);
         return new ResponseEntity<>(OK);
+    }
+
+    @PatchMapping("teacher/change")
+    public ResponseEntity<String> changeTeacher(
+            @Valid @RequestBody ChangeTeacherRequest changeTeacherRequest
+    ) {
+        studentManageService.changeExistTeacher(changeTeacherRequest);
+        return ResponseEntity.ok("변경되었습니다.");
     }
 }

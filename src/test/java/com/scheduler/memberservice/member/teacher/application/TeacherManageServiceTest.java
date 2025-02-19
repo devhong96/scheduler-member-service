@@ -2,6 +2,8 @@ package com.scheduler.memberservice.member.teacher.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.scheduler.memberservice.client.CourseServiceClient;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
@@ -12,23 +14,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.List;
 import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.TeacherResponse;
 import static com.scheduler.memberservice.testSet.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @IntegrationTest
 class TeacherManageServiceTest {
 
     //== setting
-    @Autowired
-    private TeacherCertService teacherCertService;
 
     @Autowired
     private TeacherJpaRepository teacherJpaRepository;
@@ -36,15 +37,18 @@ class TeacherManageServiceTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    //== setting
-
     @Autowired
     private TeacherManageService teacherManageService;
 
+    @MockitoBean
+    private CourseServiceClient courseServiceClient;
+
+    //== setting
 
     @BeforeEach
     void setUp() {
-
+        WireMockServer wireMockServer = new WireMockServer(wireMockConfig().port(8080));
+        wireMockServer.start();
     }
 
     @AfterEach
@@ -74,15 +78,14 @@ class TeacherManageServiceTest {
                 .isEqualTo(TEST_TEACHER_NAME);
     }
 
-//    @Test
+    @Test
+    @DisplayName("교사 상태 변경")
     @WithTeacher(username = TEST_TEACHER_NAME)
     void changeTeacherStatus() throws JsonProcessingException {
 
-        final String loginId = "sh111";
         final String expectedResponse = objectMapper.writeValueAsString(
                 Map.of(
-                        "memberId", 1,
-                        "nickname", "성하"
+                        "result", true
                 )
         );
 
@@ -91,25 +94,26 @@ class TeacherManageServiceTest {
                 .findByUsernameIs(TEST_TEACHER_USERNAME)
                 .orElseThrow(MemberExistException::new);
 
-        //
-        stubFor(get(urlEqualTo(BASE_URL ))
+        Boolean beforeApproved = before.getApproved();
+
+        teacherManageService.changeTeacherStatus(TEST_TEACHER_USERNAME);
+
+        stubFor(get(urlEqualTo(
+                BASE_URL + "/" + "teacher" + "/" + TEST_TEACHER_ID + "/" + "courses"))
                 .willReturn(aResponse()
-                        .withStatus(HttpStatus.OK.value())
-                        .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                        .withStatus(200)
+                        .withHeader("Content-Type", APPLICATION_JSON_VALUE)
                         .withBody(expectedResponse))
         );
-        teacherManageService.changeTeacherStatus(TEST_TEACHER_USERNAME);
-        
 
         //
         Teacher after = teacherJpaRepository
                 .findByUsernameIs(TEST_TEACHER_USERNAME)
                 .orElseThrow(MemberExistException::new);
 
-        assertThat(before.getApproved()).isNotEqualTo(after.getApproved());
-    }
+        Boolean afterApproved = after.getApproved();
 
-//    @Test
-    void changeExistTeacher() {
+        assertThat(beforeApproved)
+                .isNotEqualTo(afterApproved);
     }
 }

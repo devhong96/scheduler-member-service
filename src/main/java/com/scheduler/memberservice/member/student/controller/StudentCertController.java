@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("student")
 @RequiredArgsConstructor
-public class StudentController {
+public class StudentCertController {
 
     private final StudentCertService studentCertService;
 

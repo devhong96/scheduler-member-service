@@ -2,7 +2,6 @@ package com.scheduler.memberservice.member.teacher.application;
 
 import java.util.List;
 
-import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.ChangeTeacherRequest;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.TeacherResponse;
 
 public interface TeacherManageService {
@@ -10,8 +9,6 @@ public interface TeacherManageService {
     List<TeacherResponse> getTeacherList();
 
     TeacherResponse findTeacherInformation(String username);
-
-    void changeExistTeacher(ChangeTeacherRequest changeTeacherRequest);
 
     void changeTeacherStatus(String username);
 }

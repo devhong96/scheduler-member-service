@@ -69,4 +69,12 @@ public class StudentRequest {
         private String studentId;
         private Boolean isApproved;
     }
+
+    @Getter
+    @Setter
+    public static class ChangeTeacherRequest {
+
+        private String teacherId;
+        private String studentId;
+    }
 }
