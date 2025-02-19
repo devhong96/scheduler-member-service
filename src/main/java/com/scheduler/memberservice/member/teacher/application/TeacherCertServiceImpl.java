@@ -1,6 +1,6 @@
 package com.scheduler.memberservice.member.teacher.application;
 
-import com.scheduler.memberservice.infra.email.dto.AuthEmailService;
+import com.scheduler.memberservice.infra.email.application.AuthEmailService;
 import com.scheduler.memberservice.infra.exception.custom.DuplicateEmailException;
 import com.scheduler.memberservice.infra.exception.custom.DuplicateUsernameException;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;

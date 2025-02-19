@@ -1,6 +1,6 @@
 package com.scheduler.memberservice.member.admin.application;
 
-import com.scheduler.memberservice.infra.email.dto.AuthEmailService;
+import com.scheduler.memberservice.infra.email.application.AuthEmailService;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.infra.util.MemberUtils;
 import com.scheduler.memberservice.member.admin.domain.Admin;

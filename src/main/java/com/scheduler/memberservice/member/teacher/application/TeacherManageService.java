@@ -3,7 +3,7 @@ package com.scheduler.memberservice.member.teacher.application;
 import java.util.List;
 
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.ChangeTeacherRequest;
-import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.*;
+import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.TeacherResponse;
 
 public interface TeacherManageService {
 

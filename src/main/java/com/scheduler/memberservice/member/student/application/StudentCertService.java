@@ -2,7 +2,7 @@ package com.scheduler.memberservice.member.student.application;
 
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
 
-public interface StudentService {
+public interface StudentCertService {
 
     void registerStudent(RegisterStudentRequest registerStudentRequest);
 

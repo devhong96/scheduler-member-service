@@ -14,7 +14,7 @@ import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
 
 @Service
 @RequiredArgsConstructor
-public class StudentServiceImpl implements StudentService {
+public class StudentCertServiceImpl implements StudentCertService {
 
     private final MemberUtils memberUtils;
     private final StudentJpaRepository studentJpaRepository;

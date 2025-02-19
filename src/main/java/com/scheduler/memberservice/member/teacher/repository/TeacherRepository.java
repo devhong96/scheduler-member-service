@@ -2,16 +2,14 @@ package com.scheduler.memberservice.member.teacher.repository;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.scheduler.memberservice.member.common.RoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.querydsl.core.types.dsl.Expressions.*;
-import static com.scheduler.memberservice.member.common.RoleType.*;
+import static com.querydsl.core.types.dsl.Expressions.constant;
+import static com.scheduler.memberservice.member.common.RoleType.TEACHER;
 import static com.scheduler.memberservice.member.teacher.domain.QTeacher.teacher;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.TeacherResponse;
 

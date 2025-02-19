@@ -1,6 +1,6 @@
 package com.scheduler.memberservice.member.teacher.controller;
 
-import com.scheduler.memberservice.infra.email.dto.AuthEmailService;
+import com.scheduler.memberservice.infra.email.application.AuthEmailService;
 import com.scheduler.memberservice.member.teacher.application.TeacherCertService;
 import com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest;
 import io.swagger.v3.oas.annotations.Operation;

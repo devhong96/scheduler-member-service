@@ -4,10 +4,12 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationContext;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMIT;
@@ -18,11 +20,17 @@ import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMI
 public class SendUsernameEventListener {
 
     private final JavaMailSender javaMailSender;
+    private final ApplicationContext applicationContext;
 
     @Async
     @TransactionalEventListener(phase = AFTER_COMMIT)
     public void handleSendUsernameByEmailEvent(SendEmailEvent sendEmailEvent) {
+        SendUsernameEventListener proxy = applicationContext.getBean(SendUsernameEventListener.class);
+        proxy.processSupportEvent(sendEmailEvent);
+    }
 
+    @Transactional
+    public void processSupportEvent(SendEmailEvent sendEmailEvent) {
         String from = sendEmailEvent.getFrom();
         String to = sendEmailEvent.getTo();
         String subject = sendEmailEvent.getSubject();
@@ -31,20 +39,8 @@ public class SendUsernameEventListener {
         sendEmail(from, to, subject, message);
     }
 
-    @Async
-    @TransactionalEventListener(phase = AFTER_COMMIT)
-    public void handleSendAuthNumByEmailEvent(SendAuthNumEvent sendAuthNumEvent) {
-
-        String from = sendAuthNumEvent.getFrom();
-        String to = sendAuthNumEvent.getTo();
-        String subject = sendAuthNumEvent.getSubject();
-        String message = sendAuthNumEvent.getMessage();
-
-        sendEmail(from, to, subject, message);
-
-    }
-
-    private void sendEmail(String from, String to, String subject, String message) {
+    @Transactional
+    public void sendEmail(String from, String to, String subject, String message) {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;

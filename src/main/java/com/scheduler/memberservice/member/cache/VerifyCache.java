@@ -10,8 +10,8 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 public class VerifyCache {
 
     Cache<String, String> orderCache = Caffeine.newBuilder()
-            .expireAfterWrite(1, MINUTES)
-            .maximumSize(50)
+            .expireAfterWrite(5, MINUTES)
+            .maximumSize(100)
             .build();
 
     public void saveDirectOrder(String email, String authNum) {
@@ -25,5 +25,9 @@ public class VerifyCache {
         }
 
         return orderCache.getIfPresent(email);
+    }
+
+    public void invalidateAuthNum(String email) {
+        orderCache.invalidate(email);
     }
 }

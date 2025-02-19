@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.infra.student;
+package com.scheduler.memberservice.testSet.student;
 
 import org.springframework.security.test.context.support.WithSecurityContext;
 

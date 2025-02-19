@@ -1,9 +1,9 @@
-package com.scheduler.memberservice.infra.admin;
+package com.scheduler.memberservice.testSet.student;
 
 import com.scheduler.memberservice.infra.security.jwt.component.JwtUtils;
 import com.scheduler.memberservice.infra.security.jwt.dto.JwtTokenDto;
-import com.scheduler.memberservice.member.admin.domain.Admin;
-import com.scheduler.memberservice.member.admin.repository.AdminJpaRepository;
+import com.scheduler.memberservice.member.student.domain.Student;
+import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,24 +15,24 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
-import static com.scheduler.memberservice.infra.TestConstants.TEST_ADMIN_EMAIL;
-import static com.scheduler.memberservice.infra.TestConstants.TEST_ADMIN_PASSWORD;
+import static com.scheduler.memberservice.member.student.dto.StudentRequest.RegisterStudentRequest;
+import static com.scheduler.memberservice.testSet.TestConstants.*;
 
 @Slf4j
 @RequiredArgsConstructor
-public class WithAdminSecurityContextFactory implements WithSecurityContextFactory<WithAdmin> {
+public class WithStudentSecurityContextFactory implements WithSecurityContextFactory<WithStudent> {
 
     private final PasswordEncoder passwordEncoder;
-    private final AdminJpaRepository adminJpaRepository;
+    private final StudentJpaRepository studentJpaRepository;
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
 
     @Override
-    public SecurityContext createSecurityContext(WithAdmin withAdmin) {
+    public SecurityContext createSecurityContext(WithStudent withStudent) {
 
-        String username = withAdmin.username();
+        String username = withStudent.username();
 
-        validateAdminAccount(username);
+        validateStudentAccount(username);
 
         UserDetails principal = userDetailsService.loadUserByUsername(username);
 
@@ -50,14 +50,24 @@ public class WithAdminSecurityContextFactory implements WithSecurityContextFacto
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(tokenAuthentication);
 
-        log.info("Admin-login");
+        log.info("student-login");
 
         return context;
     }
 
-    private void validateAdminAccount(String username) {
-        adminJpaRepository.findByUsernameIs(username)
-                .orElseGet(() -> adminJpaRepository
-                        .save(Admin.create(username, TEST_ADMIN_PASSWORD, TEST_ADMIN_EMAIL, passwordEncoder)));
+    private void validateStudentAccount(String username) {
+        RegisterStudentRequest request = new RegisterStudentRequest();
+        request.setUsername(username);
+        request.setPassword(TEST_STUDENT_PASSWORD);
+        request.setStudentName(TEST_STUDENT_NAME);
+        request.setStudentEmail(TEST_STUDENT_EMAIL);
+        request.setStudentPhoneNumber(TEST_STUDENT_PHONE_NUMBER);
+        request.setStudentAddress(TEST_STUDENT_ADDRESS);
+        request.setStudentDetailedAddress(TEST_STUDENT_DETAILED_ADDRESS);
+        request.setStudentParentPhoneNumber(TEST_STUDENT_PARENT_PHONE_NUMBER);
+
+        studentJpaRepository.findStudentByUsernameIs(username)
+                .orElseGet(() -> studentJpaRepository
+                        .save(Student.create(request, "testTeacherId", passwordEncoder)));
     }
 }

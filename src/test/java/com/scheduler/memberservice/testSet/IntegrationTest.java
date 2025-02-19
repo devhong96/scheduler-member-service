@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.infra;
+package com.scheduler.memberservice.testSet;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;

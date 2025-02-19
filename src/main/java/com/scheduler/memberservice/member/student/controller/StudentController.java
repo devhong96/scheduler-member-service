@@ -1,6 +1,6 @@
 package com.scheduler.memberservice.member.student.controller;
 
-import com.scheduler.memberservice.member.student.application.StudentService;
+import com.scheduler.memberservice.member.student.application.StudentCertService;
 import com.scheduler.memberservice.member.student.dto.StudentRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +15,13 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 public class StudentController {
 
-    private final StudentService studentService;
+    private final StudentCertService studentCertService;
 
     @PostMapping("join")
     public ResponseEntity<String> saveStudent(
             @Valid @RequestBody RegisterStudentRequest registerStudentRequest
     ) {
-        studentService.registerStudent(registerStudentRequest);
+        studentCertService.registerStudent(registerStudentRequest);
         return new ResponseEntity<>(OK);
     }
 
@@ -29,7 +29,7 @@ public class StudentController {
     public ResponseEntity<String> modifyStudentInfo(
             @Valid @RequestBody StudentRequest.ModifyStudentInfoRequest registerStudentRequest
     ) {
-        studentService.modifyStudentInfo(registerStudentRequest);
+        studentCertService.modifyStudentInfo(registerStudentRequest);
         return  new ResponseEntity<>(OK);
     }
 
@@ -37,7 +37,7 @@ public class StudentController {
     public ResponseEntity<String> modifyStudentPassword(
             @Valid @RequestBody StudentRequest.ModifyStudentPasswordRequest modifyStudentPasswordRequest
     ) {
-        studentService.modifyStudentPassword(modifyStudentPasswordRequest);
+        studentCertService.modifyStudentPassword(modifyStudentPasswordRequest);
         return  new ResponseEntity<>(OK);
     }
 

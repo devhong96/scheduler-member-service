@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.infra.teacher;
+package com.scheduler.memberservice.testSet.teacher;
 
 import com.scheduler.memberservice.infra.security.jwt.component.JwtUtils;
 import com.scheduler.memberservice.infra.security.jwt.dto.JwtTokenDto;
@@ -15,8 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
-import static com.scheduler.memberservice.infra.TestConstants.*;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.JoinTeacherRequest;
+import static com.scheduler.memberservice.testSet.TestConstants.*;
 
 @Slf4j
 @RequiredArgsConstructor

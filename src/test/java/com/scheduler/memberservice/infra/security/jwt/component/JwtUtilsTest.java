@@ -1,9 +1,9 @@
 package com.scheduler.memberservice.infra.security.jwt.component;
 
-import com.scheduler.memberservice.infra.IntegrationTest;
 import com.scheduler.memberservice.infra.security.jwt.dto.JwtTokenDto;
-import com.scheduler.memberservice.infra.student.WithStudent;
-import com.scheduler.memberservice.infra.teacher.WithTeacher;
+import com.scheduler.memberservice.testSet.IntegrationTest;
+import com.scheduler.memberservice.testSet.student.WithStudent;
+import com.scheduler.memberservice.testSet.teacher.WithTeacher;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import static com.scheduler.memberservice.infra.TestConstants.TEST_TEACHER_USERNAME;
+import static com.scheduler.memberservice.testSet.TestConstants.TEST_TEACHER_USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;

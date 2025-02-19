@@ -1,10 +1,10 @@
 package com.scheduler.memberservice.member.student.application;
 
-import com.scheduler.memberservice.infra.IntegrationTest;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
-import com.scheduler.memberservice.infra.student.WithStudent;
 import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
+import com.scheduler.memberservice.testSet.IntegrationTest;
+import com.scheduler.memberservice.testSet.student.WithStudent;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,17 +13,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
-import static com.scheduler.memberservice.infra.TestConstants.*;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.ModifyStudentInfoRequest;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.ModifyStudentPasswordRequest;
+import static com.scheduler.memberservice.testSet.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @IntegrationTest
-class StudentServiceTest {
+class StudentCertServiceTest {
 
     @Autowired
-    private StudentService studentService;
+    private StudentCertService studentCertService;
 
     @Autowired
     private StudentJpaRepository studentJpaRepository;
@@ -82,7 +82,7 @@ class StudentServiceTest {
         modifyStudentPasswordRequest.setNewPassword("newPassword");
         modifyStudentPasswordRequest.setConfirmNewPassword("newPassword");
 
-        studentService.modifyStudentPassword(modifyStudentPasswordRequest);
+        studentCertService.modifyStudentPassword(modifyStudentPasswordRequest);
 
         Student student = studentJpaRepository
                 .findStudentByUsernameIs(TEST_STUDENT_NAME)

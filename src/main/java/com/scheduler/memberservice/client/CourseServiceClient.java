@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
         name = "scheduler-course-service",
-        path = "/scheduler-member-service/feign-course/",
+        path = "/scheduler-course-service/feign-course/",
         configuration = CourseFeignErrorDecoder.class
 )
 public interface CourseServiceClient {

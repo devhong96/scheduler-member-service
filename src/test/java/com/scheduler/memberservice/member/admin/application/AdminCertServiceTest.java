@@ -1,10 +1,10 @@
 package com.scheduler.memberservice.member.admin.application;
 
-import com.scheduler.memberservice.infra.IntegrationTest;
-import com.scheduler.memberservice.infra.admin.WithAdmin;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.member.admin.domain.Admin;
 import com.scheduler.memberservice.member.admin.repository.AdminJpaRepository;
+import com.scheduler.memberservice.testSet.IntegrationTest;
+import com.scheduler.memberservice.testSet.admin.WithAdmin;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static com.scheduler.memberservice.infra.TestConstants.*;
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindPasswordRequest;
 import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.EditEmailRequest;
 import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.PwdEditRequest;
+import static com.scheduler.memberservice.testSet.TestConstants.*;
 
 @Slf4j
 @IntegrationTest

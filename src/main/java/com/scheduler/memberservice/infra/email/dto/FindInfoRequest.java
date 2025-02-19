@@ -59,6 +59,10 @@ public class FindInfoRequest {
 
         @NotEmpty(message = "인증번호를 입력해 주세요")
         private String authNum;
-    }
 
+        public AuthCodeRequest(String email, String authNum) {
+            this.email = email;
+            this.authNum = authNum;
+        }
+    }
 }

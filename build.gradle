@@ -96,6 +96,8 @@ dependencies {
 
     implementation 'com.h2database:h2'
 
+    testImplementation 'com.github.tomakehurst:wiremock-jre8:2.35.0'
+
     compileOnly 'org.projectlombok:lombok'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
