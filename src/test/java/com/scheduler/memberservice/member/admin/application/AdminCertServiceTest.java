@@ -59,7 +59,7 @@ class AdminCertServiceTest {
         pwdEditRequest.setPassword(TEST_ADMIN_PASSWORD);
 
         Admin admin = adminJpaRepository
-                .findByUsernameIs(TEST_ADMIN_USERNAME)
+                .findAdminByUsernameIs(TEST_ADMIN_USERNAME)
                 .orElseThrow(MemberExistException::new);
 
         //
@@ -81,7 +81,7 @@ class AdminCertServiceTest {
         editEmailRequest.setEmail(TEST_ADMIN_EMAIL);
 
         Admin admin = adminJpaRepository
-                .findByUsernameIs(TEST_ADMIN_USERNAME)
+                .findAdminByUsernameIs(TEST_ADMIN_USERNAME)
                 .orElseThrow(MemberExistException::new);
 
         adminCertService.updateEmail(editEmailRequest);

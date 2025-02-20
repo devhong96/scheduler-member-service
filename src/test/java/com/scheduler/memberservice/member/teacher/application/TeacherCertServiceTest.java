@@ -48,7 +48,7 @@ class TeacherCertServiceTest {
         teacherCertService.joinTeacher(joinTeacherRequest);
 
         Teacher teacher = teacherJpaRepository
-                .findByUsernameIs(TEST_TEACHER_USERNAME)
+                .findTeacherByUsernameIs(TEST_TEACHER_USERNAME)
                 .orElseThrow(MemberExistException::new);
 
         assertNotNull(teacher);
@@ -95,7 +95,7 @@ class TeacherCertServiceTest {
 
         teacherCertService.initializePassword(pwdEditRequest);
 
-        Teacher teacher = teacherJpaRepository.findByUsernameIs(TEST_TEACHER_USERNAME)
+        Teacher teacher = teacherJpaRepository.findTeacherByUsernameIs(TEST_TEACHER_USERNAME)
                 .orElseThrow(MemberExistException::new);
 
         String newPassword = teacher.getPassword();
@@ -114,7 +114,7 @@ class TeacherCertServiceTest {
 
         teacherCertService.changeUserEmail(editEmailRequest);
 
-        Teacher teacher = teacherJpaRepository.findByUsernameIs(TEST_TEACHER_USERNAME)
+        Teacher teacher = teacherJpaRepository.findTeacherByUsernameIs(TEST_TEACHER_USERNAME)
                 .orElseThrow(MemberExistException::new);
 
         assertEquals(TEST_NEW_TEACHER_EMAIL, teacher.getEmail());

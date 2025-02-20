@@ -88,7 +88,7 @@ public class TeacherCertServiceImpl implements TeacherCertService {
             throw new PasswordMismatchException();
 
         Teacher teacher = teacherJpaRepository
-                .findByUsernameIs(username)
+                .findTeacherByUsernameIs(username)
                 .orElseThrow(MemberExistException::new);
 
         teacher.updatePassword(passwordEncoder, pwdEditRequest);

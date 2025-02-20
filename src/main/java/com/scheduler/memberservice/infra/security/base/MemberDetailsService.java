@@ -48,7 +48,7 @@ public class MemberDetailsService implements UserDetailsService {
             throw new AuthorApproveException();
         }
 
-        Optional<Teacher> teacherByUsername = teacherJpaRepository.findByUsernameIs(username);
+        Optional<Teacher> teacherByUsername = teacherJpaRepository.findTeacherByUsernameIs(username);
 
         if (teacherByUsername.isPresent()) {
 
@@ -62,7 +62,7 @@ public class MemberDetailsService implements UserDetailsService {
             throw new AuthorApproveException();
         }
 
-        Optional<Admin> adminByUsername = adminJpaRepository.findByUsernameIs(username);
+        Optional<Admin> adminByUsername = adminJpaRepository.findAdminByUsernameIs(username);
 
         if (adminByUsername.isPresent()) {
             Admin admin = adminByUsername.get();

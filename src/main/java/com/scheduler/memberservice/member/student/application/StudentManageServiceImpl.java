@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseReassignmentResponse;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.ChangeTeacherRequest;
 import static com.scheduler.memberservice.member.student.dto.StudentResponse.StudentInfoResponse;
 
@@ -65,12 +66,12 @@ public class StudentManageServiceImpl implements StudentManageService {
                 .orElseThrow(MemberExistException::new);
 
         //학생의 수업엔티티와 교사의 수업을 비교 후, 재할당
-        Boolean result = courseServiceClient.validateStudentCoursesAndReassign(
+        CourseReassignmentResponse courseReassignmentResponse = courseServiceClient.validateStudentCoursesAndReassign(
                 actualTeacherId,
                 student.getStudentId()
         );
 
-        if (result) {
+        if (courseReassignmentResponse.getExists()) {
             student.assignTeacher(actualTeacherId);
         } else {
             throw new DuplicateCourseException();

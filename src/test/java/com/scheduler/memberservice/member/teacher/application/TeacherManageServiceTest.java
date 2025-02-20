@@ -95,7 +95,7 @@ class TeacherManageServiceTest {
 
         //
         Teacher before = teacherJpaRepository
-                .findByUsernameIs(TEST_TEACHER_USERNAME)
+                .findTeacherByUsernameIs(TEST_TEACHER_USERNAME)
                 .orElseThrow(MemberExistException::new);
 
         Boolean beforeApproved = before.getApproved();
@@ -112,7 +112,7 @@ class TeacherManageServiceTest {
 
         //
         Teacher after = teacherJpaRepository
-                .findByUsernameIs(TEST_TEACHER_USERNAME)
+                .findTeacherByUsernameIs(TEST_TEACHER_USERNAME)
                 .orElseThrow(MemberExistException::new);
 
         Boolean afterApproved = after.getApproved();

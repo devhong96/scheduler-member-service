@@ -62,7 +62,7 @@ public class WithTeacherSecurityContextFactory implements WithSecurityContextFac
         joinTeacherRequest.setPassword(TEST_TEACHER_PASSWORD);
         joinTeacherRequest.setTeacherName(TEST_TEACHER_NAME);
 
-        teacherJpaRepository.findByUsernameIs(username)
+        teacherJpaRepository.findTeacherByUsernameIs(username)
                 .orElseGet(() -> teacherJpaRepository
                         .save(Teacher.create(joinTeacherRequest, passwordEncoder)));
     }

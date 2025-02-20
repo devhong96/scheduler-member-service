@@ -30,7 +30,7 @@ public class MemberUtils {
                 .orElseThrow(() -> new MemberLoginException("관리자 로그인 에러"))
                 .getName();
 
-        return adminJpaRepository.findByUsernameIs(username)
+        return adminJpaRepository.findAdminByUsernameIs(username)
                 .orElseThrow(() -> new MemberLoginException("Cannot find author with username: " + username))
                 .getAdminId();
     }
@@ -43,7 +43,7 @@ public class MemberUtils {
                 .orElseThrow(() -> new MemberLoginException("관리자 로그인 에러"))
                 .getName();
 
-        return adminJpaRepository.findByUsernameIs(username)
+        return adminJpaRepository.findAdminByUsernameIs(username)
                 .orElseThrow(() -> new MemberLoginException("Cannot find author with username: " + username));
     }
 
@@ -54,7 +54,7 @@ public class MemberUtils {
                 .getName();
 
         Teacher reader = teacherJpaRepository
-                .findByUsernameIs(username)
+                .findTeacherByUsernameIs(username)
                 .orElseThrow(() -> new MemberLoginException("Cannot find teacher with username: " + username));
 
         return reader.getTeacherId();
@@ -69,7 +69,7 @@ public class MemberUtils {
                 .getName();
 
         return teacherJpaRepository
-                .findByUsernameIs(username)
+                .findTeacherByUsernameIs(username)
                 .orElseThrow(() -> new MemberLoginException("Cannot find author with username: " + username));
     }
 

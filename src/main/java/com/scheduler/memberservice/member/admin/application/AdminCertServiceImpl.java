@@ -63,7 +63,7 @@ public class AdminCertServiceImpl implements AdminCertService {
         String username = memberUtils.getAdmin().getUsername();
 
         Admin admin = adminJpaRepository
-                .findByUsernameIs(username)
+                .findAdminByUsernameIs(username)
                 .orElseThrow(MemberExistException::new);
 
         admin.updateEmail(editEmailRequest);
