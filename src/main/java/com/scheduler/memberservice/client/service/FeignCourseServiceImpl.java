@@ -13,8 +13,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.scheduler.memberservice.client.dto.FeignMemberResponse.*;
 import static com.scheduler.memberservice.client.dto.FeignMemberResponse.MemberInfo;
+import static com.scheduler.memberservice.client.dto.FeignMemberResponse.StudentInfo;
 import static com.scheduler.memberservice.member.common.RoleType.*;
 
 @Service

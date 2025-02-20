@@ -61,6 +61,48 @@ class TeacherManageServiceTest {
     }
 
     @Test
+    @DisplayName("교사 상태 변경")
+    @WithTeacher(username = TEST_TEACHER_NAME)
+    void changeTeacherStatus() throws JsonProcessingException {
+
+        final String expectedResponse = objectMapper.writeValueAsString(
+                Map.of(
+                        "result", true
+                )
+        );
+
+        System.out.println("expectedResponse = " + expectedResponse);
+
+        //
+        Teacher before = teacherJpaRepository
+                .findTeacherByUsernameIs(TEST_TEACHER_USERNAME)
+                .orElseThrow(MemberExistException::new);
+
+        Boolean beforeApproved = before.getApproved();
+
+        stubFor(get(urlEqualTo(
+                BASE_URL + "/" + "teacher" + "/" + TEST_TEACHER_ID + "/" + "courses"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", APPLICATION_JSON_VALUE)
+                        .withBody(expectedResponse))
+        );
+
+        teacherManageService.changeTeacherStatus(TEST_TEACHER_USERNAME);
+
+
+        //
+        Teacher after = teacherJpaRepository
+                .findTeacherByUsernameIs(TEST_TEACHER_USERNAME)
+                .orElseThrow(MemberExistException::new);
+
+        Boolean afterApproved = after.getApproved();
+
+        assertThat(beforeApproved)
+                .isNotEqualTo(afterApproved);
+    }
+
+    @Test
     @WithTeacher(username = TEST_TEACHER_NAME)
     @DisplayName("등록된 교사 인원 수")
     void getTeacherList() {
@@ -80,44 +122,5 @@ class TeacherManageServiceTest {
 
         assertThat(teacherInformation.getTeacherName())
                 .isEqualTo(TEST_TEACHER_NAME);
-    }
-
-    @Test
-    @DisplayName("교사 상태 변경")
-    @WithTeacher(username = TEST_TEACHER_NAME)
-    void changeTeacherStatus() throws JsonProcessingException {
-
-        final String expectedResponse = objectMapper.writeValueAsString(
-                Map.of(
-                        "result", true
-                )
-        );
-
-        //
-        Teacher before = teacherJpaRepository
-                .findTeacherByUsernameIs(TEST_TEACHER_USERNAME)
-                .orElseThrow(MemberExistException::new);
-
-        Boolean beforeApproved = before.getApproved();
-
-        teacherManageService.changeTeacherStatus(TEST_TEACHER_USERNAME);
-
-        stubFor(get(urlEqualTo(
-                BASE_URL + "/" + "teacher" + "/" + TEST_TEACHER_ID + "/" + "courses"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", APPLICATION_JSON_VALUE)
-                        .withBody(expectedResponse))
-        );
-
-        //
-        Teacher after = teacherJpaRepository
-                .findTeacherByUsernameIs(TEST_TEACHER_USERNAME)
-                .orElseThrow(MemberExistException::new);
-
-        Boolean afterApproved = after.getApproved();
-
-        assertThat(beforeApproved)
-                .isNotEqualTo(afterApproved);
     }
 }

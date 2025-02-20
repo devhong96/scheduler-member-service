@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseExistenceResponse;
 import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseReassignmentResponse;
 
 @FeignClient(
@@ -18,7 +17,7 @@ public interface CourseServiceClient {
 
     @Operation(summary = "선생님이 담당하는 학생들의 주간 수업 존재 여부 조회")
     @GetMapping("teacher/{teacherId}/courses")
-    CourseExistenceResponse existWeeklyCoursesByTeacherId(
+    Boolean existWeeklyCoursesByTeacherId(
             @PathVariable String teacherId
     );
 

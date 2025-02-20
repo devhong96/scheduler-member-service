@@ -10,6 +10,10 @@ public class FeignMemberRequest {
     public static class CourseExistenceResponse {
 
         private Boolean exists;
+
+        public CourseExistenceResponse() {
+        }
+
         public CourseExistenceResponse(Boolean exists) {
             this.exists = exists;
         }
@@ -19,6 +23,7 @@ public class FeignMemberRequest {
     @Getter
     @Setter
     public static class CourseReassignmentResponse {
+
         private Boolean exists;
 
         public CourseReassignmentResponse(Boolean exists) {

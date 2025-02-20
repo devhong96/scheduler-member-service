@@ -5,7 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.scheduler.memberservice.client.dto.FeignMemberResponse.*;
+import static com.scheduler.memberservice.client.dto.FeignMemberResponse.MemberInfo;
+import static com.scheduler.memberservice.client.dto.FeignMemberResponse.StudentInfo;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController

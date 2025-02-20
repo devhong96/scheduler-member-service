@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseExistenceResponse;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.TeacherResponse;
 
 @Service
@@ -40,12 +39,13 @@ public class TeacherManageServiceImpl implements TeacherManageService {
                 .findTeacherByUsernameIs(username)
                 .orElseThrow(MemberExistException::new);
 
-        CourseExistenceResponse courseExistenceResponse = courseServiceClient
+        Boolean result = courseServiceClient
                 .existWeeklyCoursesByTeacherId(teacher.getTeacherId());
 
-        if (courseExistenceResponse.getExists()) {
+        if (result) {
             throw new IllegalStateException("학생 수업 시간이 남아 있습니다.");
         }
+
 
         Boolean approved = teacher.getApproved();
         teacher.updateApprove(!approved);
