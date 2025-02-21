@@ -11,8 +11,7 @@ public class FeignMemberRequest {
 
         private Boolean exists;
 
-        public CourseExistenceResponse() {
-        }
+        public CourseExistenceResponse() {}
 
         public CourseExistenceResponse(Boolean exists) {
             this.exists = exists;
