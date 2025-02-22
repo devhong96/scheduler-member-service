@@ -14,6 +14,7 @@ import java.util.UUID;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.lang.Boolean.*;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -33,20 +34,28 @@ public class Student extends BaseEntity {
     @Column(nullable = false)
     private String teacherId;
 
+    @Column(nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String studentName;
 
+    @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String studentPhoneNumber;
 
+    @Column(nullable = false)
     private String studentParentPhoneNumber;
 
+    @Column(nullable = false)
     private String studentAddress;
 
+    @Column(nullable = false)
     private String studentDetailedAddress;
 
     @Enumerated(STRING)
@@ -69,7 +78,7 @@ public class Student extends BaseEntity {
         student.studentParentPhoneNumber = registerStudentRequest.getStudentParentPhoneNumber();
         student.studentAddress = registerStudentRequest.getStudentAddress();
         student.studentDetailedAddress = registerStudentRequest.getStudentDetailedAddress();
-        student.approved = true;
+        student.approved = TRUE;
         return student;
     }
 

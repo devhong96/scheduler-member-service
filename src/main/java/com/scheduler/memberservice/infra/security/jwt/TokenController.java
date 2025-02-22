@@ -28,8 +28,9 @@ public class TokenController {
     }
 
     @PostMapping("reissue")
-    private ResponseEntity<Map<String, Object>> refreshAuth(@RequestHeader(value = "refresh") String refresh,
-                                                            HttpServletResponse response)
+    private ResponseEntity<Map<String, Object>> refreshAuth(
+            @RequestHeader(value = "refresh") String refresh,
+            HttpServletResponse response)
     {
         return new ResponseEntity<>(refreshTokenService.refreshToken(refresh, response), OK);
     }

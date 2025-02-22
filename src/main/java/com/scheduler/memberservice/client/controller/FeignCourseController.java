@@ -23,7 +23,7 @@ public class FeignCourseController {
         return new ResponseEntity<>(feignCourseService.findStudentInfoByToken(token), OK);
     }
 
-    @GetMapping("memberInfo")
+    @GetMapping("member/info")
     public  ResponseEntity<MemberInfo> findMemberInfoByToken(
             @RequestHeader("Authorization") String token
     ){

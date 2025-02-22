@@ -14,8 +14,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class StudentDetails implements UserDetails {
 
-    private final Student student
-            ;
+    private final Student student;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();

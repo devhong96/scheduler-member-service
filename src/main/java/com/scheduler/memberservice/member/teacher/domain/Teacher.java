@@ -1,5 +1,6 @@
 package com.scheduler.memberservice.member.teacher.domain;
 
+import com.scheduler.memberservice.infra.BaseEntity;
 import com.scheduler.memberservice.member.common.RoleType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,7 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 @DynamicUpdate
 @DynamicInsert
 @NoArgsConstructor(access = PROTECTED)
-public class Teacher {
+public class Teacher extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
