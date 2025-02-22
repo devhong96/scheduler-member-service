@@ -5,6 +5,7 @@ import com.scheduler.memberservice.member.common.RoleType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -19,6 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @DynamicUpdate
+@DynamicInsert
 @NoArgsConstructor(access = PROTECTED)
 public class Student extends BaseEntity {
 
