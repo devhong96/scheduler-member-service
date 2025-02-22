@@ -57,6 +57,7 @@ public class SecurityConfig {
             "/member-api/**",
             "/actuator/**",
 
+            "/login",
             "/help/*",
             "/join",
             "/token/*"
