@@ -54,8 +54,16 @@ class StudentCertServiceTest {
     void modifyStudentInfo() {
 
         ModifyStudentInfoRequest modifyStudentInfoRequest = new ModifyStudentInfoRequest();
-        
+
+        modifyStudentInfoRequest.setStudentPhoneNumber(TEST_STUDENT_PHONE_NUMBER);
         modifyStudentInfoRequest.setStudentEmail("student@email.com");
+        modifyStudentInfoRequest.setStudentAddress(TEST_STUDENT_ADDRESS);
+        modifyStudentInfoRequest.setStudentDetailedAddress(TEST_STUDENT_DETAILED_ADDRESS);
+        modifyStudentInfoRequest.setStudentParentPhoneNumber(TEST_STUDENT_PARENT_PHONE_NUMBER);
+
+        studentCertService.modifyStudentInfo(modifyStudentInfoRequest);
+
+
 
         Student student = studentJpaRepository
                 .findStudentByUsernameIs(TEST_STUDENT_NAME)

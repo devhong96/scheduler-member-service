@@ -99,6 +99,7 @@ class StudentManageServiceTest {
                         .withHeader("Content-Type", APPLICATION_JSON_VALUE)
                         .withBody(expectedResponse))
         );
+
         ChangeTeacherRequest changeTeacherRequest = new ChangeTeacherRequest();
         changeTeacherRequest.setTeacherId(TEST_TEACHER_ID);
         changeTeacherRequest.setStudentId(TEST_STUDENT_ID);
@@ -119,6 +120,7 @@ class StudentManageServiceTest {
         request.setUsername(TEST_STUDENT_USERNAME);
         request.setStudentName(TEST_STUDENT_NAME);
         request.setPassword(TEST_STUDENT_PASSWORD);
+        request.setStudentEmail(TEST_STUDENT_EMAIL);
         request.setStudentPhoneNumber(TEST_STUDENT_PHONE_NUMBER);
         request.setStudentAddress(TEST_STUDENT_ADDRESS);
         request.setStudentDetailedAddress(TEST_STUDENT_DETAILED_ADDRESS);
