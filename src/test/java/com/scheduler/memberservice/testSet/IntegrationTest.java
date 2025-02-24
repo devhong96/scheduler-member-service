@@ -4,6 +4,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.lang.annotation.Target;
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
+@EnableCaching
 @ActiveProfiles("test")
 public @interface IntegrationTest {
 

@@ -53,6 +53,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config:4.2.0'
     implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j:3.2.0'
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp:4.2.0'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 
@@ -99,6 +100,11 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     implementation 'com.h2database:h2'
+
+    testImplementation ('it.ozimov:embedded-redis:0.7.3') {
+        exclude group: "org.slf4j", module: "slf4j-simple"
+    }
+    testImplementation 'com.h2database:h2'
 
     compileOnly 'org.projectlombok:lombok'
     testImplementation 'io.projectreactor:reactor-test'

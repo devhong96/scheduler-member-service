@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.infra.config;
+package com.scheduler.memberservice.infra.config.swagger;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;

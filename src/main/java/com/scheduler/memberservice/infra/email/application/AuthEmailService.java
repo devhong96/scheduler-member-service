@@ -3,26 +3,24 @@ package com.scheduler.memberservice.infra.email.application;
 import com.scheduler.memberservice.infra.email.dto.EmailMessageDto;
 import com.scheduler.memberservice.infra.email.event.SendEmailEvent;
 import com.scheduler.memberservice.infra.exception.custom.InvalidAuthNumException;
-import com.scheduler.memberservice.member.cache.VerifyCache;
+import com.scheduler.memberservice.member.redis.RedisVerifyCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.AuthCodeRequest;
 
 @Slf4j
 @Component
-@Transactional
 @RequiredArgsConstructor
 public class AuthEmailService {
 
     @Value("${spring.mail.username}")
     private String from;
 
-    private final VerifyCache verifyCache;
+    private final RedisVerifyCache redisVerifyCache;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -47,7 +45,7 @@ public class AuthEmailService {
 
         String authNum = authNumBuilder.toString();
 
-        verifyCache.saveDirectOrder(email, authNum);
+        redisVerifyCache.saveAuthNum(email, authNum);
 
         EmailMessageDto emailMessageDto = EmailMessageDto.builder()
                 .from(from)
@@ -66,12 +64,12 @@ public class AuthEmailService {
         String email = authCodeRequest.getEmail();
         String authNum = authCodeRequest.getAuthNum();
 
-        String authNumByEmail = verifyCache.getAuthNumByEmail(email);
+        String authNumByEmail = redisVerifyCache.getAuthNumByEmail(email);
 
         if (!authNumByEmail.equals(authNum)) {
             throw new InvalidAuthNumException();
         }
 
-        verifyCache.invalidateAuthNum(email);
+        redisVerifyCache.invalidateAuthNum(email);
     }
 }
