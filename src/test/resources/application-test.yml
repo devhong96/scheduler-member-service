@@ -45,6 +45,8 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
 
+scheduler_course_service_url: http://localhost:8080
+
 management:
   endpoints:
     web:

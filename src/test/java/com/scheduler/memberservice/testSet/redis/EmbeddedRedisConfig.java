@@ -18,7 +18,6 @@ public class EmbeddedRedisConfig {
     public void startRedis() {
         try {
             redisServer = new RedisServer(redisPort);
-            System.out.println("redisPort = " + redisPort);
             redisServer.start();
         } catch (Exception e) {
             throw new RuntimeException(e);

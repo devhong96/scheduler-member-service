@@ -3,8 +3,8 @@ package com.scheduler.memberservice.member.teacher.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.scheduler.memberservice.client.CourseServiceClient;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
+import com.scheduler.memberservice.infra.util.MemberUtils;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import com.scheduler.memberservice.testSet.IntegrationTest;
@@ -30,7 +30,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 class TeacherManageServiceTest {
 
     //== setting
-
     @Autowired
     private TeacherJpaRepository teacherJpaRepository;
 
@@ -41,16 +40,17 @@ class TeacherManageServiceTest {
     private TeacherManageService teacherManageService;
 
     @MockitoBean
-    private CourseServiceClient courseServiceClient;
-
-    @MockitoBean
     private WireMockServer wireMockServer;
 
+    @Autowired
+    private MemberUtils memberUtils;
     //== setting
 
     @BeforeEach
     void setUp() {
-        wireMockServer = new WireMockServer(wireMockConfig().port(8080));
+        wireMockServer = new WireMockServer(
+                wireMockConfig()
+                .port(8080));
         wireMockServer.start();
     }
 
@@ -60,13 +60,15 @@ class TeacherManageServiceTest {
         teacherJpaRepository.deleteAll();
     }
 
-//    @Test
+    @Test
     @DisplayName("교사 상태 변경")
     @WithTeacher(username = TEST_TEACHER_NAME)
     void changeTeacherStatus() throws JsonProcessingException {
 
-        final String expectedResponse = objectMapper.writeValueAsString(
-                new CourseExistenceResponse(true)
+        String teacherId = memberUtils.getTeacherId();
+
+        final String expectedResponse = objectMapper
+                .writeValueAsString(new CourseExistenceResponse(false)
         );
 
         //
@@ -77,7 +79,8 @@ class TeacherManageServiceTest {
         Boolean beforeApproved = before.getApproved();
 
         stubFor(get(urlEqualTo(
-                BASE_URL + "/" + "teacher" + "/" + TEST_TEACHER_ID + "/" + "courses"))
+                BASE_URL + "/teacher/" + teacherId + "/courses"))
+//                .withHeader("Authorization", matching(".*"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", APPLICATION_JSON_VALUE)
@@ -85,7 +88,6 @@ class TeacherManageServiceTest {
         );
 
         teacherManageService.changeTeacherStatus(TEST_TEACHER_USERNAME);
-
 
         //
         Teacher after = teacherJpaRepository

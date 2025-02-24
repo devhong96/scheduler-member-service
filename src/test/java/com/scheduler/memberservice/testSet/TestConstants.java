@@ -24,5 +24,5 @@ public class TestConstants {
     public static final String TEST_STUDENT_DETAILED_ADDRESS = "삼성동 456-7, 101호";
     public static final String TEST_STUDENT_PARENT_PHONE_NUMBER = "010-3333-4444";
 
-    public static final String BASE_URL = "/scheduler-course-service/feign-course";
+    public static final String BASE_URL = "/feign-course";
 }
