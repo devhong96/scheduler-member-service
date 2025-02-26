@@ -19,8 +19,8 @@ import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseRe
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.ChangeStudentName;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.ChangeTeacherRequest;
 import static com.scheduler.memberservice.member.student.dto.StudentResponse.StudentInfoResponse;
-import static com.scheduler.memberservice.messaging.RabbitConfig.EXCHANGE_NAME;
-import static com.scheduler.memberservice.messaging.RabbitConfig.ROUTING_KEY;
+import static com.scheduler.memberservice.infra.config.messaging.RabbitConfig.EXCHANGE_NAME;
+import static com.scheduler.memberservice.infra.config.messaging.RabbitConfig.ROUTING_KEY;
 
 @Service
 @RequiredArgsConstructor

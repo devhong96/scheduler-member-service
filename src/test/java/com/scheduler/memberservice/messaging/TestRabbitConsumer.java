@@ -2,14 +2,14 @@ package com.scheduler.memberservice.messaging;
 
 import com.scheduler.memberservice.member.student.application.ChangeStudentNameRequest;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.test.context.TestComponent;
 
 import java.util.concurrent.CountDownLatch;
 
-import static com.scheduler.memberservice.messaging.RabbitConfig.QUEUE_NAME;
+import static com.scheduler.memberservice.infra.config.messaging.RabbitConfig.QUEUE_NAME;
 
 
-@Component
+@TestComponent
 public class TestRabbitConsumer {
 
     private ChangeStudentNameRequest changeStudentName;

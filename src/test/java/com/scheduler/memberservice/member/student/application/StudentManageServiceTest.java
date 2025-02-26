@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.testcontainers.containers.RabbitMQContainer;
@@ -30,6 +31,7 @@ import static org.springframework.data.domain.PageRequest.of;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @IntegrationTest
+@Import(TestRabbitConsumer.class)
 class StudentManageServiceTest {
 
     @MockitoBean

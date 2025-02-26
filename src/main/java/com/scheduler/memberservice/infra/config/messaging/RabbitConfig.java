@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.messaging;
+package com.scheduler.memberservice.infra.config.messaging;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
