@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.scheduler.memberservice.member.student.dto.StudentRequest.ChangeStudentName;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.ChangeTeacherRequest;
 import static com.scheduler.memberservice.member.student.dto.StudentResponse.StudentInfoResponse;
 import static org.springframework.data.domain.PageRequest.of;
@@ -43,6 +44,14 @@ public class StudentManageController {
             @Valid @RequestBody ChangeTeacherRequest changeTeacherRequest
     ) {
         studentManageService.changeExistTeacher(changeTeacherRequest);
+        return ResponseEntity.ok("변경되었습니다.");
+    }
+
+    @PatchMapping("student/name")
+    public ResponseEntity<String> changeStudentName(
+            @Valid @RequestBody ChangeStudentName changeStudentName
+    ) {
+        studentManageService.changeStudentName(changeStudentName);
         return ResponseEntity.ok("변경되었습니다.");
     }
 }

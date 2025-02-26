@@ -2,7 +2,9 @@ package com.scheduler.memberservice.member.student.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class StudentRequest {
@@ -76,5 +78,17 @@ public class StudentRequest {
 
         private String teacherId;
         private String studentId;
+
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ChangeStudentName {
+
+        private String studentId;
+        private String studentName;
+
     }
 }

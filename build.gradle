@@ -40,9 +40,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // cahce
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
-
     // AOP
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
@@ -72,9 +69,6 @@ dependencies {
     // MAIL
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-    // cahce
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
-
     // JWT
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.6'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.6'
@@ -97,6 +91,9 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    testImplementation 'org.testcontainers:rabbitmq:1.20.5'
+
 
     implementation 'com.h2database:h2'
 
