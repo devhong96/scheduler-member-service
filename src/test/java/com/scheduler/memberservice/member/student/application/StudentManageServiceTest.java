@@ -147,7 +147,8 @@ class StudentManageServiceTest {
         changeTeacherRequest.setStudentId(TEST_STUDENT_ID);
         studentManageService.changeExistTeacher(changeTeacherRequest);
 
-        Student student = studentJpaRepository.findStudentByUsernameIs(TEST_STUDENT_USERNAME)
+        Student student = studentJpaRepository
+                .findStudentByUsernameIs(TEST_STUDENT_USERNAME)
                 .orElseThrow(MemberExistException::new);
 
         String teacherId = student.getTeacherId();

@@ -8,7 +8,9 @@ import com.scheduler.memberservice.member.student.repository.StudentJpaRepositor
 import com.scheduler.memberservice.member.student.repository.StudentRepository;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +24,7 @@ import static com.scheduler.memberservice.member.student.dto.StudentResponse.Stu
 import static com.scheduler.memberservice.infra.config.messaging.RabbitConfig.EXCHANGE_NAME;
 import static com.scheduler.memberservice.infra.config.messaging.RabbitConfig.ROUTING_KEY;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StudentManageServiceImpl implements StudentManageService {
@@ -55,6 +58,7 @@ public class StudentManageServiceImpl implements StudentManageService {
 
     @Override
     @Transactional
+    @CircuitBreaker(name = "studentService", fallbackMethod = "fallback")
     public void changeExistTeacher(ChangeTeacherRequest changeTeacherRequest) {
 
         String teacherId = changeTeacherRequest.getTeacherId();
@@ -81,6 +85,11 @@ public class StudentManageServiceImpl implements StudentManageService {
         } else {
             throw new DuplicateCourseException();
         }
+    }
+
+    protected void fallback(String username, Throwable e) {
+        log.warn("Fallback triggered for username: {}, Exception: {}", username, e.getMessage());
+        throw new MemberExistException();
     }
 
     @Override

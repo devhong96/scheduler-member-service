@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.infra.config;
+package com.scheduler.memberservice.infra.config.setting;
 
 import com.scheduler.memberservice.member.admin.domain.Admin;
 import com.scheduler.memberservice.member.admin.repository.AdminJpaRepository;

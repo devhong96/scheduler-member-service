@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.infra.config;
+package com.scheduler.memberservice.infra.config.setting;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
