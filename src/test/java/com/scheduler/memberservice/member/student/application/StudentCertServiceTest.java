@@ -63,8 +63,6 @@ class StudentCertServiceTest {
 
         studentCertService.modifyStudentInfo(modifyStudentInfoRequest);
 
-
-
         Student student = studentJpaRepository
                 .findStudentByUsernameIs(TEST_STUDENT_NAME)
                 .orElseThrow(MemberExistException::new);

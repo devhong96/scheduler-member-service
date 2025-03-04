@@ -5,8 +5,10 @@ import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import com.scheduler.memberservice.member.teacher.repository.TeacherRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
 import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseExistenceResponse;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.TeacherResponse;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TeacherManageServiceImpl implements TeacherManageService {
@@ -34,6 +37,7 @@ public class TeacherManageServiceImpl implements TeacherManageService {
 
     @Override
     @Transactional
+    @CircuitBreaker(name = "teacherService", fallbackMethod = "fallback")
     public void changeTeacherStatus(String username) {
 
         Teacher teacher = teacherJpaRepository
@@ -49,5 +53,10 @@ public class TeacherManageServiceImpl implements TeacherManageService {
 
         Boolean approved = teacher.getApproved();
         teacher.updateApprove(!approved);
+    }
+
+    protected void fallback(String username, Throwable e) {
+        log.warn("Fallback triggered for username: {}, Exception: {}", username, e.getMessage());
+        throw new MemberExistException();
     }
 }

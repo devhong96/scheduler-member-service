@@ -31,7 +31,7 @@ public class StudentManageController {
                 .findStudentInfoList(teacherName, studentName, of(page, size)), OK);
     }
 
-    @PatchMapping("{studentId}/status")
+    @PatchMapping("student/{studentId}/status")
     public ResponseEntity<Void> changeStudentStatus(
             @PathVariable String studentId
     ) {
@@ -39,7 +39,7 @@ public class StudentManageController {
         return new ResponseEntity<>(OK);
     }
 
-    @PatchMapping("teacher/change")
+    @PatchMapping("student/change")
     public ResponseEntity<String> changeTeacher(
             @Valid @RequestBody ChangeTeacherRequest changeTeacherRequest
     ) {

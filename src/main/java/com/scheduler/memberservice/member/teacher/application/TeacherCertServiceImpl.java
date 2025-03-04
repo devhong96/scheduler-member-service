@@ -32,7 +32,7 @@ public class TeacherCertServiceImpl implements TeacherCertService {
     @Transactional
     public void joinTeacher(JoinTeacherRequest joinTeacherRequest) {
 
-        boolean existsByUsername = teacherJpaRepository.existsByUsername(joinTeacherRequest.getUsername());
+        boolean existsByUsername = teacherJpaRepository.existsTeacherByUsername(joinTeacherRequest.getUsername());
 
         if (existsByUsername) {
             throw new DuplicateUsernameException();

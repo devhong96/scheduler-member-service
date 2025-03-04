@@ -101,7 +101,6 @@ class TeacherManageServiceTest {
     }
 
     @Test
-    @WithTeacher(username = TEST_TEACHER_NAME)
     @DisplayName("등록된 교사 인원 수")
     void getTeacherList() {
         List<TeacherResponse> teacherList =

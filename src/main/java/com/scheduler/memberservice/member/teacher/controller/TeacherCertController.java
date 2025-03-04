@@ -15,7 +15,7 @@ import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("help")
+@RequestMapping("teacher")
 @RequiredArgsConstructor
 public class TeacherCertController {
 
@@ -32,7 +32,7 @@ public class TeacherCertController {
     }
 
     @Operation(description = "아이디 찾기")
-    @PostMapping("sendUsername")
+    @PostMapping("find/username")
     public ResponseEntity<String> findUsernameByEmail(
             @Valid @RequestBody FindUsernameRequest findUsernameRequest
     ) {
@@ -41,7 +41,7 @@ public class TeacherCertController {
     }
 
     @Operation(description = "이메일이 있으면 메일 보냄")
-    @PostMapping("findPwd")
+    @PostMapping("find/password")
     public ResponseEntity<String> sendPasswordResetEmail(
             @Valid @RequestBody FindPasswordRequest findPasswordRequest
     ) {
