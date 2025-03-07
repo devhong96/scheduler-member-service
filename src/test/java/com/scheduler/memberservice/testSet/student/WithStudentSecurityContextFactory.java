@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
+import java.util.Objects;
+
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.RegisterStudentRequest;
 import static com.scheduler.memberservice.testSet.TestConstants.*;
 
@@ -31,8 +33,9 @@ public class WithStudentSecurityContextFactory implements WithSecurityContextFac
     public SecurityContext createSecurityContext(WithStudent withStudent) {
 
         String username = withStudent.username();
+        String studentId = withStudent.studentId();
 
-        validateStudentAccount(username);
+        validateStudentAccount(username, studentId);
 
         UserDetails principal = userDetailsService.loadUserByUsername(username);
 
@@ -55,7 +58,8 @@ public class WithStudentSecurityContextFactory implements WithSecurityContextFac
         return context;
     }
 
-    private void validateStudentAccount(String username) {
+    private void validateStudentAccount(String username, String studentId) {
+
         RegisterStudentRequest request = new RegisterStudentRequest();
         request.setUsername(username);
         request.setPassword(TEST_STUDENT_PASSWORD);
@@ -65,6 +69,11 @@ public class WithStudentSecurityContextFactory implements WithSecurityContextFac
         request.setStudentAddress(TEST_STUDENT_ADDRESS);
         request.setStudentDetailedAddress(TEST_STUDENT_DETAILED_ADDRESS);
         request.setStudentParentPhoneNumber(TEST_STUDENT_PARENT_PHONE_NUMBER);
+
+
+        if (!Objects.equals(studentId, "")) {
+            request.setStudentId(studentId);
+        }
 
         studentJpaRepository.findStudentByUsernameIs(username)
                 .orElseGet(() -> studentJpaRepository

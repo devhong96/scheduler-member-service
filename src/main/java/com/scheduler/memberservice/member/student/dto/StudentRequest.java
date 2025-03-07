@@ -1,5 +1,6 @@
 package com.scheduler.memberservice.member.student.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,9 @@ public class StudentRequest {
     @Getter
     @Setter
     public static class RegisterStudentRequest {
+
+        @JsonIgnore
+        private String studentId;
 
         @NotEmpty(message = "아이디를 입력해주세요")
         private String username;

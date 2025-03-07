@@ -4,10 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scheduler.memberservice.client.CourseServiceClient;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
+import com.scheduler.memberservice.member.messaging.outbox.OutboxProcessor;
 import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
 import com.scheduler.memberservice.messaging.TestRabbitConsumer;
 import com.scheduler.memberservice.testSet.IntegrationTest;
+import com.scheduler.memberservice.testSet.student.WithStudent;
 import com.scheduler.memberservice.testSet.teacher.WithTeacher;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,6 +56,9 @@ class StudentManageServiceTest {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private OutboxProcessor outboxProcessor;
 
     private static final RabbitMQContainer RABBITMQ_CONTAINER =
             new RabbitMQContainer("rabbitmq:3-management");
@@ -157,6 +162,7 @@ class StudentManageServiceTest {
 
     @Test
     @DisplayName("레빗엠큐 테스트")
+    @WithStudent(username = "student123", studentId = TEST_STUDENT_ID)
     void changeStudentName() throws InterruptedException {
 
         // Given
@@ -166,6 +172,8 @@ class StudentManageServiceTest {
 
         // When
         studentManageService.changeStudentName(changeStudentName);
+
+        outboxProcessor.processOutboxEvents();
 
         // Then
         ChangeStudentNameRequest received = testRabbitConsumer.getReceivedMessage();

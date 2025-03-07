@@ -43,6 +43,10 @@ public class Student extends BaseEntity {
     @Column(nullable = false)
     private String studentName;
 
+    public void updateStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
     @Column(nullable = false)
     private String email;
 
@@ -70,6 +74,7 @@ public class Student extends BaseEntity {
     ) {
         Student student = new Student();
         student.teacherId = teacherId;
+        student.studentId = registerStudentRequest.getStudentId();
         student.username = registerStudentRequest.getUsername();
         student.password = passwordEncoder.encode(registerStudentRequest.getPassword());
         student.studentName = registerStudentRequest.getStudentName();
