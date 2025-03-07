@@ -1,5 +1,6 @@
 package com.scheduler.memberservice.member.teacher.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,9 @@ public class TeacherInfoRequest {
     @Getter
     @Setter
     public static class JoinTeacherRequest {
+
+        @JsonIgnore
+        private String teacherId;
 
         @NotEmpty(message = "아이디를 입력해 주세요")
         private String username;

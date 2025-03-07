@@ -100,8 +100,8 @@ public class StudentManageServiceImpl implements StudentManageService {
         }
     }
 
-    protected void fallback(String username, Throwable e) {
-        log.warn("Fallback triggered for username: {}, Exception: {}", username, e.getMessage());
+    protected void fallback(ChangeTeacherRequest ChangeTeacherRequest, Throwable e) {
+        log.warn("Exception: {}", e.getMessage());
         throw new MemberExistException();
     }
 

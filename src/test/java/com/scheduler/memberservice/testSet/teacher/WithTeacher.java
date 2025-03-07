@@ -12,4 +12,5 @@ import java.lang.annotation.Target;
 @WithSecurityContext(factory = WithTeacherSecurityContextFactory.class)
 public @interface WithTeacher {
     String username() default "";
+    String teacherId() default "";
 }

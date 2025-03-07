@@ -6,7 +6,6 @@ import com.scheduler.memberservice.member.admin.repository.AdminJpaRepository;
 import com.scheduler.memberservice.testSet.IntegrationTest;
 import com.scheduler.memberservice.testSet.admin.WithAdmin;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,8 @@ import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindPa
 import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.EditEmailRequest;
 import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.PwdEditRequest;
 import static com.scheduler.memberservice.testSet.TestConstants.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 @IntegrationTest
@@ -44,7 +45,7 @@ class AdminCertServiceTest {
 
         log.info("emailConfirmation result: {}", b);
 
-        Assertions.assertTrue(b);
+        assertTrue(b);
     }
 
     @Test
@@ -68,7 +69,7 @@ class AdminCertServiceTest {
         //
         boolean matches = passwordEncoder.matches(TEST_ADMIN_PASSWORD, admin.getPassword());
 
-        Assertions.assertTrue(matches);
+        assertTrue(matches);
 
     }
 
@@ -88,6 +89,6 @@ class AdminCertServiceTest {
 
         String email = admin.getEmail();
 
-        Assertions.assertEquals(TEST_ADMIN_EMAIL, email);
+        assertEquals(TEST_ADMIN_EMAIL, email);
     }
 }

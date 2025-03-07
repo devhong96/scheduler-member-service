@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
+import java.util.Objects;
+
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoRequest.JoinTeacherRequest;
 import static com.scheduler.memberservice.testSet.TestConstants.*;
 
@@ -31,8 +33,9 @@ public class WithTeacherSecurityContextFactory implements WithSecurityContextFac
     public SecurityContext createSecurityContext(WithTeacher withTeacher) {
 
         String username = withTeacher.username();
+        String teacherId = withTeacher.teacherId();
 
-        validateTeacherAccount(username);
+        validateTeacherAccount(username, teacherId);
 
         UserDetails principal = userDetailsService.loadUserByUsername(username);
 
@@ -55,12 +58,16 @@ public class WithTeacherSecurityContextFactory implements WithSecurityContextFac
         return context;
     }
 
-    private void validateTeacherAccount(String username) {
+    private void validateTeacherAccount(String username, String teacherId) {
         JoinTeacherRequest joinTeacherRequest = new JoinTeacherRequest();
         joinTeacherRequest.setUsername(username);
         joinTeacherRequest.setEmail(TEST_TEACHER_EMAIL);
         joinTeacherRequest.setPassword(TEST_TEACHER_PASSWORD);
         joinTeacherRequest.setTeacherName(TEST_TEACHER_NAME);
+
+        if(!Objects.equals(teacherId, "")){
+            joinTeacherRequest.setTeacherId(teacherId);
+        }
 
         teacherJpaRepository.findTeacherByUsernameIs(username)
                 .orElseGet(() -> teacherJpaRepository

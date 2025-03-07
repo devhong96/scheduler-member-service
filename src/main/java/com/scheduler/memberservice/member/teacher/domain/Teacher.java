@@ -65,6 +65,7 @@ public class Teacher extends BaseEntity {
 
     public static Teacher create(JoinTeacherRequest joinTeacherRequest, PasswordEncoder passwordEncoder) {
         Teacher teacher = new Teacher();
+        teacher.teacherId = joinTeacherRequest.getTeacherId();
         teacher.username = joinTeacherRequest.getUsername();
         teacher.password = passwordEncoder.encode(joinTeacherRequest.getPassword());
         teacher.teacherName = joinTeacherRequest.getTeacherName();

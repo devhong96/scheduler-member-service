@@ -9,12 +9,9 @@ import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import com.scheduler.memberservice.testSet.IntegrationTest;
 import com.scheduler.memberservice.testSet.teacher.WithTeacher;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.List;
 
@@ -22,7 +19,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseExistenceResponse;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.TeacherResponse;
-import static com.scheduler.memberservice.testSet.TestConstants.*;
+import static com.scheduler.memberservice.testSet.TestConstants.TEST_TEACHER_NAME;
+import static com.scheduler.memberservice.testSet.TestConstants.TEST_TEACHER_USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -39,23 +37,29 @@ class TeacherManageServiceTest {
     @Autowired
     private TeacherManageService teacherManageService;
 
-    @MockitoBean
-    private WireMockServer wireMockServer;
+    @Spy
+    private static WireMockServer wireMockServer;
 
     @Autowired
     private MemberUtils memberUtils;
     //== setting
 
-    @BeforeEach
-    void setUp() {
-        wireMockServer = new WireMockServer(
-                wireMockConfig()
-                .port(8080));
+    @BeforeAll
+    static void startWireMockServer() {
+        wireMockServer = new WireMockServer(wireMockConfig().port(8080));
         wireMockServer.start();
+    }
+
+    @AfterAll
+    static void stopWireMockServer() {
+        if (wireMockServer != null) {
+            wireMockServer.stop();
+        }
     }
 
     @AfterEach
     void tearDown() {
+        // 없으면 테스트간 문제 발생
         wireMockServer.stop();
         teacherJpaRepository.deleteAll();
     }
@@ -67,10 +71,6 @@ class TeacherManageServiceTest {
 
         String teacherId = memberUtils.getTeacherId();
 
-        final String expectedResponse = objectMapper
-                .writeValueAsString(new CourseExistenceResponse(false)
-        );
-
         //
         Teacher before = teacherJpaRepository
                 .findTeacherByUsernameIs(TEST_TEACHER_USERNAME)
@@ -79,13 +79,17 @@ class TeacherManageServiceTest {
         Boolean beforeApproved = before.getApproved();
 
         stubFor(get(urlEqualTo(
-                BASE_URL + "/teacher/" + teacherId + "/courses"))
-//                .withHeader("Authorization", matching(".*"))
+                "/feign-course/teacher/" + teacherId + "/courses"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", APPLICATION_JSON_VALUE)
-                        .withBody(expectedResponse))
-        );
+                        .withBody(
+                                objectMapper
+                                        .writeValueAsString(
+                                                new CourseExistenceResponse(false)
+                                        )
+                        )
+                ));
 
         teacherManageService.changeTeacherStatus(TEST_TEACHER_USERNAME);
 

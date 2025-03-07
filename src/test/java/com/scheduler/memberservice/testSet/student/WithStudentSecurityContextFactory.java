@@ -70,6 +70,9 @@ public class WithStudentSecurityContextFactory implements WithSecurityContextFac
         request.setStudentDetailedAddress(TEST_STUDENT_DETAILED_ADDRESS);
         request.setStudentParentPhoneNumber(TEST_STUDENT_PARENT_PHONE_NUMBER);
 
+        if (Objects.equals(username, "")) {
+            request.setUsername(TEST_STUDENT_USERNAME);
+        }
 
         if (!Objects.equals(studentId, "")) {
             request.setStudentId(studentId);
