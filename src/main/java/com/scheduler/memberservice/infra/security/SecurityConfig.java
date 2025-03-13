@@ -42,7 +42,7 @@ public class SecurityConfig {
     }
 
     public static final String[] MICROSERVICE_INTERNAL_ENDPOINTS = {
-//            "/actuator/**",
+            "/feign-course/**",
     };
 
     public static final String[] ADMIN_RESTRICTED_ENDPOINTS = {

@@ -7,25 +7,26 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.scheduler.memberservice.client.dto.FeignMemberResponse.MemberInfo;
 import static com.scheduler.memberservice.client.dto.FeignMemberResponse.StudentInfo;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("feign-member")
+@RequestMapping
 @RequiredArgsConstructor
 public class FeignCourseController {
 
     private final FeignCourseService feignCourseService;
 
-    @PostMapping("student/{username}")
+    @PostMapping("/feign-member/student/{username}")
     public ResponseEntity<StudentInfo> findStudentInfoByUsername(
-            @RequestHeader("Authorization") String token
+            @RequestHeader(AUTHORIZATION) String token
     ){
         return new ResponseEntity<>(feignCourseService.findStudentInfoByToken(token), OK);
     }
 
-    @GetMapping("member/info")
+    @PostMapping("/feign-member/member/info")
     public  ResponseEntity<MemberInfo> findMemberInfoByToken(
-            @RequestHeader("Authorization") String token
+            @RequestHeader(AUTHORIZATION) String token
     ){
         return new ResponseEntity<>(feignCourseService.findMemberInfoByToken(token), OK);
     }

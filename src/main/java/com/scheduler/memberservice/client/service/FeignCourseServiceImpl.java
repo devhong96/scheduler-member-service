@@ -29,10 +29,12 @@ public class FeignCourseServiceImpl implements FeignCourseService {
     @Transactional(readOnly = true)
     public StudentInfo findStudentInfoByToken(String token) {
 
+        token = token.replace("Bearer ", "").trim();
+
         Authentication authentication = jwtUtils.getAuthentication(token);
 
-        String name = authentication.getName();
-        Student student = studentJpaRepository.findStudentByStudentName(name).orElseThrow(MemberExistException::new);
+        String username = authentication.getName();
+        Student student = studentJpaRepository.findStudentByUsernameIs(username).orElseThrow(MemberExistException::new);
 
         String teacherId = student.getTeacherId();
         String studentId = student.getStudentId();
