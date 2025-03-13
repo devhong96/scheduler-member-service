@@ -2,6 +2,7 @@ package com.scheduler.memberservice.infra.security.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scheduler.memberservice.infra.security.base.AdminDetails;
+import com.scheduler.memberservice.infra.security.base.StudentDetails;
 import com.scheduler.memberservice.infra.security.base.TeacherDetails;
 import com.scheduler.memberservice.infra.security.jwt.RefreshTokenJpaRepository;
 import com.scheduler.memberservice.infra.security.jwt.component.JwtUtils;
@@ -10,6 +11,7 @@ import com.scheduler.memberservice.infra.security.jwt.dto.JwtTokenDto;
 import com.scheduler.memberservice.infra.security.jwt.dto.UsernamePasswordAutoDto;
 import com.scheduler.memberservice.member.admin.domain.Admin;
 import com.scheduler.memberservice.member.common.RoleType;
+import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -72,6 +74,20 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String refreshTokenValue = jwtTokenDto.getRefreshToken();
         Date expiresDate = jwtTokenDto.getExpiresDate();
+
+        if (authResult.getPrincipal() instanceof StudentDetails) {
+
+            Student student = ((StudentDetails) authResult.getPrincipal()).getStudent();
+            String teacherId = student.getStudentId();
+
+            RefreshToken refreshToken = refreshTokenJpaRepository
+                    .findRefreshTokenByUserId(teacherId)
+                    .orElseGet(() -> refreshTokenJpaRepository.save(new RefreshToken(teacherId, refreshTokenValue, expiresDate)));
+
+            jsonResponse = jsonProperty(student.getUsername(), student.getRoleType(),
+                    jwtTokenDto.getAccessToken(), refreshToken.getRefreshToken()
+            );
+        }
 
         if (authResult.getPrincipal() instanceof TeacherDetails) {
 
