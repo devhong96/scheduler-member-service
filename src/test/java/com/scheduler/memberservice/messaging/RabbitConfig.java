@@ -10,6 +10,8 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.testcontainers.containers.RabbitMQContainer;
 
 @TestConfiguration
 public class RabbitConfig {
@@ -17,6 +19,8 @@ public class RabbitConfig {
     public static final String EXCHANGE_NAME = "student.exchange";
     public static final String ROUTING_KEY = "student.name.update";
     public static final String QUEUE_NAME = "student.name.update.queue";
+    private static final String RABBIT_IMAGE = "rabbitmq:3-management";
+
 
     @Bean
     public DirectExchange exchange() {
@@ -44,4 +48,23 @@ public class RabbitConfig {
         rabbitTemplate.setMessageConverter(jsonMessageConverter());
         return rabbitTemplate;
     }
+
+
+    @Bean
+    public RabbitMQContainer rabbitMQContainer() {
+
+        RabbitMQContainer rabbitMQContainer = new RabbitMQContainer(RABBIT_IMAGE);
+        rabbitMQContainer.start();
+
+        // Spring properties 설정
+        System.setProperty("spring.rabbitmq.host", rabbitMQContainer.getHost());
+        System.setProperty("spring.rabbitmq.port", rabbitMQContainer.getAmqpPort().toString());
+
+        return rabbitMQContainer;
+    }
+
+    @MockitoBean
+    public RabbitTemplate rabbitTemplate;
+
+
 }

@@ -9,14 +9,15 @@ import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import com.scheduler.memberservice.testSet.IntegrationTest;
 import com.scheduler.memberservice.testSet.teacher.WithTeacher;
-import org.junit.jupiter.api.*;
-import org.mockito.Spy;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseExistenceResponse;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.TeacherResponse;
 import static com.scheduler.memberservice.testSet.TestConstants.TEST_TEACHER_NAME;
@@ -37,31 +38,25 @@ class TeacherManageServiceTest {
     @Autowired
     private TeacherManageService teacherManageService;
 
-    @Spy
-    private static WireMockServer wireMockServer;
+    @Autowired
+    private WireMockServer wireMockServer;
 
     @Autowired
     private MemberUtils memberUtils;
     //== setting
 
-    @BeforeAll
-    static void startWireMockServer() {
-        wireMockServer = new WireMockServer(wireMockConfig().port(8080));
-        wireMockServer.start();
-    }
-
-    @AfterAll
-    static void stopWireMockServer() {
-        if (wireMockServer != null) {
-            wireMockServer.stop();
+    @BeforeEach
+    void startWireMockServer() {
+        if (!wireMockServer.isRunning()) {
+            wireMockServer.start();
         }
     }
 
     @AfterEach
-    void tearDown() {
-        // 없으면 테스트간 문제 발생
-        wireMockServer.stop();
-        teacherJpaRepository.deleteAll();
+    void stopWireMockServer() {
+        if (wireMockServer != null) {
+            wireMockServer.stop();
+        }
     }
 
     @Test
@@ -84,9 +79,7 @@ class TeacherManageServiceTest {
                         .withStatus(200)
                         .withHeader("Content-Type", APPLICATION_JSON_VALUE)
                         .withBody(
-                                objectMapper
-                                        .writeValueAsString(
-                                                new CourseExistenceResponse(false)
+                                objectMapper.writeValueAsString(new CourseExistenceResponse(false)
                                         )
                         )
                 ));

@@ -9,16 +9,15 @@ import com.scheduler.memberservice.member.student.repository.StudentJpaRepositor
 import com.scheduler.memberservice.messaging.TestRabbitConsumer;
 import com.scheduler.memberservice.testSet.IntegrationTest;
 import com.scheduler.memberservice.testSet.teacher.WithTeacher;
-import org.junit.jupiter.api.*;
-import org.mockito.Spy;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
-import org.testcontainers.containers.RabbitMQContainer;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseReassignmentResponse;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
 import static com.scheduler.memberservice.member.student.dto.StudentResponse.StudentInfoResponse;
@@ -47,28 +46,10 @@ class StudentManageServiceTest {
     private TestRabbitConsumer testRabbitConsumer;
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private WireMockServer wireMockServer;
 
-    @Spy
-    private static WireMockServer wireMockServer;
-
-    private static final RabbitMQContainer RABBITMQ_CONTAINER =
-            new RabbitMQContainer("rabbitmq:3-management");
-
-    static {
-        RABBITMQ_CONTAINER.start();
-        System.setProperty("spring.rabbitmq.host", RABBITMQ_CONTAINER.getHost());
-        System.setProperty("spring.rabbitmq.port", RABBITMQ_CONTAINER.getAmqpPort().toString());
-    }
-
-    @BeforeAll
-    static void startWireMockServer() {
-        wireMockServer = new WireMockServer(wireMockConfig().port(8080));
-        wireMockServer.start();
-    }
-
-    @AfterAll
-    static void stopWireMockServer() {
+    @AfterEach
+    void stopWireMockServer() {
         if (wireMockServer != null) {
             wireMockServer.stop();
         }
@@ -76,6 +57,10 @@ class StudentManageServiceTest {
 
     @BeforeEach
     void setUp() {
+
+        if (!wireMockServer.isRunning()) {
+            wireMockServer.start();
+        }
 
         RegisterStudentRequest request = new RegisterStudentRequest();
 
@@ -89,14 +74,7 @@ class StudentManageServiceTest {
         request.setStudentDetailedAddress(TEST_STUDENT_DETAILED_ADDRESS);
         request.setStudentParentPhoneNumber(TEST_STUDENT_PARENT_PHONE_NUMBER);
         studentCertService.registerStudent(request);
-    }
 
-    @AfterEach
-    void tearDown() {
-        wireMockServer.stop();
-        studentJpaRepository.deleteAll();
-        studentJpaRepository.flush();
-        rabbitTemplate.stop();
     }
 
     @Test

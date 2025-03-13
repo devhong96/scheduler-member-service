@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.testSet.redis;
+package com.scheduler.memberservice.testSet.testConfig;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;

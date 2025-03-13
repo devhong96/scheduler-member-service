@@ -1,10 +1,12 @@
 package com.scheduler.memberservice.testSet;
 
+import com.scheduler.memberservice.testSet.testConfig.TestConfig;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ import java.lang.annotation.Target;
 @Transactional
 @AutoConfigureMockMvc
 @EnableCaching
+@Import({TestConfig.class})
 @ActiveProfiles("test")
 public @interface IntegrationTest {
 

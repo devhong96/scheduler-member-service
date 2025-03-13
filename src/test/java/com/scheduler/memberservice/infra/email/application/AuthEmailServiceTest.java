@@ -7,10 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
@@ -19,7 +16,8 @@ import java.util.regex.Pattern;
 
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.AuthCodeRequest;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @IntegrationTest
 class AuthEmailServiceTest {
@@ -99,13 +97,4 @@ class AuthEmailServiceTest {
         return matcher.find() ? matcher.group() : null;  // 6자리 인증번호 반환
     }
 
-    @TestConfiguration
-    static class MockitoPublisherConfiguration {
-
-        @Bean
-        @Primary
-        ApplicationEventPublisher publisher() {
-            return mock(ApplicationEventPublisher.class);
-        }
-    }
 }
