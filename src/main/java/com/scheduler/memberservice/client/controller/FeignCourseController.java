@@ -9,7 +9,7 @@ import static com.scheduler.memberservice.client.dto.FeignMemberResponse.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("feign-member")
+@RequestMapping("/feign-member")
 @RequiredArgsConstructor
 public class FeignCourseController {
 

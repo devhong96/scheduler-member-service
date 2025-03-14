@@ -12,7 +12,7 @@ import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseRe
 @FeignClient(
         name = "scheduler-course-service",
         url =  "${scheduler_course_service_url:}",
-        path = "/scheduler-course-service/feign-course",
+        path = "/feign-course",
         configuration = CourseFeignErrorDecoder.class
 )
 public interface CourseServiceClient {
