@@ -11,20 +11,20 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping
+@RequestMapping("feign-member")
 @RequiredArgsConstructor
 public class FeignCourseController {
 
     private final FeignCourseService feignCourseService;
 
-    @GetMapping("/feign-member/student/info")
+    @GetMapping("student/info")
     public ResponseEntity<StudentInfo> findStudentInfoByToken(
             @RequestHeader(AUTHORIZATION) String token
     ){
         return new ResponseEntity<>(feignCourseService.findStudentInfoByToken(token), OK);
     }
 
-    @PostMapping("/feign-member/member/info")
+    @PostMapping("member/info")
     public  ResponseEntity<MemberInfo> findMemberInfoByToken(
             @RequestHeader(AUTHORIZATION) String token
     ){
