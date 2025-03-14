@@ -14,8 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.scheduler.memberservice.client.dto.FeignMemberResponse.MemberInfo;
-import static com.scheduler.memberservice.client.dto.FeignMemberResponse.StudentInfo;
+import static com.scheduler.memberservice.client.dto.FeignMemberResponse.*;
 import static com.scheduler.memberservice.member.common.RoleType.*;
 
 @Slf4j
@@ -26,6 +25,17 @@ public class FeignCourseServiceImpl implements FeignCourseService {
     private final JwtUtils jwtUtils;
     private final TeacherJpaRepository teacherJpaRepository;
     private final StudentJpaRepository studentJpaRepository;
+
+    @Override
+    public TeacherInfo findTeacherInfoByToken(String token) {
+        token = token.replace("Bearer ", "").trim();
+        log.info(token);
+
+        String username = jwtUtils.getAuthentication(token).getName();
+        Teacher teacher = teacherJpaRepository.findTeacherByUsernameIs(username).orElseThrow(MemberExistException::new);
+
+        return new TeacherInfo(teacher.getTeacherId());
+    }
 
     @Override
     @Transactional(readOnly = true)

@@ -26,6 +26,10 @@ public class FeignMemberResponse {
     public static class TeacherInfo {
 
         private String teacherId;
+
+        public TeacherInfo(String teacherId) {
+            this.teacherId = teacherId;
+        }
     }
 
     @Getter
