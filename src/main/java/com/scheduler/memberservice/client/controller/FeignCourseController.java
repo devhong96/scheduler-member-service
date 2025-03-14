@@ -3,7 +3,10 @@ package com.scheduler.memberservice.client.controller;
 import com.scheduler.memberservice.client.service.FeignCourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import static com.scheduler.memberservice.client.dto.FeignMemberResponse.MemberInfo;
 import static com.scheduler.memberservice.client.dto.FeignMemberResponse.StudentInfo;
@@ -17,8 +20,8 @@ public class FeignCourseController {
 
     private final FeignCourseService feignCourseService;
 
-    @PostMapping("/feign-member/student/{username}")
-    public ResponseEntity<StudentInfo> findStudentInfoByUsername(
+    @PostMapping("/feign-member/student/info")
+    public ResponseEntity<StudentInfo> findStudentInfoByToken(
             @RequestHeader(AUTHORIZATION) String token
     ){
         return new ResponseEntity<>(feignCourseService.findStudentInfoByToken(token), OK);
