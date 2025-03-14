@@ -41,7 +41,7 @@ public class SecurityConfig {
     }
 
     public static final String[] MICROSERVICE_INTERNAL_ENDPOINTS = {
-            "/feign-course/**",
+
     };
 
     public static final String[] ADMIN_RESTRICTED_ENDPOINTS = {
@@ -55,6 +55,7 @@ public class SecurityConfig {
     public static final String[] ENDPOINTS_WHITELISTS = {
             "/member-api/**",
             "/actuator/**",
+            "/feign-course/**",
 
             "/login",
             "/help/*",
