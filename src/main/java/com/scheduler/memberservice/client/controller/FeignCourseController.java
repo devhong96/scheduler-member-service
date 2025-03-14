@@ -17,21 +17,21 @@ public class FeignCourseController {
 
     private final FeignCourseService feignCourseService;
 
-    @GetMapping("teacher/info")
+    @GetMapping("/teacher/info")
     public ResponseEntity<TeacherInfo> findTeacherInfoByToken(
             @RequestHeader(AUTHORIZATION) String token
     ){
         return new ResponseEntity<>(feignCourseService.findTeacherInfoByToken(token), OK);
     }
 
-    @GetMapping("student/info")
+    @GetMapping("/student/info")
     public ResponseEntity<StudentInfo> findStudentInfoByToken(
             @RequestHeader(AUTHORIZATION) String token
     ){
         return new ResponseEntity<>(feignCourseService.findStudentInfoByToken(token), OK);
     }
 
-    @PostMapping("member/info")
+    @PostMapping("/member/info")
     public  ResponseEntity<MemberInfo> findMemberInfoByToken(
             @RequestHeader(AUTHORIZATION) String token
     ){
