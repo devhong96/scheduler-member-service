@@ -55,7 +55,7 @@ public class SecurityConfig {
     public static final String[] ENDPOINTS_WHITELISTS = {
             "/member-api/**",
             "/actuator/**",
-            "/feign-course/**",
+            "/feign-member/**",
 
             "/login",
             "/help/*",
