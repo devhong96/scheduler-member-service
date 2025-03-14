@@ -8,6 +8,7 @@ import com.scheduler.memberservice.member.student.repository.StudentJpaRepositor
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import static com.scheduler.memberservice.client.dto.FeignMemberResponse.MemberI
 import static com.scheduler.memberservice.client.dto.FeignMemberResponse.StudentInfo;
 import static com.scheduler.memberservice.member.common.RoleType.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FeignCourseServiceImpl implements FeignCourseService {
@@ -30,6 +32,7 @@ public class FeignCourseServiceImpl implements FeignCourseService {
     public StudentInfo findStudentInfoByToken(String token) {
 
         token = token.replace("Bearer ", "").trim();
+        log.info(token);
 
         Authentication authentication = jwtUtils.getAuthentication(token);
 
@@ -39,6 +42,8 @@ public class FeignCourseServiceImpl implements FeignCourseService {
         String teacherId = student.getTeacherId();
         String studentId = student.getStudentId();
         String studentName = student.getStudentName();
+
+        log.info("teacherId = {}", teacherId);
 
         return new StudentInfo(studentId, studentName, teacherId);
     }
