@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.scheduler.memberservice.client.dto.FeignMemberResponse.*;
-import static com.scheduler.memberservice.client.dto.FeignMemberResponse.MemberInfo;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -19,21 +17,21 @@ public class FeignCourseController {
 
     @GetMapping("/teacher/info")
     public ResponseEntity<TeacherInfo> findTeacherInfoByToken(
-            @RequestHeader(AUTHORIZATION) String token
+            @RequestHeader("Authorization") String token
     ){
         return new ResponseEntity<>(feignCourseService.findTeacherInfoByToken(token), OK);
     }
 
     @GetMapping("/student/info")
     public ResponseEntity<StudentInfo> findStudentInfoByToken(
-            @RequestHeader(AUTHORIZATION) String token
+            @RequestHeader("Authorization") String token
     ){
         return new ResponseEntity<>(feignCourseService.findStudentInfoByToken(token), OK);
     }
 
     @PostMapping("/member/info")
     public  ResponseEntity<MemberInfo> findMemberInfoByToken(
-            @RequestHeader(AUTHORIZATION) String token
+            @RequestHeader("Authorization") String token
     ){
         return new ResponseEntity<>(feignCourseService.findMemberInfoByToken(token), OK);
     }
