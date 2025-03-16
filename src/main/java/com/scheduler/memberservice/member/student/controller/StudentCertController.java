@@ -1,13 +1,12 @@
 package com.scheduler.memberservice.member.student.controller;
 
 import com.scheduler.memberservice.member.student.application.StudentCertService;
-import com.scheduler.memberservice.member.student.dto.StudentRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.scheduler.memberservice.member.student.dto.StudentRequest.RegisterStudentRequest;
+import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -27,7 +26,7 @@ public class StudentCertController {
 
     @PatchMapping("modify/info")
     public ResponseEntity<String> modifyStudentInfo(
-            @Valid @RequestBody StudentRequest.ModifyStudentInfoRequest registerStudentRequest
+            @Valid @RequestBody ModifyStudentInfoRequest registerStudentRequest
     ) {
         studentCertService.modifyStudentInfo(registerStudentRequest);
         return  new ResponseEntity<>(OK);
@@ -35,7 +34,7 @@ public class StudentCertController {
 
     @PatchMapping("modify/password")
     public ResponseEntity<String> modifyStudentPassword(
-            @Valid @RequestBody StudentRequest.ModifyStudentPasswordRequest modifyStudentPasswordRequest
+            @Valid @RequestBody ModifyStudentPasswordRequest modifyStudentPasswordRequest
     ) {
         studentCertService.modifyStudentPassword(modifyStudentPasswordRequest);
         return  new ResponseEntity<>(OK);

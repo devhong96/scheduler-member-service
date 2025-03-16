@@ -78,11 +78,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         if (authResult.getPrincipal() instanceof StudentDetails) {
 
             Student student = ((StudentDetails) authResult.getPrincipal()).getStudent();
-            String teacherId = student.getStudentId();
+            String studentId = student.getStudentId();
 
             RefreshToken refreshToken = refreshTokenJpaRepository
-                    .findRefreshTokenByUserId(teacherId)
-                    .orElseGet(() -> refreshTokenJpaRepository.save(new RefreshToken(teacherId, refreshTokenValue, expiresDate)));
+                    .findRefreshTokenByUserId(studentId)
+                    .orElseGet(() -> refreshTokenJpaRepository.save(new RefreshToken(studentId, refreshTokenValue, expiresDate)));
 
             jsonResponse = jsonProperty(student.getUsername(), student.getRoleType(),
                     jwtTokenDto.getAccessToken(), refreshToken.getRefreshToken()

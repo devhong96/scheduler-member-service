@@ -1,7 +1,6 @@
 package com.scheduler.memberservice.infra.config.setting;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import feign.okhttp.OkHttpClient;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +28,4 @@ public class QueryConfig {
         return new JavaMailSenderImpl();
     }
 
-    @Bean
-    public OkHttpClient okHttpClient() {
-        return new OkHttpClient();
-    }
 }

@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
@@ -42,7 +41,7 @@ public class SecurityConfig {
     }
 
     public static final String[] MICROSERVICE_INTERNAL_ENDPOINTS = {
-//            "/actuator/**",
+
     };
 
     public static final String[] ADMIN_RESTRICTED_ENDPOINTS = {
@@ -54,13 +53,14 @@ public class SecurityConfig {
     };
 
     public static final String[] ENDPOINTS_WHITELISTS = {
-            "/member-api/**",
-            "/actuator/**",
-
-            "/login",
-            "/help/*",
-            "/join",
-            "/token/*"
+            "/**"
+//            "/actuator/**",
+//            "/feign-member/**",
+//
+//            "/login",
+//            "/help/*",
+//            "/join",
+//            "/token/*"
     };
 
     @Bean
@@ -79,10 +79,7 @@ public class SecurityConfig {
                 .addFilterBefore(new CustomLogoutFilter(jwtUtils, refreshTokenJpaRepository), LogoutFilter.class)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers(MICROSERVICE_INTERNAL_ENDPOINTS)
-                                .access(
-                                        new WebExpressionAuthorizationManager(
-                                                "hasIpAddress('127.0.0.1') or hasIpAddress('172.18.0.0/16')"))
+                                .requestMatchers(MICROSERVICE_INTERNAL_ENDPOINTS).authenticated()
                                 .requestMatchers(ADMIN_RESTRICTED_ENDPOINTS).hasAuthority("ADMIN")
                                 .requestMatchers(AUTHORIZED_ENDPOINTS).hasAnyAuthority("ADMIN", "TEACHER")
                                 .requestMatchers(ENDPOINTS_WHITELISTS).permitAll()

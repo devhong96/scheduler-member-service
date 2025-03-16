@@ -91,7 +91,6 @@ dependencies {
 
     testImplementation 'org.testcontainers:rabbitmq:1.20.5'
 
-
     implementation 'com.h2database:h2'
 
     testImplementation ('it.ozimov:embedded-redis:0.7.3') {

@@ -8,15 +8,16 @@ import com.scheduler.memberservice.member.student.repository.StudentJpaRepositor
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.scheduler.memberservice.client.dto.FeignMemberResponse.MemberInfo;
-import static com.scheduler.memberservice.client.dto.FeignMemberResponse.StudentInfo;
+import static com.scheduler.memberservice.client.dto.FeignMemberResponse.*;
 import static com.scheduler.memberservice.member.common.RoleType.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FeignCourseServiceImpl implements FeignCourseService {
@@ -26,17 +27,33 @@ public class FeignCourseServiceImpl implements FeignCourseService {
     private final StudentJpaRepository studentJpaRepository;
 
     @Override
+    public TeacherInfo findTeacherInfoByToken(String token) {
+        token = token.replace("Bearer ", "").trim();
+        log.info(token);
+
+        String username = jwtUtils.getAuthentication(token).getName();
+        Teacher teacher = teacherJpaRepository.findTeacherByUsernameIs(username).orElseThrow(MemberExistException::new);
+
+        return new TeacherInfo(teacher.getTeacherId());
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public StudentInfo findStudentInfoByToken(String token) {
 
+        token = token.replace("Bearer ", "").trim();
+        log.info(token);
+
         Authentication authentication = jwtUtils.getAuthentication(token);
 
-        String name = authentication.getName();
-        Student student = studentJpaRepository.findStudentByStudentName(name).orElseThrow(MemberExistException::new);
+        String username = authentication.getName();
+        Student student = studentJpaRepository.findStudentByUsernameIs(username).orElseThrow(MemberExistException::new);
 
         String teacherId = student.getTeacherId();
         String studentId = student.getStudentId();
         String studentName = student.getStudentName();
+
+        log.info("teacherId = {}", teacherId);
 
         return new StudentInfo(studentId, studentName, teacherId);
     }

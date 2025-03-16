@@ -5,25 +5,31 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.scheduler.memberservice.client.dto.FeignMemberResponse.MemberInfo;
-import static com.scheduler.memberservice.client.dto.FeignMemberResponse.StudentInfo;
+import static com.scheduler.memberservice.client.dto.FeignMemberResponse.*;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("feign-member")
+@RequestMapping("/feign-member")
 @RequiredArgsConstructor
 public class FeignCourseController {
 
     private final FeignCourseService feignCourseService;
 
-    @PostMapping("student/{username}")
-    public ResponseEntity<StudentInfo> findStudentInfoByUsername(
+    @GetMapping("/teacher/info")
+    public ResponseEntity<TeacherInfo> findTeacherInfoByToken(
+            @RequestHeader("Authorization") String token
+    ){
+        return new ResponseEntity<>(feignCourseService.findTeacherInfoByToken(token), OK);
+    }
+
+    @GetMapping("/student/info")
+    public ResponseEntity<StudentInfo> findStudentInfoByToken(
             @RequestHeader("Authorization") String token
     ){
         return new ResponseEntity<>(feignCourseService.findStudentInfoByToken(token), OK);
     }
 
-    @GetMapping("member/info")
+    @PostMapping("/member/info")
     public  ResponseEntity<MemberInfo> findMemberInfoByToken(
             @RequestHeader("Authorization") String token
     ){
