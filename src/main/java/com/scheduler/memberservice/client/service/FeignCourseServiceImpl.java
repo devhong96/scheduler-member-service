@@ -29,10 +29,11 @@ public class FeignCourseServiceImpl implements FeignCourseService {
     @Override
     public TeacherInfo findTeacherInfoByToken(String token) {
         token = token.replace("Bearer ", "").trim();
-        log.info(token);
 
         String username = jwtUtils.getAuthentication(token).getName();
-        Teacher teacher = teacherJpaRepository.findTeacherByUsernameIs(username).orElseThrow(MemberExistException::new);
+        Teacher teacher = teacherJpaRepository
+                .findTeacherByUsernameIs(username)
+                .orElseThrow(MemberExistException::new);
 
         return new TeacherInfo(teacher.getTeacherId());
     }
@@ -42,20 +43,32 @@ public class FeignCourseServiceImpl implements FeignCourseService {
     public StudentInfo findStudentInfoByToken(String token) {
 
         token = token.replace("Bearer ", "").trim();
-        log.info(token);
 
         Authentication authentication = jwtUtils.getAuthentication(token);
 
         String username = authentication.getName();
-        Student student = studentJpaRepository.findStudentByUsernameIs(username).orElseThrow(MemberExistException::new);
+
+        Student student = studentJpaRepository
+                .findStudentByUsernameIs(username)
+                .orElseThrow(MemberExistException::new);
+
+        log.info(student.toString());
 
         String teacherId = student.getTeacherId();
+
+        log.info(teacherId);
+
+        Teacher teacher = teacherJpaRepository
+                .findTeacherByTeacherId(teacherId)
+                .orElseThrow(MemberExistException::new);
+
+        String teacherName = teacher.getTeacherName();
         String studentId = student.getStudentId();
         String studentName = student.getStudentName();
 
-        log.info("teacherId = {}", teacherId);
+        log.info(studentName);
 
-        return new StudentInfo(studentId, studentName, teacherId);
+        return new StudentInfo(studentId, studentName, teacherId, teacherName);
     }
 
     @Override

@@ -13,7 +13,7 @@ import static com.scheduler.memberservice.infra.config.messaging.RabbitConfig.EX
 import static com.scheduler.memberservice.infra.config.messaging.RabbitConfig.ROUTING_KEY;
 import static com.scheduler.memberservice.member.messaging.outbox.EventType.STUDENT;
 import static com.scheduler.memberservice.member.messaging.outbox.EventType.TEACHER;
-import static org.springframework.data.domain.PageRequest.*;
+import static org.springframework.data.domain.PageRequest.of;
 
 @Slf4j
 @Service

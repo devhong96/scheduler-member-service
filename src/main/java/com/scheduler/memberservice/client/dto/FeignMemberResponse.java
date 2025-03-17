@@ -13,11 +13,13 @@ public class FeignMemberResponse {
         private String studentId;
         private String studentName;
         private String teacherId;
+        private String teacherName;
 
-        public StudentInfo(String studentId, String studentName, String teacherId) {
+        public StudentInfo(String studentId, String studentName, String teacherId, String teacherName) {
             this.studentId = studentId;
             this.studentName = studentName;
             this.teacherId = teacherId;
+            this.teacherName = teacherName;
         }
     }
 

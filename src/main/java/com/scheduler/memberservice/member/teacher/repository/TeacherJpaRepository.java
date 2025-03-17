@@ -21,5 +21,4 @@ public interface TeacherJpaRepository extends JpaRepository<Teacher, Long> {
 
     Boolean existsTeacherByUsernameAndEmail(String username, String email);
 
-    Optional<Teacher> findByTeacherId(String teacherId);
 }

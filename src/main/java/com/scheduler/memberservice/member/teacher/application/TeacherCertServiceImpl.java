@@ -101,7 +101,7 @@ public class TeacherCertServiceImpl implements TeacherCertService {
         String teacherId = memberUtils.getTeacherId();
 
         Teacher teacher = teacherJpaRepository
-                .findByTeacherId(teacherId)
+                .findTeacherByTeacherId(teacherId)
                 .orElseThrow(MemberExistException::new);
 
         teacher.updateEmail(editEmailRequest);

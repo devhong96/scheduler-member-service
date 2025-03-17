@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.UUID;
 
+import static com.scheduler.memberservice.member.common.RoleType.STUDENT;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -83,6 +84,7 @@ public class Student extends BaseEntity {
         student.studentParentPhoneNumber = registerStudentRequest.getStudentParentPhoneNumber();
         student.studentAddress = registerStudentRequest.getStudentAddress();
         student.studentDetailedAddress = registerStudentRequest.getStudentDetailedAddress();
+        student.roleType = STUDENT;
         student.approved = TRUE;
         return student;
     }
