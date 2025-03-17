@@ -52,11 +52,7 @@ public class FeignCourseServiceImpl implements FeignCourseService {
                 .findStudentByUsernameIs(username)
                 .orElseThrow(MemberExistException::new);
 
-        log.info(student.toString());
-
         String teacherId = student.getTeacherId();
-
-        log.info(teacherId);
 
         Teacher teacher = teacherJpaRepository
                 .findTeacherByTeacherId(teacherId)
@@ -65,8 +61,6 @@ public class FeignCourseServiceImpl implements FeignCourseService {
         String teacherName = teacher.getTeacherName();
         String studentId = student.getStudentId();
         String studentName = student.getStudentName();
-
-        log.info(studentName);
 
         return new StudentInfo(studentId, studentName, teacherId, teacherName);
     }

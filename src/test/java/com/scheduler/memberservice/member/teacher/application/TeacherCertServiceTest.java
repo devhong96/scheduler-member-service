@@ -108,11 +108,11 @@ class TeacherCertServiceTest {
     @Test
     @DisplayName("교사 이메일 변경")
     @WithTeacher(username = TEST_TEACHER_USERNAME)
-    void changeUserEmail() {
+    void changeTeacherEmail() {
         EditEmailRequest editEmailRequest = new EditEmailRequest();
         editEmailRequest.setEmail(TEST_NEW_TEACHER_EMAIL);
 
-        teacherCertService.changeUserEmail(editEmailRequest);
+        teacherCertService.changeTeacherEmail(editEmailRequest);
 
         Teacher teacher = teacherJpaRepository.findTeacherByUsernameIs(TEST_TEACHER_USERNAME)
                 .orElseThrow(MemberExistException::new);

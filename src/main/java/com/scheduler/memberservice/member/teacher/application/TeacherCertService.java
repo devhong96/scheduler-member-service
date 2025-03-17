@@ -14,5 +14,5 @@ public interface TeacherCertService {
 
     void initializePassword(PwdEditRequest pwdEditRequest);
 
-    void changeUserEmail(EditEmailRequest editEmailRequest);
+    void changeTeacherEmail(EditEmailRequest editEmailRequest);
 }

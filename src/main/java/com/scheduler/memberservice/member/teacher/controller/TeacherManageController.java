@@ -1,6 +1,7 @@
 package com.scheduler.memberservice.member.teacher.controller;
 
 import com.scheduler.memberservice.member.teacher.application.TeacherManageService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +18,19 @@ public class TeacherManageController {
 
     private final TeacherManageService teacherManageService;
 
+    @Operation(
+            summary = "교사 가입 정보 확인",
+            description = "모든 상태 확인(등록, 비등록)"
+    )
     @GetMapping("teacher/list")
     public ResponseEntity<List<TeacherResponse>> getTeacherList() {
         return new ResponseEntity<>(teacherManageService.getTeacherList(), OK);
     }
 
+    @Operation(
+            summary = "특정 교사 정보 조회",
+            description = "상세 정보 조회"
+    )
     @GetMapping("teacher/{username}")
     public ResponseEntity<TeacherResponse> findTeacherInformation(
             @PathVariable String username
@@ -29,6 +38,10 @@ public class TeacherManageController {
         return new ResponseEntity<>(teacherManageService.findTeacherInformation(username), OK);
     }
 
+    @Operation(
+            summary = "교사 상태 변경",
+            description = "승인 비승인 여부 변경"
+    )
     @PatchMapping("teacher/{username}/status")
     public ResponseEntity<String> changeTeacherStatus(
             @PathVariable String username

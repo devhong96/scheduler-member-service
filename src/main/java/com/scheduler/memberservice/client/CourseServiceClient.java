@@ -17,13 +17,19 @@ import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseRe
 )
 public interface CourseServiceClient {
 
-    @Operation(summary = "선생님이 담당하는 학생들의 주간 수업 존재 여부 조회")
+    @Operation(
+            summary = "교사 수업 존재 여부 조회",
+            description = "담당하는 학생들의 주간 수업 존재 여부 조회"
+    )
     @GetMapping("teacher/{teacherId}/courses")
     CourseExistenceResponse existWeeklyCoursesByTeacherId(
             @PathVariable String teacherId
     );
 
-    @Operation(summary = "학생과 선생님의 주간 코스 중복 확인 후, 변경")
+    @Operation(
+            summary = "교사 변경",
+            description = "학생과 선생님의 주간 코스 중복 확인 후, 변경"
+    )
     @PatchMapping("teacher/{teacherId}/student/{studentId}")
     CourseReassignmentResponse validateStudentCoursesAndReassign(
             @PathVariable String teacherId,

@@ -96,7 +96,7 @@ public class TeacherCertServiceImpl implements TeacherCertService {
 
     @Override
     @Transactional
-    public void changeUserEmail(EditEmailRequest editEmailRequest) {
+    public void changeTeacherEmail(EditEmailRequest editEmailRequest) {
 
         String teacherId = memberUtils.getTeacherId();
 

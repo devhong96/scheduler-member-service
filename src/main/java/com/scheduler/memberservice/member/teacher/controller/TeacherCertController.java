@@ -20,16 +20,22 @@ public class TeacherCertController {
     private final TeacherCertService teacherCertService;
     private final AuthEmailService authEmailService;
 
-    @Operation(description = "교사 회원 가입")
+    @Operation(
+            summary = "교사 회원 가입",
+            description = "관리자가 승인하기 전에는 로그인 불가"
+    )
     @PostMapping
-    public ResponseEntity<Void> approved(
+    public ResponseEntity<Void> teacherJoin(
             @Valid @RequestBody JoinTeacherRequest joinTeacherRequest
     ) {
         teacherCertService.joinTeacher(joinTeacherRequest);
         return new ResponseEntity<>(OK);
     }
 
-    @Operation(description = "아이디 찾기")
+    @Operation(
+            summary = "교사의 아이디 찾기",
+            description = "가입된 이메일이 있을 경우 전송."
+    )
     @PostMapping("find/username")
     public ResponseEntity<String> findUsernameByEmail(
             @Valid @RequestBody FindUsernameRequest findUsernameRequest
@@ -38,7 +44,10 @@ public class TeacherCertController {
         return new ResponseEntity<>(OK);
     }
 
-    @Operation(description = "이메일이 있으면 메일 보냄")
+    @Operation(
+            summary = "비밀번호 찾기(변경)",
+            description = "등록된 정보에 있을 경우 레디스에 인증번호 저장한 뒤, 이메일로 인증 번호 발송"
+    )
     @PostMapping("find/password")
     public ResponseEntity<String> sendPasswordResetEmail(
             @Valid @RequestBody FindPasswordRequest findPasswordRequest
@@ -47,7 +56,10 @@ public class TeacherCertController {
         return new ResponseEntity<>(OK);
     }
 
-    @Operation(description = "인증번호 인증")
+    @Operation(
+            summary = "인증번호 유효성 확인",
+            description = "유효 시간내 입력한 인증번호가 일치할 경우 레디스에서 삭제한 뒤 승인"
+    )
     @PostMapping("authNumCheck")
     public ResponseEntity<String> verifyAuthCode(
             @Valid @RequestBody AuthCodeRequest authCodeRequest
@@ -56,7 +68,10 @@ public class TeacherCertController {
         return new ResponseEntity<>(OK);
     }
 
-    @Operation(description = "확인 후 변경")
+    @Operation(
+            summary = "비밀번호 변경",
+            description = "사용자 인증을 거친 후, 변경"
+    )
     @PatchMapping("password")
     public ResponseEntity<String> initializePassword(
             @Valid @RequestBody PwdEditRequest pwdEditRequest
@@ -65,12 +80,15 @@ public class TeacherCertController {
         return new ResponseEntity<>(OK);
     }
 
-    @Operation(description = "로그인 상태에서 이메일 변경")
+    @Operation(
+            summary = "이메일 변경",
+            description = "교사 이메일 변경"
+    )
     @PatchMapping("email")
-    public ResponseEntity<Void> changeUserEmail(
+    public ResponseEntity<Void> changeTeacherEmail(
             @Valid @RequestBody EditEmailRequest editEmailRequest
     ) {
-        teacherCertService.changeUserEmail(editEmailRequest);
+        teacherCertService.changeTeacherEmail(editEmailRequest);
         return new ResponseEntity<>(OK);
     }
 }
