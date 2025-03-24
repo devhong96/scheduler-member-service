@@ -31,11 +31,11 @@ public class RedisCacheConfig {
                 .cacheDefaults(defaultConfig)
                 .withCacheConfiguration("studentsByUsername",
                         RedisCacheConfiguration.defaultCacheConfig()
-                                .entryTtl(Duration.ofSeconds(30L))
+                                .entryTtl(Duration.ofMinutes(1L))
                                 .serializeValuesWith(fromSerializer(new GenericJackson2JsonRedisSerializer())))
                 .withCacheConfiguration("teachersByUsername",
                         RedisCacheConfiguration.defaultCacheConfig()
-                                .entryTtl(Duration.ofSeconds(30L))
+                                .entryTtl(Duration.ofMillis(1L))
                                 .serializeValuesWith(fromSerializer(new GenericJackson2JsonRedisSerializer())))
                 .build();
     }

@@ -33,7 +33,7 @@ public class RedisCourse {
     private static final String TEACHER_CACHE_NAME = "teacher";
     private static final String STUDENT_CACHE_NAME = "student";
 
-    private static final long CACHE_TTL = 30;
+    private static final long CACHE_TTL = 1;
     private final RedisTemplate<String, Object> redisTemplate;
 
     @PostConstruct
@@ -72,7 +72,7 @@ public class RedisCourse {
             redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
                 for (Student student : studentList) {
                     String cacheKey = generateStudentCacheKey(student);
-                    redisTemplate.opsForValue().set(cacheKey, student, CACHE_TTL, TimeUnit.SECONDS);
+                    redisTemplate.opsForValue().set(cacheKey, student, CACHE_TTL, TimeUnit.MINUTES);
                 }
                 return null;
             });
@@ -80,7 +80,7 @@ public class RedisCourse {
             redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
                 for (Teacher teacher : teacherList) {
                     String cacheKey = generateTeacherCacheKey(teacher);
-                    redisTemplate.opsForValue().set(cacheKey, teacher, CACHE_TTL, TimeUnit.SECONDS);
+                    redisTemplate.opsForValue().set(cacheKey, teacher, CACHE_TTL, TimeUnit.MINUTES);
                 }
                 return null;
             });
