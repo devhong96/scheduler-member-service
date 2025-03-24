@@ -19,6 +19,7 @@ spring:
     redis:
       host: localhost
       port: 6379
+      redis-preload-enabled: false
 
   mail: #email
     host: smtp.gmail.com
