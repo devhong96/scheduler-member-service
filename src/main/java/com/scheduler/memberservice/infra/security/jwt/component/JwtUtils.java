@@ -93,6 +93,7 @@ public class JwtUtils {
 
     @Operation(summary = "인증")
     public Authentication getAuthentication(String token) {
+
         Claims claims = getPayload(token);
 
         Collection<? extends GrantedAuthority> authorities = Arrays

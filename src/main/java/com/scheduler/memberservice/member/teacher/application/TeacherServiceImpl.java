@@ -1,8 +1,10 @@
 package com.scheduler.memberservice.member.teacher.application;
 
+import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,7 +12,14 @@ import org.springframework.stereotype.Service;
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherJpaRepository teacherJpaRepository;
-    private final PasswordEncoder passwordEncoder;
 
-
+    @Cacheable(
+        cacheNames = "teachersByUsername",
+        key = "'teacher:username:' + #username",
+        cacheManager = "authCacheManager"
+    )
+    public Teacher findTeacherByUsernameIs(String username) {
+        return teacherJpaRepository.findTeacherByUsernameIs(username)
+                .orElseThrow(EntityNotFoundException::new);
+    }
 }

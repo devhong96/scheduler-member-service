@@ -7,11 +7,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
+
+import static org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair.fromSerializer;
 
 @Configuration
 @EnableCaching
@@ -19,22 +20,23 @@ public class RedisCacheConfig {
 
     @Bean
     public CacheManager authCacheManager(RedisConnectionFactory redisConnectionFactory) {
-        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration
-                .defaultCacheConfig()
-                .serializeKeysWith(
-                        RedisSerializationContext.SerializationPair.fromSerializer(
-                                new StringRedisSerializer()))
-                .serializeValuesWith(
-                        RedisSerializationContext.SerializationPair.fromSerializer(
-                                new Jackson2JsonRedisSerializer<>(Object.class)
-                        )
-                )
-                .entryTtl(Duration.ofMinutes(1L));
+        RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig()
+                .serializeKeysWith(fromSerializer(new StringRedisSerializer()))
+                .serializeValuesWith(fromSerializer(new GenericJackson2JsonRedisSerializer()))
+                .entryTtl(Duration.ofSeconds(30L));
 
         return RedisCacheManager
                 .RedisCacheManagerBuilder
                 .fromConnectionFactory(redisConnectionFactory)
-                .cacheDefaults(redisCacheConfiguration)
+                .cacheDefaults(defaultConfig)
+                .withCacheConfiguration("studentsByUsername",
+                        RedisCacheConfiguration.defaultCacheConfig()
+                                .entryTtl(Duration.ofSeconds(30L))
+                                .serializeValuesWith(fromSerializer(new GenericJackson2JsonRedisSerializer())))
+                .withCacheConfiguration("teachersByUsername",
+                        RedisCacheConfiguration.defaultCacheConfig()
+                                .entryTtl(Duration.ofSeconds(30L))
+                                .serializeValuesWith(fromSerializer(new GenericJackson2JsonRedisSerializer())))
                 .build();
     }
 }

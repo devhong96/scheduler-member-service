@@ -3,10 +3,10 @@ package com.scheduler.memberservice.infra.util;
 import com.scheduler.memberservice.infra.exception.custom.MemberLoginException;
 import com.scheduler.memberservice.member.admin.domain.Admin;
 import com.scheduler.memberservice.member.admin.repository.AdminJpaRepository;
+import com.scheduler.memberservice.member.student.application.StudentService;
 import com.scheduler.memberservice.member.student.domain.Student;
-import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
+import com.scheduler.memberservice.member.teacher.application.TeacherService;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
-import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,8 +19,8 @@ import java.util.Optional;
 public class MemberUtils {
 
     private final AdminJpaRepository adminJpaRepository;
-    private final TeacherJpaRepository teacherJpaRepository;
-    private final StudentJpaRepository studentJpaRepository;
+    private final TeacherService teacherService;
+    private final StudentService studentService;
 
     public String getAdminId() {
 
@@ -53,11 +53,9 @@ public class MemberUtils {
                 .orElseThrow(() -> new MemberLoginException("교사 로그인 에러"))
                 .getName();
 
-        Teacher reader = teacherJpaRepository
-                .findTeacherByUsernameIs(username)
-                .orElseThrow(() -> new MemberLoginException("Cannot find teacher with username: " + username));
+        Teacher teacher = teacherService.findTeacherByUsernameIs(username);
 
-        return reader.getTeacherId();
+        return teacher.getTeacherId();
     }
 
     public Teacher getTeacher() {
@@ -68,9 +66,7 @@ public class MemberUtils {
                 .orElseThrow(() -> new MemberLoginException("교사 로그인 에러"))
                 .getName();
 
-        return teacherJpaRepository
-                .findTeacherByUsernameIs(username)
-                .orElseThrow(() -> new MemberLoginException("Cannot find author with username: " + username));
+        return teacherService.findTeacherByUsernameIs(username);
     }
 
     public Student getStudent() {
@@ -81,8 +77,6 @@ public class MemberUtils {
                 .orElseThrow(() -> new MemberLoginException("교사 로그인 에러"))
                 .getName();
 
-        return studentJpaRepository
-                .findStudentByUsernameIs(username)
-                .orElseThrow(() -> new MemberLoginException("Cannot find author with username: " + username));
+        return studentService.findStudentByUsernameIs(username);
     }
 }

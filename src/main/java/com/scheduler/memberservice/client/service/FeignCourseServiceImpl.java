@@ -3,10 +3,11 @@ package com.scheduler.memberservice.client.service;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.infra.security.jwt.component.JwtUtils;
 import com.scheduler.memberservice.member.common.RoleType;
+import com.scheduler.memberservice.member.student.application.StudentService;
 import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
+import com.scheduler.memberservice.member.teacher.application.TeacherService;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
-import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -23,17 +24,18 @@ import static com.scheduler.memberservice.member.common.RoleType.*;
 public class FeignCourseServiceImpl implements FeignCourseService {
 
     private final JwtUtils jwtUtils;
-    private final TeacherJpaRepository teacherJpaRepository;
+    private final TeacherService teacherService;
+    private final StudentService studentService;
     private final StudentJpaRepository studentJpaRepository;
 
     @Override
     public TeacherInfo findTeacherInfoByToken(String token) {
+
         token = token.replace("Bearer ", "").trim();
 
         String username = jwtUtils.getAuthentication(token).getName();
-        Teacher teacher = teacherJpaRepository
-                .findTeacherByUsernameIs(username)
-                .orElseThrow(MemberExistException::new);
+
+        Teacher teacher = teacherService.findTeacherByUsernameIs(username);
 
         return new TeacherInfo(teacher.getTeacherId());
     }
@@ -54,9 +56,7 @@ public class FeignCourseServiceImpl implements FeignCourseService {
 
         String teacherId = student.getTeacherId();
 
-        Teacher teacher = teacherJpaRepository
-                .findTeacherByTeacherId(teacherId)
-                .orElseThrow(MemberExistException::new);
+        Teacher teacher = teacherService.findTeacherByUsernameIs(authentication.getName());
 
         String teacherName = teacher.getTeacherName();
         String studentId = student.getStudentId();
@@ -69,6 +69,8 @@ public class FeignCourseServiceImpl implements FeignCourseService {
     @Transactional(readOnly = true)
     public MemberInfo findMemberInfoByToken(String token) {
 
+        token = token.replace("Bearer ", "").trim();
+
         Authentication authentication = jwtUtils.getAuthentication(token);
 
         RoleType roleType = valueOf(authentication.getAuthorities()
@@ -79,9 +81,7 @@ public class FeignCourseServiceImpl implements FeignCourseService {
         switch (roleType) {
 
             case TEACHER: {
-                Teacher teacher = teacherJpaRepository
-                        .findTeacherByUsernameIs(authentication.getName())
-                        .orElseThrow(MemberExistException::new);
+                Teacher teacher = teacherService.findTeacherByUsernameIs(authentication.getName());
 
                 String teacherId = teacher.getTeacherId();
 
@@ -89,9 +89,7 @@ public class FeignCourseServiceImpl implements FeignCourseService {
             }
 
             case STUDENT: {
-                Student student = studentJpaRepository
-                        .findStudentByUsernameIs(authentication.getName())
-                        .orElseThrow(MemberExistException::new);
+                Student student = studentService.findStudentByUsernameIs(authentication.getName());
 
                 String studentId = student.getStudentId();
 

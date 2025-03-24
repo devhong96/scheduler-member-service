@@ -8,6 +8,7 @@ import com.scheduler.memberservice.infra.exception.custom.PasswordMismatchExcept
 import com.scheduler.memberservice.infra.util.MemberUtils;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -102,7 +103,7 @@ public class TeacherCertServiceImpl implements TeacherCertService {
 
         Teacher teacher = teacherJpaRepository
                 .findTeacherByTeacherId(teacherId)
-                .orElseThrow(MemberExistException::new);
+                .orElseThrow(EntityNotFoundException::new);
 
         teacher.updateEmail(editEmailRequest);
     }

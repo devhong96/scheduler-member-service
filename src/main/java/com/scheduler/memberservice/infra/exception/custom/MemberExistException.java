@@ -4,7 +4,7 @@ public class MemberExistException extends RuntimeException {
 
     // 기본 생성자
     public MemberExistException() {
-        super("회원이 이미 존재합니다.");
+        super("회원 에러");
     }
 
     // 메시지를 받는 생성자

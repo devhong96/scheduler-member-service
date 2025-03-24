@@ -6,6 +6,7 @@ import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import com.scheduler.memberservice.member.teacher.repository.TeacherRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +58,6 @@ public class TeacherManageServiceImpl implements TeacherManageService {
 
     protected void fallback(String username, Throwable e) {
         log.warn("Fallback triggered for username: {}, Exception: {}", username, e.getMessage());
-        throw new MemberExistException();
+        throw new EntityNotFoundException();
     }
 }
