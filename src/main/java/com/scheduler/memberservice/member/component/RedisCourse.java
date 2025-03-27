@@ -45,7 +45,7 @@ public class RedisCourse {
             return;
         }
 
-        RLock lock = redissonClient.getLock("redis_course_lock");
+        RLock lock = redissonClient.getLock("redis_member_lock");
 
         if (!lock.tryLock()) {
             log.info("이미 다른 인스턴스에서 실행 중이므로 종료.");
@@ -91,10 +91,10 @@ public class RedisCourse {
     }
 
     private String generateTeacherCacheKey(Teacher teacher) {
-        return TEACHER_CACHE_NAME + ":username:" + teacher.getTeacherId();
+        return TEACHER_CACHE_NAME + ":username:" + teacher.getUsername();
     }
 
     private String generateStudentCacheKey(Student student) {
-        return STUDENT_CACHE_NAME + ":username:" + student.getStudentId();
+        return STUDENT_CACHE_NAME + ":username:" + student.getUsername();
     }
 }

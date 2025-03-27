@@ -35,7 +35,7 @@ public class RedisCacheConfig {
                                 .serializeValuesWith(fromSerializer(new GenericJackson2JsonRedisSerializer())))
                 .withCacheConfiguration("teachersByUsername",
                         RedisCacheConfiguration.defaultCacheConfig()
-                                .entryTtl(Duration.ofMillis(1L))
+                                .entryTtl(Duration.ofMinutes(1L))
                                 .serializeValuesWith(fromSerializer(new GenericJackson2JsonRedisSerializer())))
                 .build();
     }
