@@ -30,6 +30,7 @@ public class AccountConfig implements ApplicationRunner {
         final String admin = "admin";
         final String password = "password";
         final String email = "email";
+        Teacher teacherEntity = null;
 
         if (!adminJpaRepository.existsAdminByUsername(admin)) {
             adminJpaRepository.save(Admin.create(admin, password, email, passwordEncoder));
@@ -44,7 +45,7 @@ public class AccountConfig implements ApplicationRunner {
         joinTeacherRequest.setEmail(email);
 
         if (!teacherJpaRepository.existsTeacherByUsername(teacher)) {
-            teacherJpaRepository.save(Teacher.create(joinTeacherRequest, passwordEncoder));
+            teacherEntity = teacherJpaRepository.save(Teacher.create(joinTeacherRequest, passwordEncoder));
         }
 
         final String student = "student";
@@ -61,7 +62,7 @@ public class AccountConfig implements ApplicationRunner {
         studentRequest.setStudentParentPhoneNumber("studentParentPhoneNumber");
 
         if (!studentJpaRepository.existsStudentByUsername(student)) {
-            studentJpaRepository.save(Student.create(studentRequest, "", passwordEncoder));
+            studentJpaRepository.save(Student.create(studentRequest, teacherEntity.getTeacherId(), passwordEncoder));
         }
 
     }
