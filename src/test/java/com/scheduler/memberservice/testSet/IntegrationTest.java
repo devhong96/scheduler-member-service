@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import java.lang.annotation.Target;
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 @Transactional
+@Rollback
 @AutoConfigureMockMvc
 @EnableCaching
 @Import({TestConfig.class})

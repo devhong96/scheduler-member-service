@@ -132,7 +132,7 @@ class StudentManageServiceTest {
                 .containsExactly(TEST_STUDENT_NAME, TEST_STUDENT_ID);
     }
 
-//    @Test
+    @Test
     @DisplayName("교사 변경")
     @WithTeacher(username = TEST_TEACHER_NAME, teacherId = TEST_TEACHER_ID)
     void changeExistTeacher() throws JsonProcessingException {

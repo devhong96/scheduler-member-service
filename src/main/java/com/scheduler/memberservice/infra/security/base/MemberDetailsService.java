@@ -35,9 +35,11 @@ public class MemberDetailsService implements UserDetailsService {
         try {
             Student student = studentService.findStudentByUsernameIs(username);
             StudentDetails studentDetails = new StudentDetails(student);
+
             if (studentDetails.isEnabled()) {
                 return studentDetails;
             }
+
             throw new AuthorApproveException();
         } catch (EntityNotFoundException e) {
             log.debug("학생 아님: {}", username);

@@ -106,7 +106,7 @@ class TeacherCertServiceTest {
         assertTrue(matches);
     }
 
-//    @Test
+    @Test
     @DisplayName("교사 이메일 변경")
     @WithTeacher(username = TEST_TEACHER_USERNAME)
     void changeTeacherEmail() {

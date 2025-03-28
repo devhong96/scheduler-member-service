@@ -80,7 +80,7 @@ public class TeacherCertServiceImpl implements TeacherCertService {
     @Transactional
     public void initializePassword(PwdEditRequest pwdEditRequest) {
 
-        String username = memberUtils.getTeacher().getUsername();
+        String username = memberUtils.getTeacherForEntity().getUsername();
 
         if(!Objects.equals(
                 pwdEditRequest.getCheckPassword(),
@@ -99,7 +99,7 @@ public class TeacherCertServiceImpl implements TeacherCertService {
     @Transactional
     public void changeTeacherEmail(EditEmailRequest editEmailRequest) {
 
-        String teacherId = memberUtils.getTeacherId();
+        String teacherId = memberUtils.getTeacherForEntity().getTeacherId();
 
         Teacher teacher = teacherJpaRepository
                 .findTeacherByTeacherId(teacherId)

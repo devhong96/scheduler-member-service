@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scheduler.memberservice.infra.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import static com.scheduler.memberservice.member.messaging.outbox.EventType.STUDENT;
 import static jakarta.persistence.EnumType.STRING;
@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
-@RequiredArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
 public class OutboxEvent extends BaseEntity {
 
     @Id

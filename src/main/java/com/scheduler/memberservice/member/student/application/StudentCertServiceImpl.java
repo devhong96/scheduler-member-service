@@ -34,7 +34,7 @@ public class StudentCertServiceImpl implements StudentCertService {
     public void modifyStudentInfo(
             ModifyStudentInfoRequest modifyStudentRequest
     ) {
-        Student student = memberUtils.getStudent();
+        Student student = memberUtils.getStudentForEntity();
         student.modifyStudentInfo(modifyStudentRequest);
     }
 
@@ -50,7 +50,7 @@ public class StudentCertServiceImpl implements StudentCertService {
             throw new RuntimeException("Passwords do not match");
         }
 
-        Student student = memberUtils.getStudent();
+        Student student = memberUtils.getStudentForEntity();
         student.changePassword(modifyStudentPasswordRequest, passwordEncoder);
     }
 }

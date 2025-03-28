@@ -65,7 +65,7 @@ class TeacherManageServiceTest {
     @WithTeacher(username = TEST_TEACHER_USERNAME)
     void changeTeacherStatus() throws JsonProcessingException {
 
-        String teacherId = memberUtils.getTeacherId();
+        String teacherId = memberUtils.getTeacherForEntity().getTeacherId();
 
         //
         Teacher before = teacherJpaRepository
