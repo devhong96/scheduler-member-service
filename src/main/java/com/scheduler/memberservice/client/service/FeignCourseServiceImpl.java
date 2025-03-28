@@ -8,6 +8,7 @@ import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
 import com.scheduler.memberservice.member.teacher.application.TeacherService;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
+import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -27,6 +28,7 @@ public class FeignCourseServiceImpl implements FeignCourseService {
     private final TeacherService teacherService;
     private final StudentService studentService;
     private final StudentJpaRepository studentJpaRepository;
+    private final TeacherJpaRepository teacherJpaRepository;
 
     @Override
     public TeacherInfo findTeacherInfoByToken(String token) {
@@ -52,11 +54,13 @@ public class FeignCourseServiceImpl implements FeignCourseService {
 
         Student student = studentJpaRepository
                 .findStudentByUsernameIs(username)
-                .orElseThrow(MemberExistException::new);
+                .orElseThrow(() -> new MemberExistException("Student not found" + username));
 
         String teacherId = student.getTeacherId();
 
-        Teacher teacher = teacherService.findTeacherByUsernameIs(authentication.getName());
+        Teacher teacher = teacherJpaRepository
+                .findTeacherByTeacherId(teacherId)
+                .orElseThrow(() -> new MemberExistException("Teacher not found" + teacherId));
 
         String teacherName = teacher.getTeacherName();
         String studentId = student.getStudentId();
