@@ -1,8 +1,7 @@
 package com.scheduler.memberservice.member.student.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.scheduler.memberservice.client.CourseServiceClient;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
@@ -16,22 +15,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseReassignmentResponse;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
 import static com.scheduler.memberservice.member.student.dto.StudentResponse.StudentInfoResponse;
 import static com.scheduler.memberservice.testSet.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 import static org.springframework.data.domain.PageRequest.of;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @IntegrationTest
 @Import(TestRabbitConsumer.class)
 class StudentManageServiceTest {
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Autowired
     private StudentCertService studentCertService;
@@ -47,6 +43,9 @@ class StudentManageServiceTest {
 
     @Autowired
     private WireMockServer wireMockServer;
+
+    @MockitoBean
+    private CourseServiceClient courseServiceClient;
 
     @AfterEach
     void stopWireMockServer() {
@@ -135,18 +134,10 @@ class StudentManageServiceTest {
     @Test
     @DisplayName("교사 변경")
     @WithTeacher(username = TEST_TEACHER_NAME, teacherId = TEST_TEACHER_ID)
-    void changeExistTeacher() throws JsonProcessingException {
+    void changeExistTeacher() {
 
-        stubFor(patch(urlEqualTo(
-                "/feign-course/teacher/" + TEST_TEACHER_ID + "/student/" + TEST_STUDENT_ID))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", APPLICATION_JSON_VALUE)
-                        .withBody(objectMapper
-                                .writeValueAsString(
-                                        new CourseReassignmentResponse(true)
-                                )))
-        );
+        when(courseServiceClient.validateStudentCoursesAndReassign(TEST_TEACHER_ID, TEST_STUDENT_ID))
+                .thenReturn(new CourseReassignmentResponse(true));
 
         ChangeTeacherRequest changeTeacherRequest = new ChangeTeacherRequest();
         changeTeacherRequest.setTeacherId(TEST_TEACHER_ID);

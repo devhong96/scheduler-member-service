@@ -1,8 +1,7 @@
 package com.scheduler.memberservice.member.teacher.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.scheduler.memberservice.client.CourseServiceClient;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.infra.util.MemberUtils;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
@@ -15,16 +14,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.List;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseExistenceResponse;
 import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse.TeacherResponse;
 import static com.scheduler.memberservice.testSet.TestConstants.TEST_TEACHER_NAME;
 import static com.scheduler.memberservice.testSet.TestConstants.TEST_TEACHER_USERNAME;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.mockito.Mockito.when;
 
 @IntegrationTest
 class TeacherManageServiceTest {
@@ -34,9 +33,6 @@ class TeacherManageServiceTest {
     private TeacherJpaRepository teacherJpaRepository;
 
     @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
     private TeacherManageService teacherManageService;
 
     @Autowired
@@ -44,6 +40,9 @@ class TeacherManageServiceTest {
 
     @Autowired
     private MemberUtils memberUtils;
+
+    @MockitoBean
+    private CourseServiceClient courseServiceClient;
     //== setting
 
     @BeforeEach
@@ -60,10 +59,10 @@ class TeacherManageServiceTest {
         }
     }
 
-//    @Test
+    @Test
     @DisplayName("교사 상태 변경")
     @WithTeacher(username = TEST_TEACHER_USERNAME)
-    void changeTeacherStatus() throws JsonProcessingException {
+    void changeTeacherStatus()  {
 
         String teacherId = memberUtils.getTeacherForEntity().getTeacherId();
 
@@ -72,18 +71,10 @@ class TeacherManageServiceTest {
                 .findTeacherByUsernameIs(TEST_TEACHER_USERNAME)
                 .orElseThrow(EntityNotFoundException::new);
 
-        Boolean beforeApproved = before.getApproved();
+        when(courseServiceClient.existWeeklyCoursesByTeacherId(teacherId))
+                .thenReturn(new CourseExistenceResponse(false));
 
-        stubFor(get(urlEqualTo(
-                "/feign-course/teacher/" + teacherId + "/courses"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", APPLICATION_JSON_VALUE)
-                        .withBody(
-                                objectMapper.writeValueAsString(new CourseExistenceResponse(false)
-                                        )
-                        )
-                ));
+        Boolean beforeApproved = before.getApproved();
 
         teacherManageService.changeTeacherStatus(TEST_TEACHER_USERNAME);
 
