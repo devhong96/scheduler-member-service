@@ -1,6 +1,6 @@
 package com.scheduler.memberservice.member.admin.controller;
 
-import com.scheduler.memberservice.member.admin.application.AdminCertService;
+import com.scheduler.memberservice.member.admin.service.AdminCertService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

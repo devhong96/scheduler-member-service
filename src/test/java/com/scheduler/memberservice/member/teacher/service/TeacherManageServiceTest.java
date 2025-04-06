@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.teacher.application;
+package com.scheduler.memberservice.member.teacher.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

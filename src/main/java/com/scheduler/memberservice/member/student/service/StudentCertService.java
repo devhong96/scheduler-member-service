@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.student.application;
+package com.scheduler.memberservice.member.student.service;
 
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
 

@@ -1,7 +1,7 @@
 package com.scheduler.memberservice.member.teacher.controller;
 
 import com.scheduler.memberservice.infra.email.application.AuthEmailService;
-import com.scheduler.memberservice.member.teacher.application.TeacherCertService;
+import com.scheduler.memberservice.member.teacher.service.TeacherCertService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

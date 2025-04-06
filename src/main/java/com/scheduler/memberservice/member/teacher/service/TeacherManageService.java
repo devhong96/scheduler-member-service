@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.teacher.application;
+package com.scheduler.memberservice.member.teacher.service;
 
 import java.util.List;
 

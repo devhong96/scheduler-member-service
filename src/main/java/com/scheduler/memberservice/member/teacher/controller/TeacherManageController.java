@@ -1,6 +1,6 @@
 package com.scheduler.memberservice.member.teacher.controller;
 
-import com.scheduler.memberservice.member.teacher.application.TeacherManageService;
+import com.scheduler.memberservice.member.teacher.service.TeacherManageService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

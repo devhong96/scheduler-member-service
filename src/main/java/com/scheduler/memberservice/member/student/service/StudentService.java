@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.student.application;
+package com.scheduler.memberservice.member.student.service;
 
 import com.scheduler.memberservice.member.student.domain.Student;
 

@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.student.application;
+package com.scheduler.memberservice.member.student.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

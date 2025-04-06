@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.teacher.application;
+package com.scheduler.memberservice.member.teacher.service;
 
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import com.scheduler.memberservice.member.teacher.repository.TeacherJpaRepository;

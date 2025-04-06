@@ -35,7 +35,6 @@ public class OutboxProcessor {
             try {
                 rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTING_KEY, event.getPayload());
                 event.updateProcessed(true);
-                outboxEventJpaRepository.save(event);
             } catch (Exception e) {
                 log.error("Failed to send to RabbitMQ: {}", event.getId(), e);
             }
@@ -54,7 +53,6 @@ public class OutboxProcessor {
             try {
                 rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTING_KEY, event.getPayload());
                 event.updateProcessed(true);
-                outboxEventJpaRepository.save(event);
             } catch (Exception e) {
                 log.error("Failed to send to RabbitMQ: {}", event.getId(), e);
             }

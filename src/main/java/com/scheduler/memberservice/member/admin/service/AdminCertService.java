@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.admin.application;
+package com.scheduler.memberservice.member.admin.service;
 
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindPasswordRequest;
 import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.*;

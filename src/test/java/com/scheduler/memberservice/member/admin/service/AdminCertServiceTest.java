@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.admin.application;
+package com.scheduler.memberservice.member.admin.service;
 
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.member.admin.domain.Admin;

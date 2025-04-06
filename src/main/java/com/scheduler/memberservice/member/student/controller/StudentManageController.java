@@ -1,6 +1,6 @@
 package com.scheduler.memberservice.member.student.controller;
 
-import com.scheduler.memberservice.member.student.application.StudentManageService;
+import com.scheduler.memberservice.member.student.service.StudentManageService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.student.application;
+package com.scheduler.memberservice.member.student.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.scheduler.memberservice.client.CourseServiceClient;
@@ -113,12 +113,10 @@ public class StudentManageServiceImpl implements StudentManageService {
                 .getLock(redisKey + changeStudentName.getStudentId());
 
         try {
-
             boolean available = lock.tryLock(10, 1, SECONDS);
 
             if (available) {
                 try {
-
                     Student student = studentJpaRepository
                             .findStudentByStudentId(changeStudentName.getStudentId())
                             .orElseThrow(() -> new RuntimeException("Student not found"));

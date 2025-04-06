@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.teacher.application;
+package com.scheduler.memberservice.member.teacher.service;
 
 import com.scheduler.memberservice.client.CourseServiceClient;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;

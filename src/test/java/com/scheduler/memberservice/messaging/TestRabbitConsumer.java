@@ -1,6 +1,6 @@
 package com.scheduler.memberservice.messaging;
 
-import com.scheduler.memberservice.member.student.application.ChangeStudentNameRequest;
+import com.scheduler.memberservice.member.student.service.ChangeStudentNameRequest;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.boot.test.context.TestComponent;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
