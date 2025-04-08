@@ -52,8 +52,7 @@ public class TeacherCertServiceImpl implements TeacherCertService {
     @Override
     public void findUsernameByEmail(FindUsernameRequest findUsernameRequest) {
 
-        Teacher teacher = teacherJpaRepository
-                .findByEmailIs(findUsernameRequest.getEmail())
+        Teacher teacher = teacherJpaRepository.findByEmailIs(findUsernameRequest.getEmail())
                 .orElseThrow(MemberExistException::new);
 
         authEmailService.sendUsername(teacher.getUsername(), findUsernameRequest.getEmail());
@@ -66,8 +65,7 @@ public class TeacherCertServiceImpl implements TeacherCertService {
         String username = findPasswordRequest.getUsername();
         String email = findPasswordRequest.getEmail();
 
-        Boolean exist = teacherJpaRepository
-                .existsTeacherByUsernameAndEmail(username, email);
+        Boolean exist = teacherJpaRepository.existsTeacherByUsernameAndEmail(username, email);
 
         if(!exist) {
             throw new MemberExistException();
@@ -88,8 +86,7 @@ public class TeacherCertServiceImpl implements TeacherCertService {
 
             throw new PasswordMismatchException();
 
-        Teacher teacher = teacherJpaRepository
-                .findTeacherByUsernameIs(username)
+        Teacher teacher = teacherJpaRepository.findTeacherByUsernameIs(username)
                 .orElseThrow(MemberExistException::new);
 
         teacher.updatePassword(passwordEncoder, pwdEditRequest);
@@ -101,8 +98,7 @@ public class TeacherCertServiceImpl implements TeacherCertService {
 
         String teacherId = memberUtils.getTeacherForEntity().getTeacherId();
 
-        Teacher teacher = teacherJpaRepository
-                .findTeacherByTeacherId(teacherId)
+        Teacher teacher = teacherJpaRepository.findTeacherByTeacherId(teacherId)
                 .orElseThrow(EntityNotFoundException::new);
 
         teacher.updateEmail(editEmailRequest);

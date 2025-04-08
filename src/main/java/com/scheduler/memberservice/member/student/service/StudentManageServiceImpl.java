@@ -59,8 +59,7 @@ public class StudentManageServiceImpl implements StudentManageService {
     @Transactional
     public void changeStudentStatus(String studentId) {
 
-        Student student = studentJpaRepository
-                .findStudentByStudentId(studentId)
+        Student student = studentJpaRepository.findStudentByStudentId(studentId)
                 .orElseThrow(MemberExistException::new);
 
         Boolean approved = student.getApproved();
@@ -76,14 +75,12 @@ public class StudentManageServiceImpl implements StudentManageService {
         String teacherId = changeTeacherRequest.getTeacherId();
         String studentId = changeTeacherRequest.getStudentId();
 
-        Teacher teacher = teacherJpaRepository
-                .findTeacherByTeacherId(teacherId)
+        Teacher teacher = teacherJpaRepository.findTeacherByTeacherId(teacherId)
                 .orElseThrow(MemberExistException::new);
 
         String actualTeacherId = teacher.getTeacherId();
 
-        Student student = studentJpaRepository
-                .findStudentByStudentId(studentId)
+        Student student = studentJpaRepository.findStudentByStudentId(studentId)
                 .orElseThrow(MemberExistException::new);
 
         //학생의 수업엔티티와 교사의 수업을 비교 후, 재할당
@@ -117,9 +114,8 @@ public class StudentManageServiceImpl implements StudentManageService {
 
             if (available) {
                 try {
-                    Student student = studentJpaRepository
-                            .findStudentByStudentId(changeStudentName.getStudentId())
-                            .orElseThrow(() -> new RuntimeException("Student not found"));
+                    Student student = studentJpaRepository.findStudentByStudentId(changeStudentName.getStudentId())
+                            .orElseThrow(() -> new MemberExistException("Student not found"));
 
                     student.updateStudentName(changeStudentName.getStudentName());
 

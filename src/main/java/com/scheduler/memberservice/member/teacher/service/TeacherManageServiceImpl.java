@@ -41,12 +41,10 @@ public class TeacherManageServiceImpl implements TeacherManageService {
     @CircuitBreaker(name = "teacherService", fallbackMethod = "fallback")
     public void changeTeacherStatus(String username) {
 
-        Teacher teacher = teacherJpaRepository
-                .findTeacherByUsernameIs(username)
+        Teacher teacher = teacherJpaRepository.findTeacherByUsernameIs(username)
                 .orElseThrow(MemberExistException::new);
 
-        CourseExistenceResponse result = courseServiceClient
-                .existWeeklyCoursesByTeacherId(teacher.getTeacherId());
+        CourseExistenceResponse result = courseServiceClient.existWeeklyCoursesByTeacherId(teacher.getTeacherId());
 
         if (result.getExists()) {
             throw new IllegalStateException("학생 수업 시간이 남아 있습니다.");

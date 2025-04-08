@@ -19,8 +19,7 @@ public class TeacherServiceImpl implements TeacherService {
         cacheManager = "authCacheManager"
     )
     public Teacher findTeacherByUsernameIs(String username) {
-        return teacherJpaRepository
-                .findTeacherByUsernameIs(username)
+        return teacherJpaRepository.findTeacherByUsernameIs(username)
                 .orElseThrow(EntityNotFoundException::new);
     }
 }

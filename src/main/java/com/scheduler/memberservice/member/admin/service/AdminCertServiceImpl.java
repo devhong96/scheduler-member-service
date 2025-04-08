@@ -27,8 +27,7 @@ public class AdminCertServiceImpl implements AdminCertService {
     @Override
     public void findAdminUsernameByEmail(AdminInfoRequest.EmailRequest emailRequest) {
 
-        Admin admin = adminJpaRepository
-                .findAdminByEmail(emailRequest.getEmail())
+        Admin admin = adminJpaRepository.findAdminByEmail(emailRequest.getEmail())
                 .orElseThrow(MemberExistException::new);
 
         String email = admin.getEmail();
@@ -49,8 +48,7 @@ public class AdminCertServiceImpl implements AdminCertService {
         String adminId = memberUtils.getAdminId();
         String password = PwdEditRequest.getPassword();
 
-        Admin admin = adminJpaRepository
-                .findAdminByAdminId(adminId)
+        Admin admin = adminJpaRepository.findAdminByAdminId(adminId)
                 .orElseThrow(MemberExistException::new);
 
         admin.updatePassword(passwordEncoder, password);
@@ -62,8 +60,7 @@ public class AdminCertServiceImpl implements AdminCertService {
 
         String username = memberUtils.getAdmin().getUsername();
 
-        Admin admin = adminJpaRepository
-                .findAdminByUsernameIs(username)
+        Admin admin = adminJpaRepository.findAdminByUsernameIs(username)
                 .orElseThrow(MemberExistException::new);
 
         admin.updateEmail(editEmailRequest);

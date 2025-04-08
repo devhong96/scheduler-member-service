@@ -1,5 +1,6 @@
 package com.scheduler.memberservice.member.student.service;
 
+import com.scheduler.memberservice.infra.exception.custom.PasswordMismatchException;
 import com.scheduler.memberservice.infra.util.MemberUtils;
 import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
@@ -47,7 +48,7 @@ public class StudentCertServiceImpl implements StudentCertService {
         String confirmNewPassword = modifyStudentPasswordRequest.getConfirmNewPassword();
 
         if(!Objects.equals(newPassword, confirmNewPassword)){
-            throw new RuntimeException("Passwords do not match");
+            throw new PasswordMismatchException("Passwords do not match");
         }
 
         Student student = memberUtils.getStudentForEntity();

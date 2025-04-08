@@ -19,8 +19,7 @@ public class StudentServiceImpl implements StudentService {
             cacheManager = "authCacheManager"
     )
     public Student findStudentByUsernameIs(String username) {
-        return studentJpaRepository
-                .findStudentByUsernameIs(username)
+        return studentJpaRepository.findStudentByUsernameIs(username)
                 .orElseThrow(() -> new EntityNotFoundException("학생을 찾을 수 없습니다: " + username));
     }
 }
