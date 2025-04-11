@@ -1,11 +1,12 @@
 package com.scheduler.memberservice.member.student.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scheduler.memberservice.client.CourseServiceClient;
+import com.scheduler.memberservice.infra.config.messaging.RabbitStudentNameProperties;
 import com.scheduler.memberservice.infra.exception.custom.DuplicateCourseException;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
+import com.scheduler.memberservice.member.messaging.outbox.NameOutboxEvent;
 import com.scheduler.memberservice.member.messaging.outbox.OutBoxEventJpaRepository;
-import com.scheduler.memberservice.member.messaging.outbox.OutboxEvent;
 import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
 import com.scheduler.memberservice.member.student.repository.StudentRepository;
@@ -24,9 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseReassignmentResponse;
-import static com.scheduler.memberservice.infra.config.messaging.RabbitConfig.EXCHANGE_NAME;
-import static com.scheduler.memberservice.infra.config.messaging.RabbitConfig.ROUTING_KEY;
-import static com.scheduler.memberservice.member.student.dto.StudentRequest.ChangeStudentName;
+import static com.scheduler.memberservice.member.messaging.outbox.EventType.STUDENT;
+import static com.scheduler.memberservice.member.student.dto.StudentRequest.ChangeStudentNameRequest;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.ChangeTeacherRequest;
 import static com.scheduler.memberservice.member.student.dto.StudentResponse.StudentInfoResponse;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -46,6 +46,8 @@ public class StudentManageServiceImpl implements StudentManageService {
     private final CourseServiceClient courseServiceClient;
     private final RedissonClient redissonClient;
     private final RabbitTemplate rabbitTemplate;
+    private final ObjectMapper objectMapper;
+    private final RabbitStudentNameProperties properties;
 
     @Override
     @Transactional(readOnly = true)
@@ -104,25 +106,28 @@ public class StudentManageServiceImpl implements StudentManageService {
 
     @Override
     @Transactional
-    public void changeStudentName(ChangeStudentName changeStudentName) {
+    public void changeStudentName(ChangeStudentNameRequest changeStudentNameRequest) {
 
         RLock lock = redissonClient
-                .getLock(redisKey + changeStudentName.getStudentId());
+                .getLock(redisKey + changeStudentNameRequest.getStudentId());
 
         try {
             boolean available = lock.tryLock(10, 1, SECONDS);
 
             if (available) {
                 try {
-                    Student student = studentJpaRepository.findStudentByStudentId(changeStudentName.getStudentId())
+                    Student student = studentJpaRepository.findStudentByStudentId(changeStudentNameRequest.getStudentId())
                             .orElseThrow(() -> new MemberExistException("Student not found"));
 
-                    student.updateStudentName(changeStudentName.getStudentName());
+                    student.updateStudentName(changeStudentNameRequest.getStudentName());
 
-                    OutboxEvent save = outBoxEventJpaRepository.save(OutboxEvent.create(changeStudentName));
-                    processOutboxEventAsync(save);
+                    NameOutboxEvent nameOutboxEvent = outBoxEventJpaRepository.save(
+                            NameOutboxEvent.createStudentOutboxEvent(STUDENT, student, changeStudentNameRequest)
+                    );
 
-                } catch (JsonProcessingException e) {
+                    processOutboxEventAsync(nameOutboxEvent, student, changeStudentNameRequest);
+
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 } finally {
                     lock.unlock();
@@ -137,12 +142,19 @@ public class StudentManageServiceImpl implements StudentManageService {
 
     //일단 이벤트 발행시. 시도 아웃 박스에서는 실패 로직만
     @Async
-    public void processOutboxEventAsync(OutboxEvent event) {
+    @Transactional
+    public void processOutboxEventAsync(
+            NameOutboxEvent event, Student student, ChangeStudentNameRequest changeStudentNameRequest
+    ) {
         try {
-            rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTING_KEY, event.getPayload());
+            String payload = objectMapper.writeValueAsString(event);
+            rabbitTemplate.convertAndSend(properties.getExchange().getName(),
+                    properties.getRouting().getKey(),
+                    payload);
+
             event.updateProcessed(true);
-            outBoxEventJpaRepository.save(event);
         } catch (Exception e) {
+            student.updateStudentName(changeStudentNameRequest.getStudentName());
             log.error("Failed to send to RabbitMQ: {}", event.getId(), e);
         }
     }

@@ -59,6 +59,10 @@ public class Teacher extends BaseEntity {
         }
     }
 
+    public void updateTeacherName(String newTeacherName) {
+        this.teacherName = newTeacherName;
+    }
+
     public void updateApprove(boolean approved) {
         this.approved = approved;
     }

@@ -12,11 +12,11 @@ spring:
         show_sql: true
         highlight_sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
 
   datasource: # jdbc
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;
+    url: jdbc:h2:mem:testdb;
     username: sa
     password:
 
@@ -48,6 +48,33 @@ spring:
       password: 123
   messages:
     basename: errors
+
+  rabbitmq:
+    student-name:
+      exchange:
+        name: "student.exchange"
+        dlx: "student.dlx"
+        compensation: "student.compensation.exchange"
+      routing:
+        key: "student.name.update"
+        compensation: "student.compensation.routing"
+      queue:
+        name: "student.name.update.queue"
+        dlq: "student.name.update.dlq"
+        compensation: "student.compensation.queue"
+
+    teacher-name:
+      exchange:
+        name: "teacher.exchange"
+        dlx: "teacher.dlx"
+        compensation: "teacher.compensation.exchange"
+      routing:
+        key: "teacher.name.update"
+        compensation: "teacher.compensation.routing"
+      queue:
+        name: "teacher.name.update.queue"
+        dlq: "teacher.name.update.dlq"
+        compensation: "teacher.compensation.queue"
 
 eureka:
   client:

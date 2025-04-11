@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.scheduler.memberservice.client.CourseServiceClient;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.member.student.domain.Student;
+import com.scheduler.memberservice.member.student.dto.StudentRequest;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;
 import com.scheduler.memberservice.messaging.TestRabbitConsumer;
 import com.scheduler.memberservice.testSet.IntegrationTest;
@@ -116,18 +117,18 @@ class StudentManageServiceTest {
     void changeStudentName() throws InterruptedException {
 
         // Given
-        ChangeStudentName changeStudentName = new ChangeStudentName();
-        changeStudentName.setStudentId(TEST_STUDENT_ID);
-        changeStudentName.setStudentName(TEST_STUDENT_NAME);
+        StudentRequest.ChangeStudentNameRequest changeStudentNameRequest = new StudentRequest.ChangeStudentNameRequest();
+        changeStudentNameRequest.setStudentId(TEST_STUDENT_ID);
+        changeStudentNameRequest.setStudentName(TEST_STUDENT_NAME);
 
         // When
-        studentManageService.changeStudentName(changeStudentName);
+        studentManageService.changeStudentName(changeStudentNameRequest);
 
         // Then
         ChangeStudentNameRequest received = testRabbitConsumer.getReceivedMessage();
 
         assertThat(received)
-                .extracting("studentName", "studentId")
+                .extracting("newName", "memberId")
                 .containsExactly(TEST_STUDENT_NAME, TEST_STUDENT_ID);
     }
 

@@ -10,8 +10,8 @@ import java.util.List;
 import static jakarta.persistence.LockModeType.PESSIMISTIC_WRITE;
 
 @Repository
-public interface OutBoxEventJpaRepository extends JpaRepository<OutboxEvent, Long> {
+public interface OutBoxEventJpaRepository extends JpaRepository<NameOutboxEvent, Long> {
 
     @Lock(PESSIMISTIC_WRITE)
-    List<OutboxEvent> findOutboxEventsByProcessedFalseAndEventType(EventType eventType, Pageable pageable);
+    List<NameOutboxEvent> findOutboxEventsByProcessedFalseAndEventType(EventType eventType, Pageable pageable);
 }

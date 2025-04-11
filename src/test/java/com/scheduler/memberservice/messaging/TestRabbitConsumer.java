@@ -1,6 +1,7 @@
 package com.scheduler.memberservice.messaging;
 
 import com.scheduler.memberservice.member.student.service.ChangeStudentNameRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.boot.test.context.TestComponent;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,9 +9,8 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
-import static com.scheduler.memberservice.infra.config.messaging.RabbitConfig.QUEUE_NAME;
-
 @TestComponent
+@RequiredArgsConstructor
 public class TestRabbitConsumer {
 
     private final ObjectMapper objectMapper =  new ObjectMapper();
@@ -18,10 +18,11 @@ public class TestRabbitConsumer {
 
     private ChangeStudentNameRequest changeStudentName;
 
-    @RabbitListener(queues = QUEUE_NAME)
+    @RabbitListener(queues = "${spring.rabbitmq.student-name.queue.name}")
     public void receiveMessage(String payload) throws IOException {
-        changeStudentName = objectMapper.readValue(payload, ChangeStudentNameRequest.class);
 
+
+        changeStudentName = objectMapper.readValue(payload, ChangeStudentNameRequest.class);
         latch.countDown();
     }
 

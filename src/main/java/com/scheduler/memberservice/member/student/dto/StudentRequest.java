@@ -89,7 +89,7 @@ public class StudentRequest {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ChangeStudentName {
+    public static class ChangeStudentNameRequest {
 
         private String studentId;
         private String studentName;
