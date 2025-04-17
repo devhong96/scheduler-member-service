@@ -40,8 +40,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    public static final String[] MICROSERVICE_INTERNAL_ENDPOINTS = {
-
+    public static final String[] INTERNAL_ENDPOINTS = {
+            "/feign-member/**"
     };
 
     public static final String[] ADMIN_RESTRICTED_ENDPOINTS = {
@@ -53,14 +53,14 @@ public class SecurityConfig {
     };
 
     public static final String[] ENDPOINTS_WHITELISTS = {
-            "/**"
-//            "/actuator/**",
-//            "/feign-member/**",
-//
-//            "/login",
-//            "/help/*",
-//            "/join",
-//            "/token/*"
+//            "/**"
+            "/member-api/**",
+            "/actuator/**",
+            "/login",
+            "/help/*",
+            "/student/*",
+            "/teacher/*",
+            "/token/*"
     };
 
     @Bean
@@ -79,7 +79,7 @@ public class SecurityConfig {
                 .addFilterBefore(new CustomLogoutFilter(jwtUtils, refreshTokenJpaRepository), LogoutFilter.class)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers(MICROSERVICE_INTERNAL_ENDPOINTS).authenticated()
+                                .requestMatchers(INTERNAL_ENDPOINTS).authenticated()
                                 .requestMatchers(ADMIN_RESTRICTED_ENDPOINTS).hasAuthority("ADMIN")
                                 .requestMatchers(AUTHORIZED_ENDPOINTS).hasAnyAuthority("ADMIN", "TEACHER")
                                 .requestMatchers(ENDPOINTS_WHITELISTS).permitAll()

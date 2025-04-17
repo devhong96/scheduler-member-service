@@ -15,7 +15,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/feign-member")
 @RequiredArgsConstructor
-public class FeignCourseController {
+public class FeignController {
 
     private final FeignCourseService feignCourseService;
 
