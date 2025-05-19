@@ -1,7 +1,7 @@
 package com.scheduler.memberservice.infra.email.application;
 
 import com.scheduler.memberservice.infra.email.event.SendEmailEvent;
-import com.scheduler.memberservice.member.redis.RedisVerifyCache;
+import com.scheduler.memberservice.infra.redis.RedisVerifyCache;
 import com.scheduler.memberservice.testSet.IntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

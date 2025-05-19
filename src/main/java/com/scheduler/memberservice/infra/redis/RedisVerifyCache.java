@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.redis;
+package com.scheduler.memberservice.infra.redis;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

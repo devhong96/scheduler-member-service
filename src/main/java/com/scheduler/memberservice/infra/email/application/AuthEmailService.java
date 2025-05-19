@@ -3,7 +3,7 @@ package com.scheduler.memberservice.infra.email.application;
 import com.scheduler.memberservice.infra.email.dto.EmailMessageDto;
 import com.scheduler.memberservice.infra.email.event.SendEmailEvent;
 import com.scheduler.memberservice.infra.exception.custom.InvalidAuthNumException;
-import com.scheduler.memberservice.member.redis.RedisVerifyCache;
+import com.scheduler.memberservice.infra.redis.RedisVerifyCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

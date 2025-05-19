@@ -1,7 +1,7 @@
 package com.scheduler.memberservice.member.student.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.scheduler.memberservice.member.messaging.outbox.EventType;
+import com.scheduler.memberservice.infra.messaging.outbox.EventType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

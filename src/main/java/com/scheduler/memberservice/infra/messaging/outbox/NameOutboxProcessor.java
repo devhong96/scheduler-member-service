@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.messaging.outbox;
+package com.scheduler.memberservice.infra.messaging.outbox;
 
 import com.scheduler.memberservice.infra.config.messaging.RabbitStudentNameProperties;
 import com.scheduler.memberservice.infra.config.messaging.RabbitTeacherNameProperties;
@@ -18,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
-import static com.scheduler.memberservice.member.messaging.outbox.EventType.STUDENT;
-import static com.scheduler.memberservice.member.messaging.outbox.EventType.TEACHER;
+import static com.scheduler.memberservice.infra.messaging.outbox.EventType.STUDENT;
+import static com.scheduler.memberservice.infra.messaging.outbox.EventType.TEACHER;
 import static org.springframework.data.domain.PageRequest.of;
 
 @Slf4j

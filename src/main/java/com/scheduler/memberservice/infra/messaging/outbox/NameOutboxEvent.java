@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.member.messaging.outbox;
+package com.scheduler.memberservice.infra.messaging.outbox;
 
 import com.scheduler.memberservice.member.student.domain.Student;
 import jakarta.persistence.*;
