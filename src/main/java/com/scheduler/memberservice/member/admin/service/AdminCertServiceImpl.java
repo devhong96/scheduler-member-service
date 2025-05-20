@@ -1,10 +1,8 @@
 package com.scheduler.memberservice.member.admin.service;
 
-import com.scheduler.memberservice.infra.email.application.AuthEmailService;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.infra.util.MemberUtils;
 import com.scheduler.memberservice.member.admin.domain.Admin;
-import com.scheduler.memberservice.member.admin.dto.AdminInfoRequest;
 import com.scheduler.memberservice.member.admin.repository.AdminJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,20 +19,7 @@ public class AdminCertServiceImpl implements AdminCertService {
 
     private final MemberUtils memberUtils;
     private final PasswordEncoder passwordEncoder;
-    private final AuthEmailService authEmailService;
     private final AdminJpaRepository adminJpaRepository;
-
-    @Override
-    public void findAdminUsernameByEmail(AdminInfoRequest.EmailRequest emailRequest) {
-
-        Admin admin = adminJpaRepository.findAdminByEmail(emailRequest.getEmail())
-                .orElseThrow(MemberExistException::new);
-
-        String email = admin.getEmail();
-        String username = admin.getUsername();
-
-        authEmailService.sendUsername(email, username);
-    }
 
     @Override
     public boolean emailConfirmation(FindPasswordRequest findPasswordDTO) {

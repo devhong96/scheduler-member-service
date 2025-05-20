@@ -1,15 +1,20 @@
 package com.scheduler.memberservice.member.teacher.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.scheduler.memberservice.client.CourseServiceClient;
 import com.scheduler.memberservice.infra.security.jwt.component.JwtUtils;
 import com.scheduler.memberservice.infra.security.jwt.dto.JwtTokenDto;
 import com.scheduler.memberservice.testSet.IntegrationTest;
 import com.scheduler.memberservice.testSet.teacher.WithTeacher;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpHeaders.AUTHORIZATION;
@@ -34,6 +39,27 @@ class TeacherCertControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private WireMockServer wireMockServer;
+
+    @MockitoBean
+    private CourseServiceClient courseServiceClient;
+    //== setting
+
+    @BeforeEach
+    void startWireMockServer() {
+        if (!wireMockServer.isRunning()) {
+            wireMockServer.start();
+        }
+    }
+
+    @AfterEach
+    void stopWireMockServer() {
+        if (wireMockServer != null) {
+            wireMockServer.stop();
+        }
+    }
 
     @Test
     @DisplayName("교사 컨트롤러 : 회원가입")
@@ -79,7 +105,7 @@ class TeacherCertControllerTest {
 
         String json = objectMapper.writeValueAsString(request);
 
-        mockMvc.perform(post("/teacher/find/username")
+        mockMvc.perform(post("/teacher/find/password")
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());

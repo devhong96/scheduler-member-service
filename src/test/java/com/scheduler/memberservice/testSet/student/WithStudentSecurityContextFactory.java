@@ -80,6 +80,6 @@ public class WithStudentSecurityContextFactory implements WithSecurityContextFac
 
         studentJpaRepository.findStudentByUsernameIs(username)
                 .orElseGet(() -> studentJpaRepository
-                        .save(Student.create(request, "testTeacherId", passwordEncoder)));
+                        .save(Student.create(request, TEST_TEACHER_ID, passwordEncoder)));
     }
 }

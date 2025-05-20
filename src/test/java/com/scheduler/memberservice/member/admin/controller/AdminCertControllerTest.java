@@ -37,15 +37,13 @@ class AdminCertControllerTest {
     @WithAdmin(username = TEST_ADMIN_USERNAME)
     void initializePassword() throws Exception {
 
-        String accessToken = getAccessToken();
-
         PwdEditRequest pwdEditRequest = new PwdEditRequest();
         pwdEditRequest.setPassword("password");
 
         String json = objectMapper.writeValueAsString(pwdEditRequest);
 
         mockMvc.perform(patch("/admin/help/password")
-                        .header(AUTHORIZATION, accessToken)
+                        .header(AUTHORIZATION, getAccessToken())
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());
@@ -56,15 +54,13 @@ class AdminCertControllerTest {
     @WithAdmin(username = TEST_ADMIN_USERNAME)
     void updateEmail() throws Exception {
 
-        String accessToken = getAccessToken();
-
         EditEmailRequest editEmailRequest = new EditEmailRequest();
         editEmailRequest.setEmail("testEmail@gmail.com");
 
         String json = objectMapper.writeValueAsString(editEmailRequest);
 
         mockMvc.perform(patch("/admin/help/email")
-                        .header(AUTHORIZATION, accessToken)
+                        .header(AUTHORIZATION, getAccessToken())
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());

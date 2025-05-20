@@ -26,13 +26,13 @@ INSERT INTO student (
     student_address, student_detailed_address, role_type, approved
 ) VALUES
       (
-          'STU001', 'TCH001', 'john_doe', 'securePass123', 'John Doe',
-          'john.doe@example.com', '010-1234-5678', '010-9876-5432',
+          'STU001', 'TCH001', 'lee_student', 'securePass123', 'John Doe',
+          'lee_student@example.com', '010-1234-5678', '010-9876-5432',
           'Seoul, Gangnam-gu', 'Apt 101, ABC Tower', 'STUDENT', TRUE
       ),
       (
-          'STU002', 'TCH002', 'jane_smith', 'pass456Secure', 'Jane Smith',
-          'jane.smith@example.com', '010-8765-4321', '010-1234-5678',
+          'STU002', 'TCH002', 'kim_student', 'pass456Secure', 'Jane Smith',
+          'kim_student@example.com', '010-8765-4321', '010-1234-5678',
           'Busan, Haeundae-gu', 'Unit 305, XYZ Villa', 'STUDENT', FALSE
       );
 

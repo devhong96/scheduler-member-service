@@ -1,5 +1,6 @@
 package com.scheduler.memberservice.member.admin.service;
 
+import com.scheduler.memberservice.infra.email.application.AuthEmailService;
 import com.scheduler.memberservice.infra.exception.custom.MemberExistException;
 import com.scheduler.memberservice.member.admin.domain.Admin;
 import com.scheduler.memberservice.member.admin.repository.AdminJpaRepository;
@@ -10,10 +11,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindPasswordRequest;
-import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.EditEmailRequest;
-import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.PwdEditRequest;
+import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.*;
 import static com.scheduler.memberservice.testSet.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,6 +31,9 @@ class AdminCertServiceTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @MockitoBean
+    private AuthEmailService authEmailService;
 
     @Test
     @WithAdmin(username = TEST_ADMIN_USERNAME)
