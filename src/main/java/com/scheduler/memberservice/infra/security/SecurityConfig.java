@@ -61,7 +61,6 @@ public class SecurityConfig {
     };
 
     public static final String[] ENDPOINTS_WHITELISTS = {
-//            "/**"
             "/member-api/**",
             "/actuator/**",
             "/login",
@@ -70,6 +69,9 @@ public class SecurityConfig {
             "/teacher/find/*",
             "/teacher/join",
             "/token/*"
+            //test
+//            "/**"
+
     };
 
     @Bean

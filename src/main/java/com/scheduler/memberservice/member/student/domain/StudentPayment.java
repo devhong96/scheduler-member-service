@@ -6,13 +6,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 public class StudentPayment extends BaseEntity {
 
     @Id

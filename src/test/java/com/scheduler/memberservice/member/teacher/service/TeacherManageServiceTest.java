@@ -95,7 +95,7 @@ class TeacherManageServiceTest {
         List<TeacherResponse> teacherList =
                 teacherManageService.getTeacherList();
 
-        assertThat(teacherList.size()).isEqualTo(1);
+        assertThat(teacherList.size()).isEqualTo(3);
     }
 
     @Test

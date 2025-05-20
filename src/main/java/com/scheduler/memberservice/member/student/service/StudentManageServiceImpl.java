@@ -85,6 +85,7 @@ public class StudentManageServiceImpl implements StudentManageService {
         Student student = studentJpaRepository.findStudentByStudentId(studentId)
                 .orElseThrow(MemberExistException::new);
 
+
         //학생의 수업엔티티와 교사의 수업을 비교 후, 재할당
         CourseReassignmentResponse courseReassignmentResponse = courseServiceClient
                 .validateStudentCoursesAndReassign(
