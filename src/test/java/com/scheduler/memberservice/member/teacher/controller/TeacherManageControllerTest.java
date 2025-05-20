@@ -1,0 +1,55 @@
+package com.scheduler.memberservice.member.teacher.controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.scheduler.memberservice.infra.security.jwt.component.JwtUtils;
+import com.scheduler.memberservice.infra.security.jwt.dto.JwtTokenDto;
+import com.scheduler.memberservice.testSet.IntegrationTest;
+import com.scheduler.memberservice.testSet.admin.WithAdmin;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpHeaders.AUTHORIZATION;
+import static com.scheduler.memberservice.testSet.TestConstants.TEST_ADMIN_USERNAME;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@IntegrationTest
+class TeacherManageControllerTest {
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    @WithAdmin(username = TEST_ADMIN_USERNAME)
+    void getTeacherList() throws Exception{
+
+        String accessToken = getAccessToken();
+
+        mockMvc.perform(get("/manage/teacher/list")
+                        .header(AUTHORIZATION, accessToken))
+                .andExpect(status().isOk());
+    }
+
+//    @Test
+    void findTeacherInformation() {
+    }
+
+//    @Test
+    void changeTeacherStatus() {
+    }
+
+    private String getAccessToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JwtTokenDto jwtTokenDto = jwtUtils.generateToken(authentication);
+        return "Bearer " + jwtTokenDto.getAccessToken();
+    }
+}

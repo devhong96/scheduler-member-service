@@ -49,7 +49,15 @@ public class SecurityConfig {
     };
 
     public static final String[] AUTHORIZED_ENDPOINTS = {
-            "/manage/*"
+            "/manage/**"
+    };
+
+    public static final String[] TEACHER_ENDPOINTS = {
+            "/teacher/manage/*",
+    };
+
+    public static final String[] STUDENT_ENDPOINTS = {
+            "/student/**"
     };
 
     public static final String[] ENDPOINTS_WHITELISTS = {
@@ -58,8 +66,9 @@ public class SecurityConfig {
             "/actuator/**",
             "/login",
             "/help/*",
-            "/student/*",
-            "/teacher/*",
+            "/student/join",
+            "/teacher/find/*",
+            "/teacher/join",
             "/token/*"
     };
 
@@ -80,9 +89,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers(INTERNAL_ENDPOINTS).authenticated()
+                                .requestMatchers(ENDPOINTS_WHITELISTS).permitAll()
+                                .requestMatchers(STUDENT_ENDPOINTS).hasAuthority("STUDENT")
+                                .requestMatchers(TEACHER_ENDPOINTS).hasAuthority("TEACHER")
                                 .requestMatchers(ADMIN_RESTRICTED_ENDPOINTS).hasAuthority("ADMIN")
                                 .requestMatchers(AUTHORIZED_ENDPOINTS).hasAnyAuthority("ADMIN", "TEACHER")
-                                .requestMatchers(ENDPOINTS_WHITELISTS).permitAll()
+                                .anyRequest().denyAll()
                 )
                 .sessionManagement(
                         sessionManagement ->

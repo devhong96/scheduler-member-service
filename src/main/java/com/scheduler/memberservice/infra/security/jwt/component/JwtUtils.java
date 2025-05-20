@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.time.Clock;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,10 +36,6 @@ import static io.jsonwebtoken.io.Decoders.BASE64;
 @RequiredArgsConstructor
 public class JwtUtils {
 
-    private static final Long accessTokenPeriod = 60L * 60L * 12L; // 12시간
-    private static final Long refreshTokenPeriod = 60L * 60L * 24L * 30L; // 24시간
-    private static final long EXPIRATION_THRESHOLD = 60L * 60L;
-
     @Value("${jwt.secret_key}")
     private String secretKey;
 
@@ -51,7 +48,13 @@ public class JwtUtils {
     @Getter
     private SecretKey signingKey; // static 제거
 
+    private static final Long accessTokenPeriod = 60L * 60L * 12L; // 12시간
+    private static final Long refreshTokenPeriod = 60L * 60L * 24L * 30L; // 24시간
+    private static final long EXPIRATION_THRESHOLD = 60L * 60L;
+
+    private final Clock clocks;
     private final RefreshTokenJpaRepository refreshTokenJpaRepository;
+
 
     @Operation(summary = "토큰 생성", description = "계정 이름과 권한을 토큰에 저장")
     public JwtTokenDto generateToken(Authentication authentication) {
@@ -109,7 +112,7 @@ public class JwtUtils {
     public boolean isRefreshTokenExpiringSoon(String token) {
         Claims claims = getClaimsFromToken(token);
         Date expirationDate = claims.getExpiration();
-        long currentTimeInMillis = System.currentTimeMillis();
+        long currentTimeInMillis = Instant.now(clocks).toEpochMilli();
         long timeUntilExpirationInSeconds = (expirationDate.getTime() - currentTimeInMillis) / 1000;
 
         return timeUntilExpirationInSeconds < EXPIRATION_THRESHOLD;

@@ -12,7 +12,7 @@ import static com.scheduler.memberservice.member.teacher.dto.TeacherInfoResponse
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("manage")
+@RequestMapping("manage/teacher")
 @RequiredArgsConstructor
 public class TeacherManageController {
 
@@ -22,7 +22,7 @@ public class TeacherManageController {
             summary = "교사 가입 정보 확인",
             description = "모든 상태 확인(등록, 비등록)"
     )
-    @GetMapping("teacher/list")
+    @GetMapping("list")
     public ResponseEntity<List<TeacherResponse>> getTeacherList() {
         return new ResponseEntity<>(teacherManageService.getTeacherList(), OK);
     }
@@ -31,7 +31,7 @@ public class TeacherManageController {
             summary = "특정 교사 정보 조회",
             description = "상세 정보 조회"
     )
-    @GetMapping("teacher/{username}")
+    @GetMapping("{username}")
     public ResponseEntity<TeacherResponse> findTeacherInformation(
             @PathVariable String username
     ) {
@@ -42,7 +42,7 @@ public class TeacherManageController {
             summary = "교사 상태 변경",
             description = "승인 비승인 여부 변경"
     )
-    @PatchMapping("teacher/{username}/status")
+    @PatchMapping("{username}/status")
     public ResponseEntity<String> changeTeacherStatus(
             @PathVariable String username
     ) {

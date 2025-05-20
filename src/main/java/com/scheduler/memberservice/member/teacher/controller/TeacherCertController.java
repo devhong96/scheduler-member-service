@@ -24,7 +24,7 @@ public class TeacherCertController {
             summary = "교사 회원 가입",
             description = "관리자가 승인하기 전에는 로그인 불가"
     )
-    @PostMapping
+    @PostMapping("join")
     public ResponseEntity<Void> teacherJoin(
             @Valid @RequestBody JoinTeacherRequest joinTeacherRequest
     ) {
@@ -60,7 +60,7 @@ public class TeacherCertController {
             summary = "인증번호 유효성 확인",
             description = "유효 시간내 입력한 인증번호가 일치할 경우 레디스에서 삭제한 뒤 승인"
     )
-    @PostMapping("authNumCheck")
+    @PostMapping("find/authNumCheck")
     public ResponseEntity<String> verifyAuthCode(
             @Valid @RequestBody AuthCodeRequest authCodeRequest
     ) {
@@ -72,7 +72,7 @@ public class TeacherCertController {
             summary = "비밀번호 변경",
             description = "사용자 인증을 거친 후, 변경"
     )
-    @PatchMapping("password")
+    @PatchMapping("manage/password")
     public ResponseEntity<String> initializePassword(
             @Valid @RequestBody PwdEditRequest pwdEditRequest
     ) {
@@ -84,7 +84,7 @@ public class TeacherCertController {
             summary = "이메일 변경",
             description = "교사 이메일 변경"
     )
-    @PatchMapping("email")
+    @PatchMapping("manage/email")
     public ResponseEntity<Void> changeTeacherEmail(
             @Valid @RequestBody EditEmailRequest editEmailRequest
     ) {

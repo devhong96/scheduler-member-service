@@ -1,4 +1,4 @@
-package com.scheduler.memberservice.infra.component;
+package com.scheduler.memberservice.infra.redis;
 
 import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.student.repository.StudentJpaRepository;

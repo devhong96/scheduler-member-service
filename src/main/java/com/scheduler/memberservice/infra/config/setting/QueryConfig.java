@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import java.time.Clock;
+
 import static com.querydsl.jpa.JPQLTemplates.DEFAULT;
 
 @Configuration
@@ -26,6 +28,11 @@ public class QueryConfig {
     @Bean
     public JavaMailSender mailSender() {
         return new JavaMailSenderImpl();
+    }
+
+    @Bean
+    public Clock clocks() {
+        return Clock.systemDefaultZone();
     }
 
 }

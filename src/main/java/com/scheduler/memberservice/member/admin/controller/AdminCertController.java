@@ -15,8 +15,8 @@ import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.PwdE
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("admin/help")
+@RequiredArgsConstructor
 public class AdminCertController {
 
     public final AdminCertService adminCertService;
@@ -33,7 +33,7 @@ public class AdminCertController {
     @Operation(summary = "관리자 이메일 변경")
     @PatchMapping("email")
     public ResponseEntity<String> updateEmail(
-            @Valid EditEmailRequest editEmailRequest
+            @Valid @RequestBody EditEmailRequest editEmailRequest
     ) {
         adminCertService.updateEmail(editEmailRequest);
         return new ResponseEntity<>(OK);

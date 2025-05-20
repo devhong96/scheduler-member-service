@@ -30,15 +30,15 @@ public class StudentCertController {
     }
 
     @Operation(
-            summary = "학생 정보 변경",
-            description = "대상 : 전화 번호, 이메일, 주소(상세 포함), 보호자 전화번호 "
+            summary = "학생 본인의 정보 변경",
+            description = "대상 : 전화 번호, 이메일, 주소(상세 포함), 보호자 전화번호"
     )
     @PatchMapping("modify/info")
     public ResponseEntity<String> modifyStudentInfo(
             @Valid @RequestBody ModifyStudentInfoRequest registerStudentRequest
     ) {
         studentCertService.modifyStudentInfo(registerStudentRequest);
-        return  new ResponseEntity<>(OK);
+        return new ResponseEntity<>(OK);
     }
 
     @Operation(
@@ -50,7 +50,7 @@ public class StudentCertController {
             @Valid @RequestBody ModifyStudentPasswordRequest modifyStudentPasswordRequest
     ) {
         studentCertService.modifyStudentPassword(modifyStudentPasswordRequest);
-        return  new ResponseEntity<>(OK);
+        return new ResponseEntity<>(OK);
     }
 
 }
