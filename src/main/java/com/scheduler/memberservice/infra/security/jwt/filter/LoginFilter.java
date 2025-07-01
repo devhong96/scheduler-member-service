@@ -10,7 +10,6 @@ import com.scheduler.memberservice.infra.security.jwt.domain.RefreshToken;
 import com.scheduler.memberservice.infra.security.jwt.dto.JwtTokenDto;
 import com.scheduler.memberservice.infra.security.jwt.dto.UsernamePasswordAutoDto;
 import com.scheduler.memberservice.member.admin.domain.Admin;
-import com.scheduler.memberservice.member.common.RoleType;
 import com.scheduler.memberservice.member.student.domain.Student;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
 import jakarta.servlet.FilterChain;
@@ -18,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.scheduler.memberservice.infra.security.jwt.filter.CreateCookie.createCookie;
 import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 
 @Slf4j
@@ -62,12 +63,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     @Override
-    protected void successfulAuthentication(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain chain,
-            Authentication authResult
-    ) throws IOException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                            FilterChain chain,
+                                            Authentication authResult
+    ) {
 
         JwtTokenDto jwtTokenDto = jwtUtils.generateToken(authResult);
         Map<String, String> jsonResponse = new HashMap<>();
@@ -84,9 +83,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                     .findRefreshTokenByUserId(studentId)
                     .orElseGet(() -> refreshTokenJpaRepository.save(new RefreshToken(studentId, refreshTokenValue, expiresDate)));
 
-            jsonResponse = jsonProperty(student.getUsername(), student.getRoleType(),
-                    jwtTokenDto.getAccessToken(), refreshToken.getRefreshToken()
-            );
+            response.addCookie(createCookie(refreshToken.getRefreshToken()));
+
         }
 
         if (authResult.getPrincipal() instanceof TeacherDetails) {
@@ -98,9 +96,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                     .findRefreshTokenByUserId(teacherId)
                     .orElseGet(() -> refreshTokenJpaRepository.save(new RefreshToken(teacherId, refreshTokenValue, expiresDate)));
 
-            jsonResponse = jsonProperty(teacher.getUsername(), teacher.getRoleType(),
-                    jwtTokenDto.getAccessToken(), refreshToken.getRefreshToken()
-            );
+            response.addCookie(createCookie(refreshToken.getRefreshToken()));
+
         }
 
         if (authResult.getPrincipal() instanceof AdminDetails) {
@@ -112,17 +109,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                     .findRefreshTokenByUserId(adminId)
                     .orElseGet(() -> refreshTokenJpaRepository.save(new RefreshToken(adminId, refreshTokenValue, expiresDate)));
 
-            jsonResponse = jsonProperty(admin.getUsername(), admin.getRoleType(),
-                    jwtTokenDto.getAccessToken(), refreshToken.getRefreshToken()
-            );
+            response.addCookie(createCookie(refreshToken.getRefreshToken()));
+
         }
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String result = objectMapper.writeValueAsString(jsonResponse);
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("utf-8");
-        response.getWriter().write(result);
+        
+        response.setHeader("access", jwtTokenDto.getAccessToken());
+        response.setStatus(HttpStatus.OK.value());
     }
 
     @Override
@@ -150,15 +142,5 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.getWriter().write(errorMessage);
     }
 
-    private Map<String, String> jsonProperty(String username, RoleType roleType,
-                                             String accessToken, String RefreshToken) {
-        Map<String, String> jsonResponse = new HashMap<>();
 
-        jsonResponse.put("username", username);
-        jsonResponse.put("role", String.valueOf(roleType));
-        jsonResponse.put("access", accessToken);
-        jsonResponse.put("refresh", RefreshToken);
-
-        return jsonResponse;
-    }
 }
