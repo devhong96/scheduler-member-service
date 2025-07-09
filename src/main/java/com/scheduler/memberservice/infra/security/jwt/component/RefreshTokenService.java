@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.scheduler.memberservice.infra.security.jwt.filter.CreateCookie.createCookie;
 import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
@@ -28,7 +27,8 @@ public class RefreshTokenService {
     private final RefreshTokenJpaRepository refreshTokenJpaRepository;
 
     public Map<String, Object> refreshToken(String refresh,
-                                            HttpServletResponse response) {
+                                            HttpServletResponse response
+    ) {
 
         Map<String, Object> responseMap = new HashMap<>();
 
@@ -76,14 +76,11 @@ public class RefreshTokenService {
         Date expiresDate = jwtTokenDto.getExpiresDate();
 
         response.setHeader("Authorization", "Bearer " + accessToken);
-        response.addCookie(createCookie(accessToken));
 
         responseMap.put("status", OK);
 
         if (jwtUtils.isRefreshTokenExpiringSoon(refresh)) {
             refreshTokenJpaRepository.deleteByRefreshToken(refresh);
-            response.setHeader("Authorization", "Bearer " + accessToken);
-            response.addCookie(createCookie(accessToken));
             refreshTokenJpaRepository.save(new RefreshToken(authentication.getName(), refreshToken, expiresDate));
         }
 

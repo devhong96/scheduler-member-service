@@ -5,8 +5,8 @@ import com.scheduler.memberservice.infra.security.jwt.component.RefreshTokenServ
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,9 +29,9 @@ public class TokenController {
 
     @PostMapping("reissue")
     private ResponseEntity<Map<String, Object>> refreshAuth(
-            @RequestHeader(value = "refresh") String refresh,
-            HttpServletResponse response)
-    {
+            @CookieValue(value = "refresh") String refresh,
+            HttpServletResponse response
+    ) {
         return new ResponseEntity<>(refreshTokenService.refreshToken(refresh, response), OK);
     }
 }

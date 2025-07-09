@@ -26,8 +26,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.scheduler.memberservice.infra.security.jwt.filter.CreateCookie.createCookie;
 import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
@@ -69,7 +67,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     ) {
 
         JwtTokenDto jwtTokenDto = jwtUtils.generateToken(authResult);
-        Map<String, String> jsonResponse = new HashMap<>();
 
         String refreshTokenValue = jwtTokenDto.getRefreshToken();
         Date expiresDate = jwtTokenDto.getExpiresDate();
@@ -113,7 +110,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         }
         
-        response.setHeader("access", jwtTokenDto.getAccessToken());
+        response.setHeader("Authorization", jwtTokenDto.getAccessToken());
         response.setStatus(HttpStatus.OK.value());
     }
 
