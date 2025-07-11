@@ -91,5 +91,7 @@ management:
     port: 3000
 
 jwt:
-  secret_key: "ssssseeesasdcasdcasdcasdcasdcasdlckjkjlkjkjkjkjjjsadjasdjasjdasjdajd"
+  access-token-period: 43200
+  refresh-token-period: 604800
+  secret-key: "ssssseeesasdcasdcasdcasdcasdcasdlckjkjlkjkjkjkjjjsadjasdjasjdasjdajd"
 

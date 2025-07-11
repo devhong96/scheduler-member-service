@@ -1,5 +1,6 @@
 package com.scheduler.memberservice.infra.security.jwt.component;
 
+import com.scheduler.memberservice.infra.config.setting.JwtConfig;
 import com.scheduler.memberservice.infra.security.jwt.RefreshTokenJpaRepository;
 import com.scheduler.memberservice.infra.security.jwt.dto.JwtTokenDto;
 import io.jsonwebtoken.Claims;
@@ -36,7 +37,7 @@ import static io.jsonwebtoken.io.Decoders.BASE64;
 @RequiredArgsConstructor
 public class JwtUtils {
 
-    @Value("${jwt.secret_key}")
+    @Value("${jwt.secret-key}")
     private String secretKey;
 
     @PostConstruct
@@ -45,11 +46,12 @@ public class JwtUtils {
         signingKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
+
     @Getter
     private SecretKey signingKey; // static 제거
 
-    private static final Long accessTokenPeriod = 60L * 60L * 12L; // 12시간
-    private static final Long refreshTokenPeriod = 60L * 60L * 24L * 30L; // 24시간
+    private final JwtConfig jwtConfig;
+
     private static final long EXPIRATION_THRESHOLD = 60L * 60L;
 
     private final Clock clocks;
@@ -67,9 +69,9 @@ public class JwtUtils {
                 .substring(5);
 
         return new JwtTokenDto(
-                generateToken(username, auth, "access", accessTokenPeriod),
-                generateToken(username, auth, "refresh", refreshTokenPeriod),
-                Date.from(Instant.now().plusSeconds(refreshTokenPeriod))
+                generateToken(username, auth, "access", jwtConfig.getAccessTokenPeriod()),
+                generateToken(username, auth, "refresh", jwtConfig.getRefreshTokenPeriod()),
+                Date.from(Instant.now().plusSeconds(jwtConfig.getRefreshTokenPeriod()))
         );
     }
 
