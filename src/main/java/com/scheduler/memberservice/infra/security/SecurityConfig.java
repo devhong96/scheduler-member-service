@@ -42,7 +42,7 @@ public class SecurityConfig {
     }
 
     public static final String[] INTERNAL_ENDPOINTS = {
-
+            "/feign-member/**",
     };
 
     public static final String[] ADMIN_RESTRICTED_ENDPOINTS = {
@@ -63,7 +63,6 @@ public class SecurityConfig {
 
     public static final String[] ENDPOINTS_WHITELISTS = {
             "/member-api/**",
-            "/feign-member/**",
             "/actuator/**",
             "/login",
             "/help/*",
