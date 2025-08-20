@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
@@ -90,7 +91,11 @@ public class SecurityConfig {
                 .addFilterBefore(new CustomLogoutFilter(jwtUtils, refreshTokenJpaRepository), LogoutFilter.class)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers(INTERNAL_ENDPOINTS).authenticated()
+                                .requestMatchers(INTERNAL_ENDPOINTS)
+                                .access(
+                                        new WebExpressionAuthorizationManager(
+                                                "hasIpAddress('127.0.0.1') or hasIpAddress('172.18.0.0/16')")
+                                )
                                 .requestMatchers(ENDPOINTS_WHITELISTS).permitAll()
                                 .requestMatchers(STUDENT_ENDPOINTS).hasAuthority("STUDENT")
                                 .requestMatchers(TEACHER_ENDPOINTS).hasAuthority("TEACHER")
