@@ -19,7 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseReassignmentResponse;
-import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
+import static com.scheduler.memberservice.member.student.dto.StudentRequest.ChangeTeacherRequest;
+import static com.scheduler.memberservice.member.student.dto.StudentRequest.RegisterStudentRequest;
 import static com.scheduler.memberservice.member.student.dto.StudentResponse.StudentInfoResponse;
 import static com.scheduler.memberservice.testSet.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;

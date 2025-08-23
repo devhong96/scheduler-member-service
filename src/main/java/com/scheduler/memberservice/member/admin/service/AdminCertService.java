@@ -1,7 +1,8 @@
 package com.scheduler.memberservice.member.admin.service;
 
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindPasswordRequest;
-import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.*;
+import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.EditEmailRequest;
+import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.PwdEditRequest;
 
 public interface AdminCertService {
 

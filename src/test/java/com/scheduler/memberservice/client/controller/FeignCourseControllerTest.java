@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @IntegrationTest
-class FeignControllerTest {
+class FeignCourseControllerTest {
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -28,7 +28,7 @@ class FeignControllerTest {
     @WithTeacher(username = "lee_teacher")
     void findTeacherInfoByToken() throws Exception {
 
-        mockMvc.perform(get("/feign-member/teacher/info")
+        mockMvc.perform(get("/feign-course-member/teacher/info")
                         .header(AUTHORIZATION, getAccessToken()))
                 .andExpect(status().isOk());
     }
@@ -37,7 +37,7 @@ class FeignControllerTest {
     @WithStudent(username = "lee_student")
     void findStudentInfoByToken() throws Exception {
 
-        mockMvc.perform(get("/feign-member/student/info")
+        mockMvc.perform(get("/feign-course-member/student/info")
                         .header(AUTHORIZATION, getAccessToken()))
                 .andExpect(status().isOk());
 
@@ -47,7 +47,7 @@ class FeignControllerTest {
     @WithTeacher(username = "lee_teacher")
     void findMemberInfoByToken() throws Exception {
 
-        mockMvc.perform(get("/feign-member/member/info")
+        mockMvc.perform(get("/feign-course-member/member/info")
                         .header(AUTHORIZATION, getAccessToken()))
                 .andExpect(status().isOk());
     }

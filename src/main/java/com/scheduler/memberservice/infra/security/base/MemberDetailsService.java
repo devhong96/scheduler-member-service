@@ -2,10 +2,10 @@ package com.scheduler.memberservice.infra.security.base;
 
 import com.scheduler.memberservice.infra.exception.custom.AuthorApproveException;
 import com.scheduler.memberservice.member.admin.repository.AdminJpaRepository;
-import com.scheduler.memberservice.member.student.service.StudentService;
 import com.scheduler.memberservice.member.student.domain.Student;
-import com.scheduler.memberservice.member.teacher.service.TeacherService;
+import com.scheduler.memberservice.member.student.service.StudentService;
 import com.scheduler.memberservice.member.teacher.domain.Teacher;
+import com.scheduler.memberservice.member.teacher.service.TeacherService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

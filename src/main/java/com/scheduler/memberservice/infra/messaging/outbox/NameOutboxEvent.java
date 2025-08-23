@@ -1,13 +1,16 @@
 package com.scheduler.memberservice.infra.messaging.outbox;
 
 import com.scheduler.memberservice.member.student.domain.Student;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.ChangeStudentNameRequest;
 import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.GenerationType.*;
+import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity

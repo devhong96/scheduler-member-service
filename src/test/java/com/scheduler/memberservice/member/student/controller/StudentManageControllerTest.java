@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpHeaders.AUTHORIZATION;
 import static com.scheduler.memberservice.client.dto.FeignMemberRequest.CourseReassignmentResponse;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.ChangeTeacherRequest;
-import static com.scheduler.memberservice.testSet.TestConstants.*;
+import static com.scheduler.memberservice.testSet.TestConstants.TEST_ADMIN_USERNAME;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

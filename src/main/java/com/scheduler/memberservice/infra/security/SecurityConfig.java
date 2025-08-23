@@ -42,7 +42,8 @@ public class SecurityConfig {
     }
 
     public static final String[] INTERNAL_ENDPOINTS = {
-            "/feign-member/**",
+            "/feign-order-member/**",
+            "/feign-course-member/**"
     };
 
     public static final String[] ADMIN_RESTRICTED_ENDPOINTS = {

@@ -14,7 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static com.scheduler.memberservice.infra.email.dto.FindInfoRequest.FindPasswordRequest;
-import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.*;
+import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.EditEmailRequest;
+import static com.scheduler.memberservice.member.admin.dto.AdminInfoRequest.PwdEditRequest;
 import static com.scheduler.memberservice.testSet.TestConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

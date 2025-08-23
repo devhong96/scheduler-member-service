@@ -1,8 +1,7 @@
 package com.scheduler.memberservice.client.dto;
 
 import com.scheduler.memberservice.member.common.RoleType;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 public class FeignMemberResponse {
 
@@ -45,5 +44,18 @@ public class FeignMemberResponse {
             this.roleType = roleType;
             this.memberId = memberId;
         }
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class StudentResponse {
+
+        private String studentId;
+
+        private String username;
+
     }
 }

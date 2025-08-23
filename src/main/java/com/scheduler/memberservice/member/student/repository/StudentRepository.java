@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.scheduler.memberservice.client.dto.FeignMemberResponse.StudentResponse;
 import static com.scheduler.memberservice.member.student.domain.QStudent.student;
 import static com.scheduler.memberservice.member.student.dto.StudentResponse.StudentInfoResponse;
 import static com.scheduler.memberservice.member.teacher.domain.QTeacher.teacher;
@@ -57,6 +58,20 @@ public class StudentRepository {
                 );
 
         return PageableExecutionUtils.getPage(contents, pageable, counts::fetchOne);
+    }
+
+    public StudentResponse getStudentInfo(String username) {
+
+        return queryFactory.select(Projections.fields(StudentResponse.class,
+                        student.studentId,
+                        student.username))
+                .from(student)
+                .where(studentUsernameEq(username))
+                .fetchOne();
+    }
+
+    private BooleanExpression studentUsernameEq(String username) {
+        return hasText(username) ? student.username.eq(username) : null;
     }
 
     private BooleanExpression studentNameEq(String studentName) {
