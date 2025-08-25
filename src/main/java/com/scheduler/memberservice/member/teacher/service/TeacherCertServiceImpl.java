@@ -55,7 +55,7 @@ public class TeacherCertServiceImpl implements TeacherCertService {
         Teacher teacher = teacherJpaRepository.findByEmailIs(findUsernameRequest.getEmail())
                 .orElseThrow(MemberExistException::new);
 
-        authEmailService.sendUsername(teacher.getUsername(), findUsernameRequest.getEmail());
+        authEmailService.sendUsername(findUsernameRequest.getEmail(),teacher.getUsername());
     }
 
     @Override

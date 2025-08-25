@@ -66,7 +66,7 @@ class TeacherCertServiceTest {
          teacherCertService.findUsernameByEmail(findUsernameRequest);
 
         verify(authEmailService, times(1))
-                .sendUsername(TEST_TEACHER_USERNAME, TEST_TEACHER_EMAIL);
+                .sendUsername(TEST_TEACHER_EMAIL, TEST_TEACHER_USERNAME);
 
     }
 

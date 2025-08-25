@@ -10,12 +10,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.time.Clock;
+import java.util.Properties;
 
 import static com.querydsl.jpa.JPQLTemplates.DEFAULT;
 
 @Configuration
 @RequiredArgsConstructor
 public class QueryConfig {
+
+    private final MailProperties mailProperties;
 
     @PersistenceContext
     private EntityManager em;
@@ -27,7 +30,20 @@ public class QueryConfig {
 
     @Bean
     public JavaMailSender mailSender() {
-        return new JavaMailSenderImpl();
+
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost(mailProperties.getHost());
+        mailSender.setPort(mailProperties.getPort());
+        mailSender.setUsername(mailProperties.getUsername());
+        mailSender.setPassword(mailProperties.getPassword());
+        mailSender.setDefaultEncoding("UTF-8");
+
+        Properties props = new Properties();
+        props.putAll(mailProperties.getProperties());
+
+        mailSender.setJavaMailProperties(props);
+
+        return mailSender;
     }
 
     @Bean

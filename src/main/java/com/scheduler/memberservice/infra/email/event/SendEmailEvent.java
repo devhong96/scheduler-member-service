@@ -10,13 +10,15 @@ public class SendEmailEvent extends ApplicationEvent {
     private final String from;
     private final String to;
     private final String subject;
-    private final String message;
+    private final String plain;
+    private final String html;
 
     public SendEmailEvent(EmailMessageDto emailMessageDto) {
         super(emailMessageDto);
         this.from = emailMessageDto.getFrom();
         this.to = emailMessageDto.getTo();
         this.subject = emailMessageDto.getSubject();
-        this.message = emailMessageDto.getMessage();
+        this.plain = emailMessageDto.getPlain();
+        this.html = emailMessageDto.getHtml();
     }
 }

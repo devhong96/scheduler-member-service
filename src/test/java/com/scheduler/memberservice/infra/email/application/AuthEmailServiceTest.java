@@ -82,7 +82,7 @@ class AuthEmailServiceTest {
         verify(eventPublisher, times(1))
                 .publishEvent(eventCaptor.capture());
 
-        String message = eventCaptor.getValue().getMessage();
+        String message = eventCaptor.getValue().getPlain();
         String extractedAuthNum = extractAuthNumFromMessage(message);
 
         authEmailService.verifyAuthCode(new AuthCodeRequest(testEmail, extractedAuthNum));

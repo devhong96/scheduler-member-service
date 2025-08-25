@@ -21,7 +21,6 @@ public class AuthEmailService {
     private String from;
 
     private final RedisVerifyCache redisVerifyCache;
-
     private final ApplicationEventPublisher eventPublisher;
 
     public void sendUsername(String email, String username) {
@@ -29,8 +28,9 @@ public class AuthEmailService {
         EmailMessageDto emailMessageDto = EmailMessageDto.builder()
                 .from(from)
                 .to(email)
-                .subject("")
-                .message(email + "님의 아이디는 " + username + "입니다.")
+                .subject("아이디 찾기")
+                .plain(FindUsernameHtml.plain(email, username))
+                .html(FindUsernameHtml.html(email, username))
                 .build();
 
         eventPublisher.publishEvent(new SendEmailEvent(emailMessageDto));
@@ -39,6 +39,7 @@ public class AuthEmailService {
     public void sendAuthNum(String email, String username) {
 
         StringBuilder authNumBuilder = new StringBuilder();
+
         for (int i = 0; i < 6; i++) {
             authNumBuilder.append((int) (Math.random() * 10));
         }
@@ -50,11 +51,10 @@ public class AuthEmailService {
         EmailMessageDto emailMessageDto = EmailMessageDto.builder()
                 .from(from)
                 .to(email)
-                .subject("")
-                .message(username + "님의 인증번호는 " + authNum + " 입니다")
+                .subject("비밀번호 찾기")
+                .plain(VerificationHtml.plain(authNum, "5"))
+                .html(VerificationHtml.html(authNum, "5"))
                 .build();
-
-        log.info(emailMessageDto.toString());
 
         eventPublisher.publishEvent(new SendEmailEvent(emailMessageDto));
     }

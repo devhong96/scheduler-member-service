@@ -4,15 +4,13 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.EventListener;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionalEventListener;
 
-import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMIT;
+import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED;
 
 @Slf4j
 @Component
@@ -20,38 +18,32 @@ import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMI
 public class SendUsernameEventListener {
 
     private final JavaMailSender javaMailSender;
-    private final ApplicationContext applicationContext;
 
     @Async
-    @TransactionalEventListener(phase = AFTER_COMMIT)
+    @EventListener
     public void handleSendUsernameByEmailEvent(SendEmailEvent sendEmailEvent) {
-        SendUsernameEventListener proxy = applicationContext.getBean(SendUsernameEventListener.class);
-        proxy.processSupportEvent(sendEmailEvent);
-    }
 
-    @Transactional
-    public void processSupportEvent(SendEmailEvent sendEmailEvent) {
         String from = sendEmailEvent.getFrom();
         String to = sendEmailEvent.getTo();
         String subject = sendEmailEvent.getSubject();
-        String message = sendEmailEvent.getMessage();
+        String plain = sendEmailEvent.getPlain();
+        String html = sendEmailEvent.getHtml();
 
-        sendEmail(from, to, subject, message);
+        sendEmail(from, to, subject, plain, html);
     }
 
-    @Transactional
-    public void sendEmail(String from, String to, String subject, String message) {
+    public void sendEmail(String from, String to, String subject, String plain, String html) {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
 
         try {
-            mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+            mimeMessageHelper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED_RELATED, "UTF-8");
             mimeMessageHelper.setFrom(from);
 
             mimeMessageHelper.setTo(to);
             mimeMessageHelper.setSubject(subject);
-            mimeMessageHelper.setText(message, true);
+            mimeMessageHelper.setText(plain, html);
 
             javaMailSender.send(mimeMessage);
 
