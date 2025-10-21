@@ -22,7 +22,7 @@ import static org.springframework.util.StringUtils.hasText;
 @RequiredArgsConstructor
 public class StudentRepository {
 
-    public final JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
     public Page<StudentInfoResponse> studentInformationList(
             String teacherName, String studentName, Pageable pageable

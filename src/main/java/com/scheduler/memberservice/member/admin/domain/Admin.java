@@ -28,12 +28,16 @@ public class Admin extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String adminId;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private String password;
 
     @Column(columnDefinition = "varchar(255) default '이메일을 입력해 주세요'")

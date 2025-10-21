@@ -31,17 +31,22 @@ public class Teacher extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String teacherId;
 
+    @Column(nullable = false, unique = true)
     private String username;
 
+    @Column(nullable = false)
     private String teacherName;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String email;
 
     @Enumerated(STRING)
     private RoleType roleType;
 
+    @Column(nullable = false)
     private Boolean approved;
 
     public void updatePassword(PasswordEncoder passwordEncoder, PwdEditRequest pwdEditRequest) {
@@ -50,13 +55,6 @@ public class Teacher extends BaseEntity {
 
     public void updateEmail(EditEmailRequest editEmailRequest) {
         this.email = editEmailRequest.getEmail();
-    }
-
-    @PrePersist
-    public void generateUuid() {
-        if (this.teacherId == null) {
-            this.teacherId = UUID.randomUUID().toString();
-        }
     }
 
     public void updateTeacherName(String newTeacherName) {
@@ -77,5 +75,12 @@ public class Teacher extends BaseEntity {
         teacher.roleType = TEACHER;
         teacher.approved = false;
         return teacher;
+    }
+
+    @PrePersist
+    public void generateUuid() {
+        if (this.teacherId == null) {
+            this.teacherId = UUID.randomUUID().toString();
+        }
     }
 }
