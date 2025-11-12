@@ -32,10 +32,10 @@ public class StudentRepository {
                         .select(Projections.fields(StudentInfoResponse.class,
                                 student.studentId,
                                 student.studentName,
-                                student.studentAddress,
-                                student.studentDetailedAddress,
-                                student.studentPhoneNumber,
-                                student.studentParentPhoneNumber,
+                                student.address.studentAddress.as("studentAddress"),
+                                student.address.studentDetailedAddress.as("studentDetailedAddress"),
+                                student.address.studentPhoneNumber.as("studentPhoneNumber"),
+                                student.address.studentParentPhoneNumber.as("studentParentPhoneNumber"),
                                 teacher.teacherName,
                                 student.createdAt))
                         .from(student)

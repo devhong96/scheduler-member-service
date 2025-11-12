@@ -45,7 +45,7 @@ class StudentCertServiceTest {
         assertThat(studentByStudentName)
                 .isPresent()
                 .get()
-                .extracting(Student::getStudentName, Student::getStudentPhoneNumber)
+                .extracting(Student::getStudentName, student -> student.getAddress().getStudentPhoneNumber())
                 .containsExactly(TEST_STUDENT_NAME, TEST_STUDENT_PHONE_NUMBER);
     }
 

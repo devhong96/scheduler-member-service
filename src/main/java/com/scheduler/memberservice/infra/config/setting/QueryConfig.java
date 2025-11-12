@@ -2,12 +2,16 @@ package com.scheduler.memberservice.infra.config.setting;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import java.time.Clock;
 import java.util.Properties;
@@ -49,6 +53,12 @@ public class QueryConfig {
     @Bean
     public Clock clocks() {
         return Clock.systemDefaultZone();
+    }
+
+    @Bean(name = "transactionManager")
+    @Primary
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
     }
 
 }

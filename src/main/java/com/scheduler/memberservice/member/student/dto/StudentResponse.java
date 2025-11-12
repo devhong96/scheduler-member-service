@@ -11,6 +11,14 @@ public class StudentResponse {
 
         private String studentName;
 
+        private String teacherName;
+
+    }
+
+    @Getter
+    @Setter
+    public static class StudentAddressResponse {
+
         private String studentPhoneNumber;
 
         private String studentAddress;
@@ -18,8 +26,6 @@ public class StudentResponse {
         private String studentDetailedAddress;
 
         private String studentParentPhoneNumber;
-
-        private String teacherName;
 
     }
 }

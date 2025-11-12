@@ -28,6 +28,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig {
 
     private final JwtUtils jwtUtils;
+    private final JwtAuthFilter jwtAuthFilter;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final RefreshTokenJpaRepository refreshTokenJpaRepository;
 
@@ -83,10 +84,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new JwtAuthFilter(jwtUtils), LoginFilter.class)
+                .addFilterBefore(jwtAuthFilter, LoginFilter.class)
                 .addFilterAt(
-                        new LoginFilter(
-                                jwtUtils, authenticationManager(authenticationConfiguration), refreshTokenJpaRepository),
+                        new LoginFilter(jwtUtils, authenticationManager(authenticationConfiguration),
+                                refreshTokenJpaRepository),
                         UsernamePasswordAuthenticationFilter.class)
 
                 .addFilterBefore(new CustomLogoutFilter(jwtUtils, refreshTokenJpaRepository), LogoutFilter.class)

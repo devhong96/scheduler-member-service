@@ -15,7 +15,7 @@ import static com.scheduler.memberservice.member.common.RoleType.STUDENT;
 import static com.scheduler.memberservice.member.student.dto.StudentRequest.*;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static java.lang.Boolean.TRUE;
+import static java.lang.Boolean.FALSE;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -51,17 +51,8 @@ public class Student extends BaseEntity {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private String studentPhoneNumber;
-
-    @Column(nullable = false)
-    private String studentParentPhoneNumber;
-
-    @Column(nullable = false)
-    private String studentAddress;
-
-    @Column(nullable = false)
-    private String studentDetailedAddress;
+    @Embedded
+    private Address address;
 
     @Enumerated(STRING)
     private RoleType roleType;
@@ -80,12 +71,9 @@ public class Student extends BaseEntity {
         student.password = passwordEncoder.encode(registerStudentRequest.getPassword());
         student.studentName = registerStudentRequest.getStudentName();
         student.email = registerStudentRequest.getStudentEmail();
-        student.studentPhoneNumber = registerStudentRequest.getStudentPhoneNumber();
-        student.studentParentPhoneNumber = registerStudentRequest.getStudentParentPhoneNumber();
-        student.studentAddress = registerStudentRequest.getStudentAddress();
-        student.studentDetailedAddress = registerStudentRequest.getStudentDetailedAddress();
+        student.address = Address.create(registerStudentRequest);
         student.roleType = STUDENT;
-        student.approved = TRUE;
+        student.approved = FALSE;
         return student;
     }
 
@@ -93,10 +81,12 @@ public class Student extends BaseEntity {
             ModifyStudentInfoRequest modifyStudentRequest
     ) {
         this.email = modifyStudentRequest.getStudentEmail();
-        this.studentPhoneNumber = modifyStudentRequest.getStudentPhoneNumber();
-        this.studentParentPhoneNumber = modifyStudentRequest.getStudentParentPhoneNumber();
-        this.studentAddress = modifyStudentRequest.getStudentAddress();
-        this.studentDetailedAddress = modifyStudentRequest.getStudentDetailedAddress();
+        this.address = new Address(
+                modifyStudentRequest.getStudentPhoneNumber(),
+                modifyStudentRequest.getStudentParentPhoneNumber(),
+                modifyStudentRequest.getStudentAddress(),
+                modifyStudentRequest.getStudentDetailedAddress()
+        );
     }
 
     public void changePassword(
