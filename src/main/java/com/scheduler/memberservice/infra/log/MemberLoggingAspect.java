@@ -17,9 +17,13 @@ import static com.scheduler.memberservice.infra.log.IPLog.getIpAddress;
 @Component
 public class MemberLoggingAspect {
 
-    @Around("execution(* com.scheduler.memberservice.member.*.*.*Controller.*(..))"
-    )
-    public Object Controller(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("execution(* com.scheduler.memberservice.member.*.*.*Controller.*(..))")
+    public Object controller(ProceedingJoinPoint joinPoint) throws Throwable {
+        return getObject(joinPoint);
+    }
+
+    @Around("execution(* com.scheduler.memberservice.client.controller.*Controller.*(..))")
+    public Object feignController(ProceedingJoinPoint joinPoint) throws Throwable {
         return getObject(joinPoint);
     }
 
